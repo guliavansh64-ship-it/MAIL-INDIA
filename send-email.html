@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MAIL INDIA — Compose Email</title>
+  <link rel="stylesheet" href="/styles.css?v=2.2.5">
+  <script src="/common.js?v=2.2.5"></script>
+  
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:10px" alt="Mail India"></span>
+        <span>MAIL INDIA <small>API</small></span>
+        <button type="button" class="drawer-close" onclick="closeDrawer(event)" data-action="close-drawer" aria-label="Close navigation">✕</button>
+      </div>
+      <div class="side-user-card" id="side-user-card">
+        <div class="side-user-avatar" id="side-user-avatar">MI</div>
+        <div class="side-user-info">
+          <div class="side-user-email" id="side-user-email">Mail India Workspace</div>
+          <div class="side-user-credits" id="side-user-credits">High-Availability Relay</div>
+        </div>
+      </div>
+      <div class="side-scroll">
+        <div id="side-guest-section" style="display:none">
+          <div class="side-guest-box" style="padding:16px 14px;text-align:center;background:rgba(255,255,255,0.06);border-radius:12px;margin:10px 14px 16px;border:1px solid rgba(255,255,255,0.12)">
+            <div style="font-size:28px;margin-bottom:6px">🔐</div>
+            <div style="font-size:13px;font-weight:700;color:#ffffff;margin-bottom:4px">Account Required</div>
+            <p style="font-size:11px;color:#a5a3c2;line-height:1.5;margin:0 0 12px">Sign in or register to access the developer workspace, API keys, and email dispatches.</p>
+            <a href="/account.html" class="primary" style="display:block;width:100%;text-align:center;padding:9px 0;font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;background:#6342dc;color:#ffffff;box-sizing:border-box">Sign In / Register →</a>
+          </div>
+          <div class="side-label">PUBLIC RESOURCES</div>
+          <a href="/api-docs.html" class="nav-item"><span class="nav-icon">▤</span>API Documentation</a>
+          <a href="/billing/pricing.html" class="nav-item"><span class="nav-icon">🏷</span>Pricing & Plans</a>
+          <a href="/help/status.html" class="nav-item"><span class="nav-icon">●</span>System Status</a>
+        </div>
+        <div id="side-auth-section">
+          <div class="side-label">USER WORKSPACE</div>
+          
+      <div class="nav-group " id="grp-user-overview">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-overview', event)" aria-label="Toggle Overview">
+          <span class="group-title"><span>▦</span>Overview</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/dashboard.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▦</span>Dashboard
+        </a>
+        <a href="/overview.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">♙</span>Account Overview
+        </a>
+        <a href="/quick-actions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚡</span>Quick Actions
+        </a>
+        <a href="/recent-activity.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◷</span>Recent Activity
+        </a>
+        </div>
+      </div>
+      <div class="nav-group expanded" id="grp-user-email">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-email', event)" aria-label="Toggle Email & Messaging">
+          <span class="group-title"><span>✉</span>Email & Messaging</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/emails/all.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>All Emails
+        </a>
+        <a href="/send-email.html" class="nav-sub-item active">
+          <span class="nav-sub-icon">✉</span>Compose Email
+        </a>
+        <a href="/send-test.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🧪</span>Send Test Email
+        </a>
+        <a href="/send-bulk.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">👥</span>Bulk Sending
+        </a>
+        <a href="/email-history.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">↻</span>Email History
+        </a>
+        <a href="/email-templates.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▧</span>Email Templates
+        </a>
+        <a href="/contacts/suppression.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚑</span>Suppression List
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-billing">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-billing', event)" aria-label="Toggle Wallet & Billing">
+          <span class="group-title"><span>◈</span>Wallet & Billing</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/wallet.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◈</span>Wallet & Credits
+        </a>
+        <a href="/billing/buy.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚡</span>Buy Credits
+        </a>
+        <a href="/recharge-history.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">↻</span>Recharge History
+        </a>
+        <a href="/billing/transactions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚖</span>Ledger Transactions
+        </a>
+        <a href="/billing/invoices.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▤</span>Invoices & Receipts
+        </a>
+        <a href="/billing/pricing.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🏷</span>Pricing & Usage
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-dev">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-dev', event)" aria-label="Toggle Developer & API">
+          <span class="group-title"><span>⌘</span>Developer & API</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/api-docs.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▤</span>API Documentation
+        </a>
+        <a href="/api-management.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⌘</span>API Management
+        </a>
+        <a href="/api-playground.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▶</span>API Playground
+        </a>
+        <a href="/api/webhooks.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⇄</span>Webhooks
+        </a>
+        <a href="/api/rate-limits.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⏳</span>Rate Limits
+        </a>
+        <a href="/api/logs.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>API Logs
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-analytics">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-analytics', event)" aria-label="Toggle Analytics & Reports">
+          <span class="group-title"><span>◷</span>Analytics & Reports</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/usage-analytics.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◷</span>Email Analytics
+        </a>
+        <a href="/analytics/delivery.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">✓</span>Delivery Reports
+        </a>
+        <a href="/analytics/bounces.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚠</span>Bounce Reports
+        </a>
+        <a href="/analytics/consumption.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">📉</span>Credit Consumption
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-security">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-security', event)" aria-label="Toggle Account & Security">
+          <span class="group-title"><span>♙</span>Account & Security</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/profile.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">♙</span>My Profile
+        </a>
+        <a href="/account.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚙</span>Account Settings
+        </a>
+        <a href="/security/sessions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">💻</span>Active Sessions
+        </a>
+        <a href="/security/export.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">📥</span>Export My Data
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-help">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-help', event)" aria-label="Toggle Help & Support">
+          <span class="group-title"><span>◉</span>Help & Support</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/ai-support.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🤖</span>Agentic Support
+        </a>
+        <a href="/help/index.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">?</span>Help Centre
+        </a>
+        <a href="/support.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◉</span>Support Tickets
+        </a>
+        <a href="/help/status.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🟢</span>System Status
+        </a>
+        </div>
+      </div>
+          
+        </div>
+      </div>
+      <div class="side-bottom">
+        <strong>MAIL INDIA Platform</strong>
+        High-Availability Cloud Relay.<br>
+        <a href="/api-docs.html" style="color:#d3c7ff;font-weight:700">API Documentation ↗</a>
+      </div>
+    </aside>
+    <div class="veil" id="veil" onclick="closeDrawer(event)" data-action="close-drawer"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button type="button" class="icon-button menu-toggle" id="navToggle" onclick="toggleDrawer(event)" data-action="toggle-drawer" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+          <a href="/dashboard.html" class="top-brand" title="MAIL INDIA Platform">
+            <span class="top-brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:9px" alt="Mail India"></span>
+            <span class="top-brand-text">MAIL INDIA</span>
+          </a>
+          <div>
+            <div class="top-title">Compose Email</div>
+            <div class="top-sub">Customer Workspace · MAIL INDIA</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <a href="/api-docs.html" class="icon-button" style="display:grid;place-items:center" aria-label="Documentation">?</a>
+          <button type="button" class="icon-button notif-bell-btn" id="notif-toggle-btn" onclick="toggleNotifDrawer(event)" aria-label="Notifications" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+          </button>
+          <a href="/account.html" class="outline" id="auth-button" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" onclick="handleAuthClick(event)">Sign in</a>
+          <div class="profile-wrap" id="profile-wrap">
+            <button type="button" class="profile" id="topbar-profile" onclick="toggleProfileDropdown(event)" aria-label="User profile menu" aria-haspopup="true" aria-expanded="false">
+              <div class="avatar" id="topbar-avatar" style="">MI</div>
+              <span class="topbar-profile-info"><span class="topbar-profile-name">Workspace</span><small class="topbar-profile-role">Live Sync</small></span>
+              <span class="profile-caret" id="topbar-caret" style="display:none">▾</span>
+            </button>
+            <div class="profile-dropdown-menu" id="profile-dropdown-menu" role="menu" style="display:none">
+              <div class="profile-dropdown-header">
+                <div class="dropdown-avatar" id="dropdown-user-avatar">MI</div>
+                <div class="dropdown-user-info">
+                  <div class="dropdown-name" id="dropdown-user-name">Workspace User</div>
+                  <div class="dropdown-email" id="dropdown-user-email">user@mailindia.in</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="/profile.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">👤</span> My Profile
+              </a>
+              <a href="/account.html?stay=1" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">⚙️</span> Account Settings
+              </a>
+              <a href="/billing/pricing.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">🏷️</span> Pricing &amp; Upgrade
+              </a>
+              <a href="/billing/buy.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">💳</span> Buy Credits
+              </a>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="profile-dropdown-item profile-logout-btn" onclick="signOut(event)" role="menuitem">
+                <span class="dropdown-icon">🚪</span> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        
+  <div class="welcome">
+    <div>
+      <h1>Transactional Email Composer</h1>
+      <p>Send high-priority transactional emails directly from your workspace with real-time delivery verification.</p>
+    </div>
+    <div class="actions">
+      <a href="/send-test.html" class="outline">🧪 Sandbox Test</a>
+      <a href="/email-templates.html" class="outline">▧ Templates</a>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="panel">
+      <h2>Message Composer</h2>
+      <div style="margin:8px 0 14px">
+        <div style="font-size:11px;font-weight:700;color:#6b7280;margin-bottom:6px">⚡ Quick 1-Click Message Presets:</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="filter-pill" onclick="fillComposerPreset('Welcome to MAIL INDIA!', 'Hello!
+
+Welcome to MAIL INDIA. Your account is verified and ready for live email delivery.
+
+Best regards,
+The MAIL INDIA Team', '<h1>Welcome to MAIL INDIA!</h1><p>Your account is verified and ready for live delivery.</p>')">👋 Welcome</button>
+          <button type="button" class="filter-pill" onclick="fillComposerPreset('Your One-Time Password (OTP): 849201', 'Your verification code is 849201. This code expires in 10 minutes. Do not share it with anyone.', '<h2>Verification Code</h2><p style=\'font-size:24px;font-weight:bold;letter-spacing:4px;color:#6342dc\'>849201</p><p>Valid for 10 minutes.</p>')">🔑 OTP Code</button>
+          <button type="button" class="filter-pill" onclick="fillComposerPreset('Payment Receipt: Order #94821', 'Thank you for your payment of ₹100.00. 500 sending credits have been credited to your wallet.', '<h3>Payment Received</h3><p>Thank you for your payment. <strong>500 credits</strong> added to your wallet.</p>')">🧾 Receipt</button>
+          <button type="button" class="filter-pill" onclick="fillComposerPreset('Security Alert: New Sign-in Detected', 'A new sign-in to your account was detected from a Linux browser. If this was you, you can safely disregard this message.', '<p>A new sign-in was detected on your account.</p>')">🛡 Security</button>
+        </div>
+      </div>
+
+      <!-- Sender Badge (Gmail API vs Shared SMTP) -->
+      <div id="composer-sender-badge" style="margin-bottom:12px"></div>
+
+      <form id="send-email-form" style="display:grid;gap:12px">
+        <div class="mg-field">
+          <label>Recipient Email Address *</label>
+          <input required type="email" name="to" placeholder="recipient@example.com" class="mg-input">
+        </div>
+        <div class="mg-field">
+          <label>Email Subject *</label>
+          <input required type="text" name="subject" placeholder="Welcome to MAIL INDIA" class="mg-input">
+        </div>
+        <div class="mg-field">
+          <label>Plain-Text Message Body *</label>
+          <textarea required name="text" rows="4" placeholder="Hello! Welcome to our platform." class="mg-input" style="resize:vertical"></textarea>
+        </div>
+        <div class="mg-field">
+          <label>HTML Content (Optional)</label>
+          <textarea name="html" rows="4" placeholder="<h1>Welcome</h1><p>Styled message here</p>" class="mg-input" style="resize:vertical;font-family:monospace"></textarea>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#555">
+          <input type="checkbox" required checked id="consent-check">
+          <label for="consent-check">I confirm that this recipient has provided lawful consent to receive this email.</label>
+        </div>
+        <button type="submit" class="primary" style="padding:12px;font-size:14px">🚀 Dispatch Email (Consumes 1 Credit)</button>
+        <p id="send-message" role="status" style="margin-top:6px;line-height:1.6"></p>
+      </form>
+    </div>
+
+    <div class="panel">
+      <h2>Sending Rules & SLA</h2>
+      <div style="display:grid;gap:12px;font-size:13px;margin-top:12px">
+        <div class="mg-row"><span>Billing Model</span><strong>1 Accepted Send = 1 Credit</strong></div>
+        <div class="mg-row"><span>Failed / Rejected Sends</span><strong style="color:#15803d">0 Credits (Free / Released)</strong></div>
+        <div class="mg-row"><span>Idempotency Protection</span><span class="badge" style="background:#dcfce7;color:#15803d">● Active (SHA-256)</span></div>
+        <div class="mg-row"><span>Suppression Check</span><strong>Pre-flight auto check</strong></div>
+        <div class="mg-row"><span>Relay Cluster</span><strong>smtp.gmail.com:465</strong></div>
+      </div>
+      <div style="margin-top:20px;background:#f8f7fc;border-radius:8px;padding:14px;border:1px solid #ebe8f7">
+        <strong style="font-size:12px;color:#2e2a4a">Need API Automation?</strong>
+        <p style="font-size:12px;color:#6b7280;margin:6px 0 10px">You can trigger this exact dispatch endpoint programmatically via cURL or SDK.</p>
+        <a href="/api-docs.html" class="outline" style="padding:6px 12px;font-size:11px;text-decoration:none">View REST Endpoint →</a>
+      </div>
+    </div>
+  </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- IN-APP NOTIFICATIONS CENTER DRAWER -->
+  <div id="notif-veil" class="notif-veil" onclick="closeNotifDrawer()" style="display:none"></div>
+  <aside id="notif-drawer" class="notif-drawer" aria-label="Notifications" aria-hidden="true">
+    <div class="notif-drawer-header">
+      <div class="notif-header-title">
+        <span class="notif-header-icon">🔔</span>
+        <h3>Notifications</h3>
+        <span id="notif-unread-count" class="notif-header-badge">0 unread</span>
+      </div>
+      <div class="notif-header-actions">
+        <button type="button" class="notif-action-btn" onclick="markAllNotifsRead()" title="Mark all read">✓ Read All</button>
+        <button type="button" class="notif-action-btn" onclick="clearAllNotifs()" title="Clear all">🗑 Clear</button>
+        <button type="button" class="notif-close-btn" onclick="closeNotifDrawer()" aria-label="Close notifications">✕</button>
+      </div>
+    </div>
+    <div class="notif-filter-bar">
+      <button type="button" class="notif-filter-pill active" data-filter="all" onclick="filterNotifs('all', this)">All</button>
+      <button type="button" class="notif-filter-pill" data-filter="unread" onclick="filterNotifs('unread', this)">Unread</button>
+      <button type="button" class="notif-filter-pill" data-filter="billing" onclick="filterNotifs('billing', this)">Billing</button>
+      <button type="button" class="notif-filter-pill" data-filter="sending" onclick="filterNotifs('sending', this)">Sending</button>
+      <button type="button" class="notif-filter-pill" data-filter="security" onclick="filterNotifs('security', this)">Security</button>
+      <button type="button" class="notif-filter-pill" data-filter="system" onclick="filterNotifs('system', this)">System</button>
+    </div>
+    <div id="notif-list" class="notif-list">
+      <div class="notif-loading">Loading notifications…</div>
+    </div>
+    <div class="notif-drawer-footer">
+      <a href="/profile.html" class="notif-footer-link">⚙ Notification Settings</a>
+      <button type="button" class="notif-footer-link notif-btn-link" onclick="exportNotifsCSV()">Export CSV ↗</button>
+    </div>
+  </aside>
+
+  <div id="toast" role="status"></div>
+  <script>initSendEmail();</script>
+</body>
+</html>

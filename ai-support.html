@@ -1,0 +1,934 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MAIL INDIA — Agentic Support</title>
+  <link rel="stylesheet" href="/styles.css?v=2.2.6">
+  <script src="/common.js?v=2.2.6"></script>
+  <style>
+    /* Reset & Clean Agentic Layout */
+    * { box-sizing: border-box; }
+    body.agentic-body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top App Bar */
+    .agentic-topbar {
+      height: 56px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      flex-shrink: 0;
+    }
+
+    .agentic-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-drawer-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+      background: #ffffff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #475569;
+      font-size: 18px;
+      transition: all 0.15s ease;
+    }
+    .icon-drawer-btn:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      color: #0f172a;
+    }
+
+    /* Agent Dropdown Selector Pill */
+    .agent-selector-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 9999px;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      transition: all 0.15s ease;
+      font-size: 13px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .agent-selector-pill:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .agent-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #2563eb;
+      transition: background 0.2s;
+    }
+    .agent-dot.agent-y-dot {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    }
+
+    /* Dropdown Card */
+    .agent-dropdown-menu {
+      position: absolute;
+      top: 50px;
+      left: 16px;
+      width: 310px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 16px 36px rgba(15,23,42,0.12);
+      padding: 8px;
+      z-index: 50;
+      display: none;
+      animation: fadeInDown 0.15s ease-out;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .agent-opt-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .agent-opt-row:hover {
+      background: #f8fafc;
+    }
+    .agent-opt-row.active {
+      background: #f0f7ff;
+    }
+
+    .agent-opt-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .agent-opt-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #2563eb;
+      flex-shrink: 0;
+    }
+    .agent-opt-circle.agent-y-circle {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    }
+
+    .agent-opt-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      margin-left: 6px;
+    }
+    .badge-blue { background: #eff6ff; color: #2563eb; }
+    .badge-purple { background: #fdf2f8; color: #a21caf; }
+
+    .agent-opt-sub {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    .agent-check {
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    /* Thinking Mode Toggle Row */
+    .thinking-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      border-top: 1px solid #f1f5f9;
+      margin-top: 4px;
+    }
+    .switch-track {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .switch-track input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .switch-slider {
+      position: absolute;
+      cursor: pointer;
+      inset: 0;
+      background-color: #cbd5e1;
+      transition: .2s;
+      border-radius: 24px;
+    }
+    .switch-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .2s;
+      border-radius: 50%;
+    }
+    input:checked + .switch-slider {
+      background-color: #2563eb;
+    }
+    input:checked + .switch-slider:before {
+      transform: translateX(20px);
+    }
+
+    /* Topbar Right Action */
+    .new-chat-top-btn {
+      background: transparent;
+      border: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #0f172a;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .new-chat-top-btn:hover {
+      background: #f1f5f9;
+    }
+
+    /* Drawer Sidebar */
+    .drawer-veil {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,23,42,0.45);
+      backdrop-filter: blur(2px);
+      z-index: 90;
+      display: none;
+    }
+    .agentic-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      max-width: 85vw;
+      height: 100vh;
+      background: #ffffff;
+      box-shadow: 4px 0 24px rgba(0,0,0,0.12);
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+    }
+    .agentic-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+    .drawer-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .drawer-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #1e3a8a;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-new-chat-btn {
+      width: 100%;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 14px 0;
+      transition: all 0.15s;
+    }
+    .drawer-new-chat-btn:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+    }
+
+    .drawer-history-list {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin: 4px 0;
+    }
+    .history-item {
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #334155;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .history-item:hover {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+    .history-item.active {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-weight: 600;
+    }
+
+    .drawer-footer {
+      padding-top: 14px;
+      border-top: 1px solid #f1f5f9;
+    }
+    .drawer-back-link {
+      font-size: 13px;
+      color: #475569;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    .drawer-back-link:hover {
+      color: #0f172a;
+    }
+
+    /* Main Scrollable Chat Area */
+    .chat-scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 16px 130px 16px;
+      max-width: 768px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Hero / Welcome View */
+    .hero-view {
+      max-width: 540px;
+      margin: 40px auto;
+      text-align: center;
+      animation: fadeIn 0.2s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .hero-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px auto;
+      box-shadow: 0 8px 24px rgba(37,99,235,0.22);
+    }
+    .hero-avatar.agent-y-avatar {
+      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+      box-shadow: 0 8px 24px rgba(217,70,239,0.22);
+    }
+
+    .hero-heading {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.02em;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: #475569;
+      line-height: 1.6;
+      margin: 0 auto 28px auto;
+    }
+
+    .prompt-cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+    }
+    .prompt-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 15px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      width: 100%;
+    }
+    .prompt-card:hover {
+      border-color: #94a3b8;
+      background: #fafafa;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(15,23,42,0.06);
+    }
+
+    /* Message Stream */
+    .message-stream {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .user-msg-bubble {
+      align-self: flex-end;
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 18px 18px 4px 18px;
+      padding: 12px 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      max-width: 82%;
+      word-break: break-word;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .agent-msg-wrap {
+      align-self: flex-start;
+      display: flex;
+      gap: 12px;
+      max-width: 90%;
+      width: 100%;
+    }
+
+    .agent-msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .agent-msg-avatar.agent-y-av {
+      background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%);
+    }
+
+    .agent-msg-content {
+      flex: 1;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #1e293b;
+      word-break: break-word;
+    }
+    .agent-msg-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .agent-msg-name {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: #0f172a;
+    }
+    .agent-badge-pill {
+      font-size: 10.5px;
+      font-weight: 700;
+      background: #eff6ff;
+      color: #2563eb;
+      padding: 1px 7px;
+      border-radius: 4px;
+    }
+
+    /* Thinking Details Box */
+    .thinking-details {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      color: #475569;
+    }
+    .thinking-details summary {
+      cursor: pointer;
+      font-weight: 700;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
+    }
+    .thinking-details p {
+      margin: 8px 0 0 0;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    /* Model Switch Fallback Card (ZetPay Style) */
+    .switch-modal-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+      max-width: 92%;
+      margin-top: 2px;
+    }
+    .switch-modal-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .switch-modal-desc {
+      font-size: 13.5px;
+      color: #334155;
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    .switch-agent-btn {
+      margin-top: 14px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #2563eb;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .switch-agent-btn:hover {
+      background: #dbeafe;
+      border-color: #93c5fd;
+      color: #1d4ed8;
+      box-shadow: 0 2px 8px rgba(37,99,235,0.15);
+    }
+
+    /* Formatted AI Markdown Styles */
+    .ai-p {
+      margin: 0 0 10px 0;
+      line-height: 1.6;
+    }
+    .ai-p:last-child {
+      margin-bottom: 0;
+    }
+    .ai-inline-code {
+      background: #f1f5f9;
+      color: #0f172a;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      padding: 2px 6px;
+      border-radius: 5px;
+      border: 1px solid #e2e8f0;
+    }
+    .ai-code-card {
+      background: #0f172a;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0;
+      border: 1px solid #1e293b;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+    }
+    .ai-code-header {
+      background: #1e293b;
+      padding: 6px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #94a3b8;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .ai-copy-btn {
+      background: transparent;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .ai-copy-btn:hover {
+      background: #334155;
+      color: #ffffff;
+    }
+    .ai-code-card pre {
+      margin: 0;
+      padding: 14px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #f8fafc;
+    }
+    .ai-ul, .ai-ol {
+      margin: 6px 0 10px 20px;
+      padding: 0;
+    }
+    .ai-ul li, .ai-ol li {
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+    .ai-chat-link {
+      color: #2563eb;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .ai-chat-link:hover {
+      color: #1d4ed8;
+    }
+    .msg-timestamp {
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+
+    /* User Message Bubble with Metadata */
+    .user-msg-container {
+      align-self: flex-end;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      max-width: 82%;
+      gap: 4px;
+    }
+    .user-msg-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-msg-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      color: #64748b;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Fixed Bottom Bar */
+    .agentic-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.92) 25%, #ffffff 100%);
+      padding: 12px 16px 14px 16px;
+      z-index: 40;
+    }
+
+    .bottom-input-wrap {
+      max-width: 768px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .input-pill-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      padding: 6px 8px 6px 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      transition: all 0.15s ease;
+    }
+    .input-pill-box:focus-within {
+      border-color: #2563eb;
+      box-shadow: 0 4px 24px rgba(37,99,235,0.12);
+    }
+
+    .agentic-input-field {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: #0f172a;
+      font-family: inherit;
+    }
+    .agentic-input-field::placeholder {
+      color: #94a3b8;
+    }
+
+    .agentic-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: none;
+      background: #cbd5e1;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    .agentic-send-btn.active-send {
+      background: #2563eb;
+      cursor: pointer;
+    }
+    .agentic-send-btn.active-send:hover {
+      background: #1d4ed8;
+    }
+
+    .bottom-helper-text {
+      text-align: center;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    @media (max-width: 600px) {
+      .hero-heading { font-size: 22px; }
+      .prompt-card { font-size: 13px; padding: 13px 15px; }
+    }
+  </style>
+</head>
+<body class="agentic-body">
+
+  <!-- Top Navigation Bar -->
+  <header class="agentic-topbar">
+    <div class="agentic-topbar-left">
+      <!-- Drawer Toggle Icon Button -->
+      <button type="button" class="icon-drawer-btn" onclick="toggleAgenticDrawer()" aria-label="Toggle navigation drawer">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="21"></line>
+        </svg>
+      </button>
+
+      <!-- Agent Dropdown Selector Pill -->
+      <div style="position:relative">
+        <button type="button" class="agent-selector-pill" id="agent-selector-pill" onclick="toggleAgentDropdown(event)">
+          <span class="agent-dot" id="pill-agent-dot"></span>
+          <span id="pill-agent-text">Agent X</span>
+          <span style="font-size:10px;color:#64748b">▾</span>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div class="agent-dropdown-menu" id="agent-dropdown-menu">
+          <!-- Option Agent X -->
+          <div class="agent-opt-row active" id="opt-agent-x" onclick="selectAgent('agent-x')">
+            <div class="agent-opt-left">
+              <div class="agent-opt-circle"></div>
+              <div>
+                <div style="display:flex;align-items:center">
+                  <strong style="font-size:13.5px;color:#0f172a">Agent X</strong>
+                  <span class="agent-opt-badge badge-blue">Coding & Reasoning</span>
+                </div>
+                <div class="agent-opt-sub">Mail India's own assistant</div>
+              </div>
+            </div>
+            <span class="agent-check" id="check-agent-x">✓</span>
+          </div>
+
+          <!-- Option Agent Y -->
+          <div class="agent-opt-row" id="opt-agent-y" onclick="selectAgent('agent-y')">
+            <div class="agent-opt-left">
+              <div class="agent-opt-circle agent-y-circle"></div>
+              <div>
+                <div style="display:flex;align-items:center">
+                  <strong style="font-size:13.5px;color:#0f172a">Agent Y</strong>
+                  <span class="agent-opt-badge badge-purple">Agentic</span>
+                </div>
+                <div class="agent-opt-sub">Mail India's own assistant</div>
+              </div>
+            </div>
+            <span class="agent-check" id="check-agent-y" style="display:none">✓</span>
+          </div>
+
+          <!-- Thinking Mode Toggle -->
+          <div class="thinking-row">
+            <div>
+              <div style="font-weight:700;font-size:13px;color:#0f172a">Thinking mode</div>
+              <div style="font-size:11px;color:#64748b">Reason step-by-step before answering</div>
+            </div>
+            <label class="switch-track" aria-label="Toggle thinking mode">
+              <input type="checkbox" id="thinking-mode-checkbox" onchange="toggleThinkingMode(this.checked)">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: New Chat Button -->
+    <div>
+      <button type="button" class="new-chat-top-btn" onclick="startNewChat()">New chat</button>
+    </div>
+  </header>
+
+  <!-- Left Drawer Backdrop Veil -->
+  <div class="drawer-veil" id="drawer-veil" onclick="closeAgenticDrawer()"></div>
+
+  <!-- Left Drawer Menu -->
+  <aside class="agentic-drawer" id="agentic-drawer">
+    <div class="drawer-header">
+      <div class="drawer-brand-wrap">
+        <div class="drawer-avatar">M</div>
+        <div>
+          <strong id="drawer-agent-name" style="font-size:14.5px;color:#0f172a;display:block">Agent X</strong>
+          <small style="color:#64748b;font-size:11.5px">Agentic Support</small>
+        </div>
+      </div>
+      <button type="button" onclick="closeAgenticDrawer()" style="background:none;border:none;font-size:18px;color:#64748b;cursor:pointer;padding:4px">✕</button>
+    </div>
+
+    <button type="button" class="drawer-new-chat-btn" onclick="startNewChat()">
+      <span style="font-size:16px;font-weight:700">+</span>
+      <span>New chat</span>
+    </button>
+
+    <div style="font-size:11px;font-weight:700;color:#94a3b8;margin:6px 0;letter-spacing:0.04em">RECENT CHATS</div>
+    <div class="drawer-history-list" id="drawer-history-list">
+      <!-- Populated dynamically via JS -->
+    </div>
+
+    <div class="drawer-footer">
+      <a href="/dashboard.html" class="drawer-back-link">
+        <span>←</span>
+        <span>Back to Dashboard</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Scrollable Chat Area -->
+  <main class="chat-scroll-area" id="chat-scroll-area">
+    <!-- View 1: Hero Welcome Screen (when thread is empty) -->
+    <section class="hero-view" id="hero-view">
+      <div class="hero-avatar" id="hero-avatar">M</div>
+      <h1 class="hero-heading" id="hero-heading">Ask Agent X anything about Mail India</h1>
+      <p class="hero-sub">Transactional email, SMTP routing, API keys, Google Workspace relay, webhooks — I'm scoped to Mail India Platform so every answer is on-topic.</p>
+
+      <div class="prompt-cards-container">
+        <button type="button" class="prompt-card" onclick="sendPromptCard('How do I generate an API key?')">
+          How do I generate an API key?
+        </button>
+        <button type="button" class="prompt-card" onclick="sendPromptCard('Google Workspace Relay vs SMTP Relay — what\'s the difference?')">
+          Google Workspace Relay vs SMTP Relay — what's the difference?
+        </button>
+        <button type="button" class="prompt-card" onclick="sendPromptCard('How do webhooks and delivery tracking work?')">
+          How do webhooks and delivery tracking work?
+        </button>
+        <button type="button" class="prompt-card" onclick="sendPromptCard('How do I send my first email with cURL or Node.js?')">
+          How do I send my first email with cURL or Node.js?
+        </button>
+      </div>
+    </section>
+
+    <!-- View 2: Live Message Stream -->
+    <section class="message-stream" id="message-stream" style="display:none"></section>
+  </main>
+
+  <!-- Fixed Bottom Input Bar -->
+  <footer class="agentic-bottom-bar">
+    <div class="bottom-input-wrap">
+      <form id="agentic-form" onsubmit="handleAgenticSubmit(event)">
+        <div class="input-pill-box">
+          <input type="text" id="agentic-input" class="agentic-input-field" placeholder="Message Agent X..." autocomplete="off" oninput="handleInputState(this)">
+          <button type="submit" id="agentic-send-btn" class="agentic-send-btn" aria-label="Send message" disabled>↑</button>
+        </div>
+      </form>
+      <div class="bottom-helper-text">Enter for a new line · Ctrl+Enter to send · Scoped to Mail India Platform only</div>
+    </div>
+  </footer>
+
+  <div id="toast" role="status"></div>
+  <script>initAgenticSupport();</script>
+</body>
+</html>

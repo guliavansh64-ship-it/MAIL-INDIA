@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Legal & Compliance Center — MAIL INDIA</title>
+  <meta name="description" content="Official statutory legal documentation, DPDP Act 2023 compliance, Privacy Policy, Terms & Conditions, and Acceptable Use Policy for MAIL INDIA.">
+  <link rel="icon" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #7545F5;
+      --primary-light: #8E65F8;
+      --secondary: #A52AEF;
+      --navy: #171638;
+      --bg: #F7F6FC;
+      --card-bg: #FFFFFF;
+      --text: #24213D;
+      --text-muted: #64748b;
+      --border: #EAE7F6;
+      --gradient: linear-gradient(135deg, #7545F5 0%, #A52AEF 100%);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 14px; background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+    body { min-height: 100vh; line-height: 1.7; background-color: var(--bg); }
+
+    /* Topbar */
+    .topbar-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(23, 22, 56, 0.04);
+    }
+    .topbar {
+      max-width: 1140px; margin: 0 auto; padding: 0 24px;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--navy);
+    }
+    .brand img {
+      width: 34px; height: 34px; object-fit: contain; border-radius: 8px;
+    }
+    .brand-title {
+      font-size: 16px; font-weight: 900; letter-spacing: -0.3px; color: var(--navy);
+    }
+    .brand-title span { color: var(--primary); }
+    .nav-links {
+      display: flex; gap: 20px; align-items: center; list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px; font-weight: 600; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 7px 16px; font-size: 12px; font-weight: 700; border-radius: 8px; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-ghost {
+      color: var(--navy); background: #f0ecfc;
+    }
+    .btn-ghost:hover { background: #e5defc; }
+    .btn-primary {
+      color: #ffffff; background: var(--gradient); box-shadow: 0 4px 12px rgba(117, 69, 245, 0.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(117, 69, 245, 0.35); }
+
+    /* Layout */
+    .legal-shell {
+      max-width: 1140px; margin: 40px auto 80px; padding: 0 24px;
+    }
+
+    /* Hero */
+    .legal-hero {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 40px;
+    }
+    .legal-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700; color: var(--primary);
+      background: #f0ecfc; border: 1px solid rgba(117, 69, 245, 0.2);
+      border-radius: 999px; padding: 4px 14px; margin-bottom: 14px;
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .legal-hero h1 {
+      font-size: 36px; font-weight: 900; color: var(--navy); margin-bottom: 12px; letter-spacing: -0.6px; line-height: 1.25;
+    }
+    .legal-hero p {
+      font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px;
+    }
+    .legal-meta-pills {
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; font-size: 12px; font-weight: 600; color: #475569;
+    }
+    .meta-pill {
+      background: #ffffff; border: 1px solid var(--border); padding: 4px 12px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px;
+    }
+
+    /* Policy Cards Grid */
+    .policy-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .policy-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 18px rgba(23, 22, 56, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .policy-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(117, 69, 245, 0.1);
+      border-color: rgba(117, 69, 245, 0.35);
+    }
+    .policy-card-header {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .policy-icon-wrap {
+      width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .icon-privacy { background: #eff6ff; color: #2563eb; }
+    .icon-terms { background: #fdf2f8; color: #db2777; }
+    .icon-aup { background: #f0fdf4; color: #16a34a; }
+
+    .policy-tag {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 8px; border-radius: 4px;
+    }
+    .tag-privacy { background: #dbeafe; color: #1d4ed8; }
+    .tag-terms { background: #fce7f3; color: #be185d; }
+    .tag-aup { background: #dcfce7; color: #15803d; }
+
+    .policy-card-title {
+      font-size: 18px; font-weight: 800; color: var(--navy); margin-top: 4px;
+    }
+    .policy-card-desc {
+      font-size: 13.5px; color: #475569; line-height: 1.65; margin-bottom: 20px;
+    }
+    .policy-card-bullets {
+      list-style: none; margin-bottom: 22px; font-size: 12.5px; color: #334155;
+    }
+    .policy-card-bullets li {
+      margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px;
+    }
+    .policy-card-bullets li i {
+      color: #10b981; margin-top: 3px; font-size: 11px;
+    }
+    .policy-card-actions {
+      display: flex; gap: 10px; align-items: center;
+    }
+    .card-btn-primary {
+      flex: 1; text-align: center; padding: 9px 14px; background: var(--primary); color: #ffffff; font-weight: 700; font-size: 12.5px; border-radius: 8px; text-decoration: none; transition: background 0.2s;
+    }
+    .card-btn-primary:hover { background: var(--primary-light); }
+    .card-btn-ghost {
+      padding: 9px 14px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; font-weight: 600; font-size: 12.5px; border-radius: 8px; text-decoration: none; transition: all 0.2s; cursor: pointer;
+    }
+    .card-btn-ghost:hover { background: #f1f5f9; color: var(--navy); }
+
+    /* Highlights Section */
+    .highlights-panel {
+      background: #ffffff; border: 1px solid var(--border); border-radius: 16px; padding: 36px 32px; box-shadow: 0 4px 18px rgba(23, 22, 56, 0.04); margin-bottom: 40px;
+    }
+    .highlights-heading {
+      font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 24px; display: flex; align-items: center; gap: 10px;
+    }
+    .highlights-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px;
+    }
+    .highlight-item {
+      background: #fbfaff; border: 1px solid var(--border); border-radius: 12px; padding: 20px 18px;
+    }
+    .highlight-item h3 {
+      font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .highlight-item p {
+      font-size: 13px; color: #64748b; line-height: 1.6; margin: 0;
+    }
+
+    /* Tabbed Policy Reader */
+    .tabbed-reader {
+      background: #ffffff; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 20px rgba(23, 22, 56, 0.05); overflow: hidden; margin-bottom: 40px;
+    }
+    .reader-tabs {
+      display: flex; border-bottom: 1px solid var(--border); background: #faf9fd; overflow-x: auto;
+    }
+    .reader-tab-btn {
+      padding: 14px 22px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: transparent; border: none; cursor: pointer; border-bottom: 2px solid transparent; display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: all 0.2s; font-family: inherit;
+    }
+    .reader-tab-btn:hover { color: var(--primary); }
+    .reader-tab-btn.active {
+      color: var(--primary); background: #ffffff; border-bottom-color: var(--primary);
+    }
+    .reader-content {
+      padding: 36px 32px; min-height: 380px;
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .reader-header {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .reader-title { font-size: 24px; font-weight: 800; color: var(--navy); }
+    .reader-controls { display: flex; gap: 8px; }
+    .reader-ctrl-btn {
+      padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1px solid var(--border); background: #ffffff; color: #475569; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+    }
+    .reader-ctrl-btn:hover { background: #f8fafc; color: var(--navy); }
+
+    .doc-section {
+      margin-bottom: 24px;
+    }
+    .doc-section h2 {
+      font-size: 17px; font-weight: 800; color: var(--navy); margin-bottom: 8px;
+    }
+    .doc-section p {
+      font-size: 13.5px; color: #334155; line-height: 1.7; margin-bottom: 10px;
+    }
+    .doc-section ul {
+      margin-left: 20px; font-size: 13.5px; color: #334155; line-height: 1.65;
+    }
+    .doc-section li { margin-bottom: 6px; }
+    .doc-callout {
+      background: #fbfaff; border-left: 4px solid var(--primary); padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px; color: #1e1b4b; margin: 12px 0;
+    }
+
+    /* Grievance / Contact Box */
+    .grievance-panel {
+      background: linear-gradient(135deg, #171638 0%, #252352 100%);
+      color: #ffffff;
+      border-radius: 16px;
+      padding: 36px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .grievance-text h3 {
+      font-size: 20px; font-weight: 800; margin-bottom: 6px;
+    }
+    .grievance-text p {
+      font-size: 13.5px; color: #cbd5e1; max-width: 600px; line-height: 1.6;
+    }
+    .grievance-actions {
+      display: flex; gap: 12px; flex-wrap: wrap;
+    }
+    .grievance-btn {
+      padding: 10px 20px; font-size: 13px; font-weight: 700; border-radius: 8px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-mail { background: #ffffff; color: var(--navy); }
+    .btn-ticket { background: rgba(255,255,255,0.15); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border); background: #ffffff; padding: 36px 0; font-size: 12px; color: var(--text-muted);
+    }
+    .footer-inner {
+      max-width: 1140px; margin: 0 auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .legal-hero h1 { font-size: 26px; }
+      .policy-cards-grid { grid-template-columns: 1fr; }
+      .highlights-panel { padding: 24px 18px; }
+      .reader-content { padding: 24px 18px; }
+      .grievance-panel { padding: 24px 18px; flex-direction: column; align-items: flex-start; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <header class="topbar-wrap">
+    <div class="topbar">
+      <a href="/" class="brand">
+        <img src="/logo.png" alt="MAIL INDIA">
+        <div class="brand-title">MAIL <span>INDIA</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/api-docs.html">API Docs</a></li>
+        <li><a href="/#pricing">Pricing</a></li>
+        <li><a href="/support.html">Support Desk</a></li>
+        <li><a href="/legal.html" class="active">Legal</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/account.html" class="btn btn-ghost">Sign In</a>
+        <a href="/account.html?mode=signup" class="btn btn-primary">Start Free →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Shell -->
+  <main class="legal-shell">
+    <!-- Hero -->
+    <section class="legal-hero">
+      <span class="legal-badge">
+        <i class="fa-solid fa-shield-halved"></i> Statutory & Regulatory Framework
+      </span>
+      <h1>MAIL INDIA Legal & Compliance Center</h1>
+      <p>
+        Review our statutory commitments under the Digital Personal Data Protection (DPDP) Act 2023, terms of service, sovereign Indian data residency policies, and email deliverability standards.
+      </p>
+      <div class="legal-meta-pills">
+        <span class="meta-pill"><i class="fa-solid fa-landmark"></i> Jurisdiction: Republic of India</span>
+        <span class="meta-pill"><i class="fa-solid fa-database"></i> Mumbai & Bengaluru Sovereign Nodes</span>
+        <span class="meta-pill"><i class="fa-solid fa-lock"></i> DPDP Act 2023 Compliant</span>
+        <span class="meta-pill"><i class="fa-solid fa-key"></i> 2048-bit DKIM & TLS 1.3</span>
+      </div>
+    </section>
+
+    <!-- 3 Policy Action Cards Grid -->
+    <section class="policy-cards-grid">
+      <!-- Card 1: Privacy Policy -->
+      <div class="policy-card">
+        <div>
+          <div class="policy-card-header">
+            <div class="policy-icon-wrap icon-privacy">
+              <i class="fa-solid fa-user-shield"></i>
+            </div>
+            <div>
+              <span class="policy-tag tag-privacy">DPDP Act 2023</span>
+              <h2 class="policy-card-title">Privacy Policy</h2>
+            </div>
+          </div>
+          <p class="policy-card-desc">
+            How personal data, recipient transmission logs, and Google OAuth tokens are encrypted, sovereignly stored, and processed.
+          </p>
+          <ul class="policy-card-bullets">
+            <li><i class="fa-solid fa-check"></i> Indian data sovereignty (Mumbai & Bengaluru clusters)</li>
+            <li><i class="fa-solid fa-check"></i> Zero message body retention policy</li>
+            <li><i class="fa-solid fa-check"></i> SHA-256 hashed API keys and AES-256 tokens</li>
+            <li><i class="fa-solid fa-check"></i> 30-day automated log retention & GDPR erasure</li>
+          </ul>
+        </div>
+        <div class="policy-card-actions">
+          <a href="/privacy.html" class="card-btn-primary">View Full Policy →</a>
+          <button type="button" class="card-btn-ghost" onclick="switchReaderTab('tab-privacy')">Preview</button>
+        </div>
+      </div>
+
+      <!-- Card 2: Terms & Conditions -->
+      <div class="policy-card">
+        <div>
+          <div class="policy-card-header">
+            <div class="policy-icon-wrap icon-terms">
+              <i class="fa-solid fa-file-contract"></i>
+            </div>
+            <div>
+              <span class="policy-tag tag-terms">Master Service Agreement</span>
+              <h2 class="policy-card-title">Terms & Conditions</h2>
+            </div>
+          </div>
+          <p class="policy-card-desc">
+            Operational service agreement governing API usage, 99.9% uptime SLA, wallet credit rules, and ZetPay UPI recharge mechanics.
+          </p>
+          <ul class="policy-card-bullets">
+            <li><i class="fa-solid fa-check"></i> 99.9% API uptime availability commitment</li>
+            <li><i class="fa-solid fa-check"></i> ₹1 = 5 Credits ledger rule (₹0.20 / dispatch)</li>
+            <li><i class="fa-solid fa-check"></i> Instant refund on pre-send validation failures</li>
+            <li><i class="fa-solid fa-check"></i> Non-expiring purchased credit balance policy</li>
+          </ul>
+        </div>
+        <div class="policy-card-actions">
+          <a href="/terms.html" class="card-btn-primary">View Full Terms →</a>
+          <button type="button" class="card-btn-ghost" onclick="switchReaderTab('tab-terms')">Preview</button>
+        </div>
+      </div>
+
+      <!-- Card 3: Acceptable Use Policy -->
+      <div class="policy-card">
+        <div>
+          <div class="policy-card-header">
+            <div class="policy-icon-wrap icon-aup">
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <div>
+              <span class="policy-tag tag-aup">Deliverability & Anti-Spam</span>
+              <h2 class="policy-card-title">Acceptable Use Policy</h2>
+            </div>
+          </div>
+          <p class="policy-card-desc">
+            Quality and reputation standards required to send transactional email through Mail India's domestic edge relays and Google relays.
+          </p>
+          <ul class="policy-card-bullets">
+            <li><i class="fa-solid fa-check"></i> Strictly enforced &lt; 5% hard bounce rate ceiling</li>
+            <li><i class="fa-solid fa-check"></i> Maximum &lt; 0.1% spam complaint threshold</li>
+            <li><i class="fa-solid fa-check"></i> Absolute prohibition of cold purchased lists</li>
+            <li><i class="fa-solid fa-check"></i> Automated suppression and rate-limiting enforcement</li>
+          </ul>
+        </div>
+        <div class="policy-card-actions">
+          <a href="/acceptable-use.html" class="card-btn-primary">View Full AUP →</a>
+          <button type="button" class="card-btn-ghost" onclick="switchReaderTab('tab-aup')">Preview</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Compliance Pillars -->
+    <section class="highlights-panel">
+      <h2 class="highlights-heading">
+        <i class="fa-solid fa-certificate" style="color:var(--primary)"></i> Key Sovereign Cloud Commitments
+      </h2>
+      <div class="highlights-grid">
+        <div class="highlight-item">
+          <h3><i class="fa-solid fa-shield-virus" style="color:#2563eb"></i> DPDP Act 2023 Compliant</h3>
+          <p>Operates strictly within India's Digital Personal Data Protection Act framework. Data principals can request rectification or complete erasure with statutory verification.</p>
+        </div>
+        <div class="highlight-item">
+          <h3><i class="fa-solid fa-map-pin" style="color:#10b981"></i> Sovereign Indian Storage</h3>
+          <p>Databases, authentication credentials, and cryptographic vaults are physically located in Mumbai and Bengaluru edge clusters. Zero unconsented overseas replication.</p>
+        </div>
+        <div class="highlight-item">
+          <h3><i class="fa-solid fa-envelope-circle-check" style="color:#a855f7"></i> Zero Body Retention</h3>
+          <p>We do not inspect, monetize, or permanently store outgoing email HTML or text bodies. Payloads are purged from volatile memory immediately after provider delivery acceptance.</p>
+        </div>
+        <div class="highlight-item">
+          <h3><i class="fa-solid fa-lock" style="color:#f59e0b"></i> 2048-bit DKIM & TLS 1.3</h3>
+          <p>Outbound dispatches are cryptographically sealed with 2048-bit RSA keys and transmitted over TLS 1.3 with high-entropy cryptographic ciphers.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive In-Page Policy Reader -->
+    <section class="tabbed-reader" id="policyReader">
+      <nav class="reader-tabs" aria-label="Legal documents selector">
+        <button type="button" class="reader-tab-btn active" id="btn-tab-overview" onclick="switchReaderTab('tab-overview')">
+          <i class="fa-solid fa-layer-group"></i> Compliance Overview
+        </button>
+        <button type="button" class="reader-tab-btn" id="btn-tab-privacy" onclick="switchReaderTab('tab-privacy')">
+          <i class="fa-solid fa-user-shield"></i> Privacy Policy
+        </button>
+        <button type="button" class="reader-tab-btn" id="btn-tab-terms" onclick="switchReaderTab('tab-terms')">
+          <i class="fa-solid fa-file-contract"></i> Terms & Conditions
+        </button>
+        <button type="button" class="reader-tab-btn" id="btn-tab-aup" onclick="switchReaderTab('tab-aup')">
+          <i class="fa-solid fa-scale-balanced"></i> Acceptable Use Policy
+        </button>
+      </nav>
+
+      <div class="reader-content">
+        <!-- Tab 1: Overview -->
+        <div class="tab-pane active" id="tab-overview">
+          <div class="reader-header">
+            <div>
+              <h2 class="reader-title">Statutory Compliance Overview</h2>
+              <div style="font-size:12px;color:var(--text-muted)">Applicable to all tenants, developers, and integrated applications</div>
+            </div>
+            <div class="reader-controls">
+              <button type="button" class="reader-ctrl-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+            </div>
+          </div>
+          <div class="doc-section">
+            <h2>Statutory Scope & Legal Entity</h2>
+            <p>
+              MAIL INDIA Cloud Infrastructure is a transactional email and messaging platform providing REST APIs, SMTP relay nodes, and Google Workspace OAuth dispatch mechanisms to registered developers and businesses throughout India.
+            </p>
+            <div class="doc-callout">
+              <strong>Indian Legal Framework:</strong> This platform is governed by the laws of India, including the Digital Personal Data Protection (DPDP) Act, 2023, the Information Technology Act, 2000, and rules framed thereunder.
+            </div>
+            <p>
+              By accessing the API or creating an account, users consent to data processing for dispatch telemetry, fraud prevention, and wallet accounting as detailed in the sub-policies accessible below.
+            </p>
+          </div>
+          <div class="doc-section">
+            <h2>Direct Document Quick Links</h2>
+            <ul>
+              <li><a href="/privacy.html" style="color:var(--primary);font-weight:700">Official Privacy Policy Document (/privacy.html)</a> — Detailed telemetry disclosure, data subject rights, and log lifecycles.</li>
+              <li><a href="/terms.html" style="color:var(--primary);font-weight:700">Master Terms & Conditions (/terms.html)</a> — API service levels, credit reservations, ZetPay UPI payments, and billing dispute processes.</li>
+              <li><a href="/acceptable-use.html" style="color:var(--primary);font-weight:700">Acceptable Use Policy (/acceptable-use.html)</a> — Strict bounce thresholds, complaint ceilings, and spam mitigation controls.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Tab 2: Privacy Policy Preview -->
+        <div class="tab-pane" id="tab-privacy">
+          <div class="reader-header">
+            <div>
+              <h2 class="reader-title">Privacy Policy</h2>
+              <div style="font-size:12px;color:var(--text-muted)">Last Updated: November 2026 · Jurisdiction: Republic of India</div>
+            </div>
+            <div class="reader-controls">
+              <a href="/privacy.html" class="reader-ctrl-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Page</a>
+              <button type="button" class="reader-ctrl-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+            </div>
+          </div>
+          <div class="doc-section">
+            <h2>1. Digital Personal Data Protection Act Compliance</h2>
+            <p>
+              MAIL INDIA collects tenant profile details, authenticated Google identities, and transmission metadata strictly to fulfill email dispatch requests. Message bodies are processed in volatile memory and are not permanently archived.
+            </p>
+            <h2>2. Sovereign Storage & Key Security</h2>
+            <p>
+              All customer records and secret keys are stored in sovereign Indian regions. Plaintext API keys (format <code>mb_live_...</code>) are hashed using SHA-256 before database storage.
+            </p>
+            <h2>3. Log Lifecycles & Self-Service Erasure</h2>
+            <p>
+              Transmission logs are automatically purged after 30 calendar days. Users may initiate full account anonymization or export telemetry at any time.
+            </p>
+            <p style="margin-top:16px">
+              <a href="/privacy.html" style="color:var(--primary);font-weight:700">Read complete clauses in dedicated Privacy Policy Document →</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 3: Terms & Conditions Preview -->
+        <div class="tab-pane" id="tab-terms">
+          <div class="reader-header">
+            <div>
+              <h2 class="reader-title">Terms & Conditions</h2>
+              <div style="font-size:12px;color:var(--text-muted)">Last Updated: November 2026 · Master Service Agreement</div>
+            </div>
+            <div class="reader-controls">
+              <a href="/terms.html" class="reader-ctrl-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Page</a>
+              <button type="button" class="reader-ctrl-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+            </div>
+          </div>
+          <div class="doc-section">
+            <h2>1. Service Scope & Availability</h2>
+            <p>
+              MAIL INDIA provides high-deliverability transactional cloud email infrastructure with a target service availability of 99.9%. Rate limits apply per tenant tier to safeguard cluster stability.
+            </p>
+            <h2>2. Credit Wallet & Instant UPI Top-ups</h2>
+            <p>
+              Standard dispatches consume 1 credit per accepted email (₹1 = 5 Credits, meaning ₹0.20 per dispatch). Google Workspace Relays operate at ₹0.10 per dispatch (10 credits / ₹1). Credits are reserved prior to transmission and permanently deducted only upon upstream provider acceptance.
+            </p>
+            <h2>3. Refunds & Ledger Reconciliations</h2>
+            <p>
+              Emails rejected prior to transmission (e.g., suppressed or blacklisted recipients) immediately restore reserved credits to the user wallet.
+            </p>
+            <p style="margin-top:16px">
+              <a href="/terms.html" style="color:var(--primary);font-weight:700">Read complete clauses in dedicated Terms & Conditions Document →</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab 4: Acceptable Use Policy Preview -->
+        <div class="tab-pane" id="tab-aup">
+          <div class="reader-header">
+            <div>
+              <h2 class="reader-title">Acceptable Use Policy</h2>
+              <div style="font-size:12px;color:var(--text-muted)">Anti-Spam Standards & Deliverability Requirements</div>
+            </div>
+            <div class="reader-controls">
+              <a href="/acceptable-use.html" class="reader-ctrl-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Open Full Page</a>
+              <button type="button" class="reader-ctrl-btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+            </div>
+          </div>
+          <div class="doc-section">
+            <h2>1. Transactional Integrity & Anti-Spam Requirements</h2>
+            <p>
+              MAIL INDIA strictly prohibits spam, unsolicited bulk marketing, phishing, and list harvesting. Tenants must maintain an explicit opt-in relationship with all recipients.
+            </p>
+            <h2>2. Deliverability Thresholds</h2>
+            <div class="doc-callout">
+              <strong>Reputation Ceilings:</strong> Accounts with hard bounce rates exceeding 5% or spam complaint rates exceeding 0.1% are automatically throttled or suspended.
+            </div>
+            <h2>3. Automated Suppression & Safeguards</h2>
+            <p>
+              Recipients that report spam, unsubscribe, or generate hard bounces are immediately committed to the tenant suppression list to protect domain deliverability.
+            </p>
+            <p style="margin-top:16px">
+              <a href="/acceptable-use.html" style="color:var(--primary);font-weight:700">Read complete clauses in dedicated Acceptable Use Policy Document →</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Statutory Grievance Redressal Panel -->
+    <section class="grievance-panel">
+      <div class="grievance-text">
+        <h3><i class="fa-solid fa-user-shield"></i> Statutory Grievance & Compliance Redressal</h3>
+        <p>
+          Under Rule 3(2) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021 and DPDP Act 2023, data principals and law enforcement authorities may submit statutory queries directly to our Grievance Officer.
+        </p>
+      </div>
+      <div class="grievance-actions">
+        <a href="mailto:privacy@mailindia.in" class="grievance-btn btn-mail">
+          <i class="fa-solid fa-envelope"></i> privacy@mailindia.in
+        </a>
+        <a href="/support.html" class="grievance-btn btn-ticket">
+          <i class="fa-solid fa-headset"></i> Support Desk Ticket
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>
+        <strong>MAIL INDIA</strong> — Enterprise Email Cloud Platform. (C) 2026. All rights reserved.
+      </div>
+      <div class="footer-links">
+        <a href="/legal.html">Legal Portal</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms & Conditions</a>
+        <a href="/acceptable-use.html">Acceptable Use Policy</a>
+        <a href="/api-docs.html">Developer API</a>
+        <a href="/support.html">Support Desk</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchReaderTab(tabId) {
+      document.querySelectorAll('.reader-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      const activePane = document.getElementById(tabId);
+      if (activeBtn) activeBtn.classList.add('active');
+      if (activePane) activePane.classList.add('active');
+
+      const reader = document.getElementById('policyReader');
+      if (reader && window.scrollY > reader.offsetTop) {
+        reader.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Auto-select tab if URL hash contains #privacy, #terms, or #aup
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = (window.location.hash || '').toLowerCase();
+      if (hash.includes('privacy')) switchReaderTab('tab-privacy');
+      else if (hash.includes('terms')) switchReaderTab('tab-terms');
+      else if (hash.includes('aup') || hash.includes('acceptable')) switchReaderTab('tab-aup');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1297 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MAIL INDIA — API Documentation</title>
+  <link rel="stylesheet" href="/styles.css?v=2.2.5">
+  <script src="/common.js?v=2.2.5"></script>
+  
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:10px" alt="Mail India"></span>
+        <span>MAIL INDIA <small>API</small></span>
+        <button type="button" class="drawer-close" onclick="closeDrawer(event)" data-action="close-drawer" aria-label="Close navigation">✕</button>
+      </div>
+      <div class="side-user-card" id="side-user-card">
+        <div class="side-user-avatar" id="side-user-avatar">MI</div>
+        <div class="side-user-info">
+          <div class="side-user-email" id="side-user-email">Mail India Workspace</div>
+          <div class="side-user-credits" id="side-user-credits">High-Availability Relay</div>
+        </div>
+      </div>
+      <div class="side-scroll">
+        <div id="side-guest-section" style="display:none">
+          <div class="side-guest-box" style="padding:16px 14px;text-align:center;background:rgba(255,255,255,0.06);border-radius:12px;margin:10px 14px 16px;border:1px solid rgba(255,255,255,0.12)">
+            <div style="font-size:28px;margin-bottom:6px">🔐</div>
+            <div style="font-size:13px;font-weight:700;color:#ffffff;margin-bottom:4px">Account Required</div>
+            <p style="font-size:11px;color:#a5a3c2;line-height:1.5;margin:0 0 12px">Sign in or register to access the developer workspace, API keys, and email dispatches.</p>
+            <a href="/account.html" class="primary" style="display:block;width:100%;text-align:center;padding:9px 0;font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;background:#6342dc;color:#ffffff;box-sizing:border-box">Sign In / Register →</a>
+          </div>
+          <div class="side-label">PUBLIC RESOURCES</div>
+          <a href="/api-docs.html" class="nav-item"><span class="nav-icon">▤</span>API Documentation</a>
+          <a href="/billing/pricing.html" class="nav-item"><span class="nav-icon">🏷</span>Pricing & Plans</a>
+          <a href="/help/status.html" class="nav-item"><span class="nav-icon">●</span>System Status</a>
+        </div>
+        <div id="side-auth-section">
+          <div class="side-label">USER WORKSPACE</div>
+          
+      <div class="nav-group " id="grp-user-overview">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-overview', event)" aria-label="Toggle Overview">
+          <span class="group-title"><span>▦</span>Overview</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/dashboard.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▦</span>Dashboard
+        </a>
+        <a href="/overview.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">♙</span>Account Overview
+        </a>
+        <a href="/quick-actions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚡</span>Quick Actions
+        </a>
+        <a href="/recent-activity.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◷</span>Recent Activity
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-email">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-email', event)" aria-label="Toggle Email & Messaging">
+          <span class="group-title"><span>✉</span>Email & Messaging</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/emails/all.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>All Emails
+        </a>
+        <a href="/send-email.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">✉</span>Compose Email
+        </a>
+        <a href="/send-test.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🧪</span>Send Test Email
+        </a>
+        <a href="/send-bulk.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">👥</span>Bulk Sending
+        </a>
+        <a href="/email-history.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">↻</span>Email History
+        </a>
+        <a href="/email-templates.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▧</span>Email Templates
+        </a>
+        <a href="/contacts/suppression.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚑</span>Suppression List
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-billing">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-billing', event)" aria-label="Toggle Wallet & Billing">
+          <span class="group-title"><span>◈</span>Wallet & Billing</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/wallet.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◈</span>Wallet & Credits
+        </a>
+        <a href="/billing/buy.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚡</span>Buy Credits
+        </a>
+        <a href="/recharge-history.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">↻</span>Recharge History
+        </a>
+        <a href="/billing/transactions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚖</span>Ledger Transactions
+        </a>
+        <a href="/billing/invoices.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▤</span>Invoices & Receipts
+        </a>
+        <a href="/billing/pricing.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🏷</span>Pricing & Usage
+        </a>
+        </div>
+      </div>
+      <div class="nav-group expanded" id="grp-user-dev">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-dev', event)" aria-label="Toggle Developer & API">
+          <span class="group-title"><span>⌘</span>Developer & API</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/api-docs.html" class="nav-sub-item active">
+          <span class="nav-sub-icon">▤</span>API Documentation
+        </a>
+        <a href="/api-management.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⌘</span>API Management
+        </a>
+        <a href="/api-playground.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▶</span>API Playground
+        </a>
+        <a href="/api/webhooks.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⇄</span>Webhooks
+        </a>
+        <a href="/api/rate-limits.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⏳</span>Rate Limits
+        </a>
+        <a href="/api/logs.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>API Logs
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-analytics">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-analytics', event)" aria-label="Toggle Analytics & Reports">
+          <span class="group-title"><span>◷</span>Analytics & Reports</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/usage-analytics.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◷</span>Email Analytics
+        </a>
+        <a href="/analytics/delivery.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">✓</span>Delivery Reports
+        </a>
+        <a href="/analytics/bounces.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚠</span>Bounce Reports
+        </a>
+        <a href="/analytics/consumption.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">📉</span>Credit Consumption
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-security">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-security', event)" aria-label="Toggle Account & Security">
+          <span class="group-title"><span>♙</span>Account & Security</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/profile.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">♙</span>My Profile
+        </a>
+        <a href="/account.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚙</span>Account Settings
+        </a>
+        <a href="/security/sessions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">💻</span>Active Sessions
+        </a>
+        <a href="/security/export.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">📥</span>Export My Data
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-user-help">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-user-help', event)" aria-label="Toggle Help & Support">
+          <span class="group-title"><span>◉</span>Help & Support</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/ai-support.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🤖</span>Agentic Support
+        </a>
+        <a href="/help/index.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">?</span>Help Centre
+        </a>
+        <a href="/support.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◉</span>Support Tickets
+        </a>
+        <a href="/help/status.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🟢</span>System Status
+        </a>
+        </div>
+      </div>
+          
+        </div>
+      </div>
+      <div class="side-bottom">
+        <strong>MAIL INDIA Platform</strong>
+        High-Availability Cloud Relay.<br>
+        <a href="/api-docs.html" style="color:#d3c7ff;font-weight:700">API Documentation ↗</a>
+      </div>
+    </aside>
+    <div class="veil" id="veil" onclick="closeDrawer(event)" data-action="close-drawer"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button type="button" class="icon-button menu-toggle" id="navToggle" onclick="toggleDrawer(event)" data-action="toggle-drawer" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+          <a href="/dashboard.html" class="top-brand" title="MAIL INDIA Platform">
+            <span class="top-brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:9px" alt="Mail India"></span>
+            <span class="top-brand-text">MAIL INDIA</span>
+          </a>
+          <div>
+            <div class="top-title">API Documentation</div>
+            <div class="top-sub">Customer Workspace · MAIL INDIA</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <a href="/api-docs.html" class="icon-button" style="display:grid;place-items:center" aria-label="Documentation">?</a>
+          <button type="button" class="icon-button notif-bell-btn" id="notif-toggle-btn" onclick="toggleNotifDrawer(event)" aria-label="Notifications" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+          </button>
+          <a href="/account.html" class="outline" id="auth-button" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" onclick="handleAuthClick(event)">Sign in</a>
+          <div class="profile-wrap" id="profile-wrap">
+            <button type="button" class="profile" id="topbar-profile" onclick="toggleProfileDropdown(event)" aria-label="User profile menu" aria-haspopup="true" aria-expanded="false">
+              <div class="avatar" id="topbar-avatar" style="">MI</div>
+              <span class="topbar-profile-info"><span class="topbar-profile-name">Workspace</span><small class="topbar-profile-role">Live Sync</small></span>
+              <span class="profile-caret" id="topbar-caret" style="display:none">▾</span>
+            </button>
+            <div class="profile-dropdown-menu" id="profile-dropdown-menu" role="menu" style="display:none">
+              <div class="profile-dropdown-header">
+                <div class="dropdown-avatar" id="dropdown-user-avatar">MI</div>
+                <div class="dropdown-user-info">
+                  <div class="dropdown-name" id="dropdown-user-name">Workspace User</div>
+                  <div class="dropdown-email" id="dropdown-user-email">user@mailindia.in</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="/profile.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">👤</span> My Profile
+              </a>
+              <a href="/account.html?stay=1" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">⚙️</span> Account Settings
+              </a>
+              <a href="/billing/pricing.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">🏷️</span> Pricing &amp; Upgrade
+              </a>
+              <a href="/billing/buy.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">💳</span> Buy Credits
+              </a>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="profile-dropdown-item profile-logout-btn" onclick="signOut(event)" role="menuitem">
+                <span class="dropdown-icon">🚪</span> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        
+  <!-- Hero Developer Header (ZetPay Style) -->
+  <div class="docs-hero" id="overview">
+    <div class="docs-badges">
+      <span class="docs-badge"><span style="color:#4ade80">●</span> API v1: Operational</span>
+      <span class="docs-badge"><span style="color:#38bdf8">⚡</span> SMTP Relay: smtp.gmail.com:465</span>
+      <span class="docs-badge"><span style="color:#fbbf24">🛡</span> Idempotency: SHA-256 Protected</span>
+      <span class="docs-badge">🇮🇳 Data Residency: Mumbai / India</span>
+      <span class="docs-badge">💳 Billing: 1 Send = 1 Credit</span>
+    </div>
+    <h1>MAIL INDIA Developer Documentation</h1>
+    <p>
+      Complete REST API specification and developer integration guide for transactional emails.
+      Zero setup fees, instant API keys, dedicated Indian IP relays, and real-time delivery telemetry.
+    </p>
+    <div class="docs-toolbar">
+      <button type="button" class="docs-btn" onclick="copyAllDocs()">📋 Copy All Docs</button>
+      <button type="button" class="docs-btn" onclick="openAiPromptDrawer()" style="background:#5b21b6;color:#ffffff;box-shadow:0 2px 8px rgba(91,33,182,0.3)">✨ Built-in Prompts ⚡</button>
+      <button type="button" class="docs-btn" onclick="copySnippet('code-curl', 'cURL')">💻 Copy cURL</button>
+      <button type="button" class="docs-btn" onclick="copySnippet('code-node-axios', 'Node.js (Axios)')">⚡ Copy Node.js</button>
+      <button type="button" class="docs-btn" onclick="copySnippet('code-python', 'Python')">🐍 Copy Python</button>
+      <button type="button" class="docs-btn" onclick="copySnippet('code-php', 'PHP')">🐘 Copy PHP</button>
+      <a href="/api-playground.html" class="docs-btn-outline">🧪 API Playground ↗</a>
+      <a href="/api-management.html" class="docs-btn-outline">🔑 Manage Keys ↗</a>
+    </div>
+  </div>
+
+  <!-- ZetPay-Style Sticky Quick Jump Navigation -->
+  <nav class="docs-jump-bar" aria-label="Documentation Navigation">
+    <div class="docs-jump-label"><span>⚡</span> Jump to:</div>
+    <a href="#overview" class="docs-jump-link">📌 Overview</a>
+    <a href="#authentication" class="docs-jump-link">🔑 Authentication</a>
+    <a href="#pick-your-stack" class="docs-jump-link">💻 Pick Your Stack</a>
+    <a href="#ai-prompts" class="docs-jump-link">🤖 AI Prompts</a>
+    <a href="#send-api" class="docs-jump-link">✉️ Send Email API</a>
+    <a href="#status-api" class="docs-jump-link">📊 Query Status</a>
+    <a href="#webhooks" class="docs-jump-link">⚡ Webhooks</a>
+    <a href="#error-codes" class="docs-jump-link">❌ Error Codes</a>
+    <a href="#best-practices" class="docs-jump-link">🛡️ Best Practices</a>
+  </nav>
+
+  <!-- SECTION 1: OVERVIEW & ARCHITECTURE -->
+  <div class="panel" style="margin-bottom:20px">
+    <h2>1. Integration Architecture & Base URLs</h2>
+    <p class="panel-sub">
+      MAIL INDIA provides a low-latency, asynchronous transactional email pipeline built on top of high-reputation SMTP nodes.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:14px;margin:16px 0">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:#6366f1;text-transform:uppercase;margin-bottom:6px">Production Base URL</div>
+        <code style="font-size:13px;font-weight:700;color:#0f172a">https://mailindia.in/v1</code>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0">Live production cluster with guaranteed Mumbai data residency.</p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px">
+        <div style="font-size:11px;font-weight:700;color:#10b981;text-transform:uppercase;margin-bottom:6px">Local / Sandbox Base URL</div>
+        <code style="font-size:13px;font-weight:700;color:#0f172a">http://localhost:3000/v1</code>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0">Local development server with instant test sending.</p>
+      </div>
+    </div>
+
+    <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:16px;margin-top:14px">
+      <strong style="font-size:13px;color:#1e293b">Lifecycle Workflow:</strong>
+      <ol style="font-size:12px;color:#475569;margin:10px 0 0 20px;line-height:1.7;padding:0">
+        <li><strong>Sign Call:</strong> Client backend attaches API Key in header <code>Authorization: Bearer mi_live_...</code></li>
+        <li><strong>Pre-flight Checks:</strong> System validates recipient syntax, queries real-time suppression list, and reserves 1 credit idempotently.</li>
+        <li><strong>Immediate Acceptance:</strong> Returns <code>202 Accepted</code> with a 64-character <code>message_id</code> in &lt;15ms.</li>
+        <li><strong>Async Delivery:</strong> Background worker relays via verified Gmail/Custom SMTP and commits credit deduction.</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AUTHENTICATION -->
+  <div class="panel" id="authentication" style="margin-bottom:20px">
+    <h2>2. Authentication & Headers</h2>
+    <p class="panel-sub">
+      All API requests must be authenticated using your project API Key passed as a Bearer token in the <code>Authorization</code> HTTP header.
+    </p>
+
+    <div class="table-responsive">
+      <table class="docs-table">
+        <thead>
+          <tr>
+            <th>Header</th>
+            <th>Type</th>
+            <th>Requirement</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Authorization</code></td>
+            <td><code>string</code></td>
+            <td><span class="req-tag">Required</span></td>
+            <td>Bearer token format: <code>Bearer mi_live_xxxxxxxxxxxxxxxxxxxxxxxx</code></td>
+          </tr>
+          <tr>
+            <td><code>Content-Type</code></td>
+            <td><code>string</code></td>
+            <td><span class="req-tag">Required</span></td>
+            <td>Must be set to <code>application/json</code> for all POST/PUT requests</td>
+          </tr>
+          <tr>
+            <td><code>Idempotency-Key</code></td>
+            <td><code>string</code></td>
+            <td><span class="opt-tag">Recommended</span></td>
+            <td>Unique client UUID or order key (e.g. <code>order-8921</code>) to prevent duplicate sends and duplicate credit debits on network retry.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="docs-callout docs-callout-warning">
+      <span style="font-size:18px">🛡️</span>
+      <div>
+        <strong>Security Warning:</strong>
+        Never expose your API key in client-side HTML, frontend JavaScript bundles, or public Git repositories.
+        Always trigger email dispatches from your backend server or cloud functions.
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: PICK YOUR STACK -->
+  <div class="panel" id="pick-your-stack" style="margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2>3. Pick Your Stack (SDK & Code Examples)</h2>
+        <p class="panel-sub">Copy-paste production-ready code samples in your preferred language or framework.</p>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="filter-pill" onclick="copySnippet('code-curl', 'cURL')">Copy cURL</button>
+        <button type="button" class="filter-pill" onclick="copySnippet('code-node-axios', 'Node.js')">Copy Node.js</button>
+        <button type="button" class="filter-pill" onclick="copySnippet('code-python', 'Python')">Copy Python</button>
+        <button type="button" class="filter-pill" onclick="copySnippet('code-php', 'PHP')">Copy PHP</button>
+      </div>
+    </div>
+
+    <div class="docs-code-card">
+      <div class="docs-code-header">
+        <div class="docs-code-tabs">
+          <button type="button" class="docs-tab-btn active" onclick="switchDocTab('curl', this)">cURL</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('node-axios', this)">Node.js (Axios)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('node-fetch', this)">Node.js (Fetch)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('python', this)">Python (requests)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('php', this)">PHP (cURL)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('go', this)">Go</button>
+          <button type="button" class="docs-tab-btn" onclick="switchDocTab('java', this)">Java (OkHttp)</button>
+        </div>
+        <button type="button" class="docs-copy-btn" id="active-tab-copy-btn" onclick="copyActiveDocTab()">📋 Copy Code</button>
+      </div>
+
+      <!-- Tab 1: cURL -->
+      <pre class="docs-code-body tab-content" id="code-curl"><code>curl -X POST http://localhost:3000/v1/emails/send \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: mi_req_$(date +%s)" \
+  -d '{
+    "to": "recipient@example.com",
+    "subject": "Order Confirmation #94821",
+    "text": "Thank you for your order! Your tracking number is IN-94821.",
+    "html": "&lt;h2&gt;Order Confirmation&lt;/h2&gt;&lt;p&gt;Thank you! Tracking ID: &lt;strong&gt;IN-94821&lt;/strong&gt;&lt;/p&gt;",
+    "consent": true
+  }'</code></pre>
+
+      <!-- Tab 2: Node.js (Axios) -->
+      <pre class="docs-code-body tab-content" id="code-node-axios" style="display:none"><code>const axios = require('axios');
+
+async function sendTransactionalEmail() {
+  try {
+    const response = await axios.post('http://localhost:3000/v1/emails/send', {
+      to: 'recipient@example.com',
+      subject: 'Welcome to Our Platform!',
+      text: 'Hello! Thank you for creating an account with us.',
+      html: '&lt;h1&gt;Welcome!&lt;/h1&gt;&lt;p&gt;Your account is active.&lt;/p&gt;',
+      consent: true,
+      idempotency_key: 'welcome-user-' + Date.now()
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.MAIL_INDIA_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    console.log('Dispatched successfully:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Email dispatch failed:', error.response?.data || error.message);
+    throw error;
+  }
+}
+
+sendTransactionalEmail();</code></pre>
+
+      <!-- Tab 3: Node.js (Fetch) -->
+      <pre class="docs-code-body tab-content" id="code-node-fetch" style="display:none"><code>async function sendWithFetch() {
+  const payload = {
+    to: 'customer@example.com',
+    subject: 'Your One-Time Passcode (OTP)',
+    text: 'Your security verification code is 849201. Valid for 10 minutes.',
+    html: '&lt;h2&gt;Security Code&lt;/h2&gt;&lt;p style="font-size:24px;font-weight:bold;color:#4f46e5"&gt;849201&lt;/p&gt;',
+    consent: true,
+    idempotency_key: 'otp-' + Date.now()
+  };
+
+  const res = await fetch('http://localhost:3000/v1/emails/send', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer ' + process.env.MAIL_INDIA_API_KEY,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || data.error);
+  console.log('Accepted by queue:', data.message_id);
+  return data;
+}</code></pre>
+
+      <!-- Tab 4: Python (requests) -->
+      <pre class="docs-code-body tab-content" id="code-python" style="display:none"><code>import os
+import time
+import requests
+
+API_KEY = os.environ.get("MAIL_INDIA_API_KEY", "YOUR_API_KEY")
+API_URL = "http://localhost:3000/v1/emails/send"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+    "Idempotency-Key": f"py-send-{int(time.time())}"
+}
+
+payload = {
+    "to": "recipient@example.com",
+    "subject": "Password Reset Instructions",
+    "text": "Click here to reset your password: https://yourapp.com/reset",
+    "html": "&lt;p&gt;Click &lt;a href='https://yourapp.com/reset'&gt;here&lt;/a&gt; to reset your password.&lt;/p&gt;",
+    "consent": True
+}
+
+response = requests.post(API_URL, json=payload, headers=headers)
+if response.status_code == 202:
+    data = response.json()
+    print("Email Accepted! Job ID:", data.get("message_id"))
+else:
+    print(f"Error {response.status_code}: {response.text}")</code></pre>
+
+      <!-- Tab 5: PHP (cURL) -->
+      <pre class="docs-code-body tab-content" id="code-php" style="display:none"><code>&lt;?php
+$apiKey = getenv('MAIL_INDIA_API_KEY') ?: 'YOUR_API_KEY';
+$url = 'http://localhost:3000/v1/emails/send';
+
+$data = [
+    'to' => 'user@example.com',
+    'subject' => 'Monthly Billing Invoice',
+    'text' => 'Your monthly statement is ready for download.',
+    'html' => '&lt;h3&gt;Invoice Ready&lt;/h3&gt;&lt;p&gt;Thank you for your business.&lt;/p&gt;',
+    'consent' => true,
+    'idempotency_key' => 'invoice-' . uniqid()
+];
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, [
+    'Authorization: Bearer ' . $apiKey,
+    'Content-Type: application/json'
+]);
+
+$response = curl_exec($ch);
+$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+curl_close($ch);
+
+$result = json_decode($response, true);
+if ($httpCode === 202) {
+    echo "Queued successfully: " . $result['message_id'];
+} else {
+    echo "Send failed: " . ($result['message'] ?? 'Unknown error');
+}
+?&gt;</code></pre>
+
+      <!-- Tab 6: Go -->
+      <pre class="docs-code-body tab-content" id="code-go" style="display:none"><code>package main
+
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
+	"time"
+)
+
+type EmailRequest struct {
+	To             string `json:"to"`
+	Subject        string `json:"subject"`
+	Text           string `json:"text"`
+	HTML           string `json:"html,omitempty"`
+	Consent        bool   `json:"consent"`
+	IdempotencyKey string `json:"idempotency_key,omitempty"`
+}
+
+func main() {
+	reqBody, _ := json.Marshal(EmailRequest{
+		To:             "recipient@example.com",
+		Subject:        "Alert: Server Spike",
+		Text:           "High CPU utilization detected on node 4.",
+		Consent:        true,
+		IdempotencyKey: fmt.Sprintf("go-%d", time.Now().Unix()),
+	})
+
+	req, _ := http.NewRequest("POST", "http://localhost:3000/v1/emails/send", bytes.NewBuffer(reqBody))
+	req.Header.Set("Authorization", "Bearer "+os.Getenv("MAIL_INDIA_API_KEY"))
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+
+	fmt.Println("Status Code:", resp.StatusCode)
+}</code></pre>
+
+      <!-- Tab 7: Java / Kotlin -->
+      <pre class="docs-code-body tab-content" id="code-java" style="display:none"><code>import okhttp3.*;
+import java.io.IOException;
+
+public class MailSender {
+    private static final OkHttpClient client = new OkHttpClient();
+
+    public static void main(String[] args) throws IOException {
+        String json = "{"
+            + "\"to\":\"client@example.com\","
+            + "\"subject\":\"Security Notice\","
+            + "\"text\":\"A new sign-in was observed from Mumbai.\","
+            + "\"consent\":true"
+            + "}";
+
+        RequestBody body = RequestBody.create(json, MediaType.get("application/json; charset=utf-8"));
+        Request request = new Request.Builder()
+            .url("http://localhost:3000/v1/emails/send")
+            .addHeader("Authorization", "Bearer " + System.getenv("MAIL_INDIA_API_KEY"))
+            .post(body)
+            .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            System.out.println("HTTP Status: " + response.code());
+            System.out.println("Response: " + response.body().string());
+        }
+    }
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- SECTION: AI INTEGRATION PROMPTS (ZetPay Style) -->
+  <div class="panel" id="ai-prompts" style="margin-bottom:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:#ede9fe;color:#5b21b6;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;text-transform:uppercase;margin-bottom:6px">
+          <span>🤖</span> AI Integration Prompts & Templates
+        </div>
+        <h2>AI Integration Prompts for All Stacks</h2>
+        <p class="panel-sub">
+          Feed these structured prompts to ChatGPT, Claude, Cursor, GitHub Copilot, or v0 to have AI automatically wire up MAIL INDIA in your project.
+        </p>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" class="primary" onclick="openAiPromptDrawer()" style="padding:6px 14px;font-size:12px">✨ Built-in Prompts ↗</button>
+        <button type="button" class="filter-pill" onclick="copyAiPrompt('html')">Copy HTML Prompt</button>
+        <button type="button" class="filter-pill" onclick="copyAiPrompt('php')">Copy PHP Prompt</button>
+        <button type="button" class="filter-pill" onclick="copyAiPrompt('node')">Copy Node.js Prompt</button>
+        <button type="button" class="filter-pill" onclick="copyAiPrompt('python')">Copy Python Prompt</button>
+      </div>
+    </div>
+
+    <div class="docs-code-card">
+      <div class="docs-code-header">
+        <div class="docs-code-tabs">
+          <button type="button" class="docs-tab-btn active" onclick="switchAiTab('html', this)">🌐 HTML / Frontend JS</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('php', this)">🐘 PHP (cURL / Laravel)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('node', this)">⚡ Node.js / Express / Next.js</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('python', this)">🐍 Python (FastAPI / Flask / Django)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('wordpress', this)">🛍️ WordPress / WooCommerce</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('curl', this)">💻 cURL / Shell / Bash</button>
+          <button type="button" class="docs-tab-btn" onclick="switchAiTab('java', this)">☕ Java / Android</button>
+        </div>
+        <button type="button" class="docs-copy-btn" id="active-ai-prompt-btn" onclick="copyActiveAiPrompt()">📋 Copy AI Prompt</button>
+      </div>
+
+      <!-- Tab 1: HTML / Vanilla JS AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-html"><code>You are an expert frontend and full-stack developer. Integrate the MAIL INDIA Transactional Email API into my existing HTML / JavaScript web application.
+
+### API Credentials & Base URL:
+- Base URL: http://localhost:3000/v1 (or https://mailindia.in/v1 in production)
+- API Endpoint: POST /v1/emails/send
+- Header: Content-Type: application/json
+- Header: Authorization: Bearer YOUR_API_KEY (or route via an existing backend endpoint for security)
+
+### Payload Structure:
+{
+  "to": "recipient@example.com",
+  "subject": "Contact Form Submission",
+  "text": "User message here",
+  "html": "&lt;h2&gt;New Message&lt;/h2&gt;&lt;p&gt;User message here&lt;/p&gt;",
+  "consent": true
+}
+
+### Integration Requirements:
+1. Build an accessible, mobile-friendly contact / feedback form with fields for Email, Subject, and Message.
+2. Add input validation with live email regex checking.
+3. Show clean loading states (disable submit button, display spinner while dispatching).
+4. Display a success toast/alert showing the assigned message_id on success.
+5. Gracefully catch and display errors (e.g. 402 Insufficient Credits, 403 Recipient Suppressed).
+6. Write clean, vanilla HTML5, CSS3, and modern ES6 JavaScript.
+
+Please write complete, production-ready code with no dependencies.</code></pre>
+
+      <!-- Tab 2: PHP AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-php" style="display:none"><code>You are a senior PHP engineer. Integrate the MAIL INDIA Transactional Email API into my PHP codebase.
+
+### API Specifications:
+- Endpoint: POST http://localhost:3000/v1/emails/send
+- Query Status: GET http://localhost:3000/v1/emails/{message_id}
+- Header: Authorization: Bearer YOUR_API_KEY
+- Header: Content-Type: application/json
+- Header: Idempotency-Key: &lt;unique-uuid&gt; (prevents double sends)
+
+### Payload Format:
+{
+  "to": "user@example.com",
+  "subject": "Invoice Receipt #94821",
+  "text": "Your order #94821 has been confirmed.",
+  "html": "&lt;h1&gt;Invoice #94821&lt;/h1&gt;&lt;p&gt;Order confirmed.&lt;/p&gt;",
+  "consent": true,
+  "idempotency_key": "inv-94821"
+}
+
+### Expected Success Response (HTTP 202):
+{
+  "success": true,
+  "status": "queued",
+  "message_id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "credits_used": 0
+}
+
+### Integration Requirements:
+1. Create a reusable client class `MailIndiaClient.php` using native cURL.
+2. Read the API key from environment variable `MAIL_INDIA_API_KEY`.
+3. Implement method `sendEmail($to, $subject, $text, $html = null, $idempotencyKey = null)`.
+4. Implement method `getStatus($messageId)` to verify SMTP delivery outcome.
+5. Provide comprehensive error handling: throw custom exceptions for 401 (Invalid Key), 402 (Insufficient Credits), 403 (Recipient Suppressed), and 429 (Rate Limit).
+6. Include sample usage code demonstrating sending an OTP email or invoice.
+
+Please write clean, PSR-12 compliant, secure PHP code.</code></pre>
+
+      <!-- Tab 3: Node.js AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-node" style="display:none"><code>You are an expert Node.js / TypeScript developer. Integrate the MAIL INDIA Transactional Email API into my Node.js application.
+
+### API Details:
+- Base URL: http://localhost:3000/v1 (or https://mailindia.in/v1)
+- Endpoints: POST /v1/emails/send, GET /v1/emails/:id
+- Auth: Authorization: Bearer process.env.MAIL_INDIA_API_KEY
+
+### Requirements:
+1. Build a robust TypeScript / JavaScript service module `mailIndia.ts` using Axios (or native fetch).
+2. Automatically attach a unique UUID for the `Idempotency-Key` header on every request to prevent double sends.
+3. Add retry logic with exponential backoff for HTTP 429 rate limit responses.
+4. Export `sendTransactionalEmail({ to, subject, text, html })` and `checkEmailStatus(messageId)`.
+5. Provide an Express.js route handler `POST /api/send-receipt` that validates input and invokes the service.
+6. Handle all potential API error codes: 401 INVALID_API_KEY, 402 INSUFFICIENT_CREDITS, 403 RECIPIENT_SUPPRESSED, 500 SENDER_UNAVAILABLE.
+
+Please write clean, typed, modular code.</code></pre>
+
+      <!-- Tab 4: Python AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-python" style="display:none"><code>You are an expert Python engineer. Integrate the MAIL INDIA Transactional Email API into my Python (FastAPI / Django / Flask) project.
+
+### API Details:
+- Endpoint: POST http://localhost:3000/v1/emails/send
+- Query Status: GET http://localhost:3000/v1/emails/{message_id}
+- Headers: Authorization: Bearer {API_KEY}, Content-Type: application/json
+
+### Requirements:
+1. Create a client module `mail_india.py` using `requests` or `httpx`.
+2. Securely retrieve the API key from environment variable `os.getenv("MAIL_INDIA_API_KEY")`.
+3. Implement `send_email(to: str, subject: str, text: str, html: str = None) -> dict`.
+4. Implement `get_status(message_id: str) -> dict`.
+5. Parse API error responses and raise descriptive custom Python exceptions (`MailIndiaAuthError`, `InsufficientCreditsError`, `RecipientSuppressedError`).
+6. Include a FastAPI endpoint or Celery background task example demonstrating asynchronous email sending.
+
+Please provide clean, typed, PEP 8 compliant code.</code></pre>
+
+      <!-- Tab 5: WordPress AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-wordpress" style="display:none"><code>You are an expert WordPress plugin and PHP developer. Connect my WordPress site to the MAIL INDIA Transactional Email API.
+
+### API Details:
+- Endpoint: POST http://localhost:3000/v1/emails/send
+- Headers: Authorization: Bearer {MAIL_INDIA_API_KEY}, Content-Type: application/json
+
+### Requirements:
+1. Write a custom WordPress mu-plugin or functions.php snippet that overrides `wp_mail()`.
+2. Seamlessly route all WordPress transactional emails (password resets, WooCommerce order confirmations, contact form submissions) through MAIL INDIA via `wp_remote_post()`.
+3. Convert plain-text and HTML emails into MAIL INDIA's JSON schema with `consent: true`.
+4. Allow the API Key to be configured in `wp-config.php` via `define('MAIL_INDIA_API_KEY', 'your-key');` or via the WordPress admin settings.
+5. Log any failed sends to PHP `error_log()` for easy debugging.
+
+Please write clean, safe, well-commented WordPress code.</code></pre>
+
+      <!-- Tab 6: cURL / Shell AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-curl" style="display:none"><code>You are a DevOps and Linux automation engineer. Write a production-grade Bash script to send transactional alert emails through MAIL INDIA using curl.
+
+### API Details:
+- Endpoint: POST http://localhost:3000/v1/emails/send
+- Auth: Authorization: Bearer $MAIL_INDIA_API_KEY
+
+### Requirements:
+1. Create `send_alert.sh` accepting arguments: `RECIPIENT`, `SUBJECT`, and `MESSAGE`.
+2. Verify that `curl` and `jq` are installed.
+3. Automatically generate a unique timestamp-based `Idempotency-Key`.
+4. Parse the JSON response: exit with 0 on 202 Accepted and print the `message_id`; exit with 1 on errors and print the error message.
+5. Include cron-ready examples for automated server disk usage alerts or backup notifications.
+
+Please write a robust, POSIX-compatible script with execution permissions.</code></pre>
+
+      <!-- Tab 7: Java / Android AI Prompt -->
+      <pre class="docs-code-body ai-prompt-content" id="prompt-java" style="display:none"><code>You are a senior Java / Kotlin backend and Android engineer. Integrate the MAIL INDIA Transactional Email API into my application.
+
+### API Details:
+- Endpoint: POST http://localhost:3000/v1/emails/send
+- Auth: Bearer token
+
+### Requirements:
+1. Create a clean OkHttp / Retrofit service in Java or Kotlin.
+2. Define request and response data models with Gson / Moshi.
+3. Implement an asynchronous `sendEmail()` method with callback/coroutine support.
+4. Handle network timeouts, rate limits (HTTP 429), and authorization errors.
+5. Provide a working unit test or sample `main()` method demonstrating sending a welcome email.
+
+Please write clean, modern, and production-tested code.</code></pre>
+    </div>
+  </div>
+
+  <!-- SECTION 4: SEND EMAIL ENDPOINT REFERENCE -->
+  <div class="panel" id="send-api" style="margin-bottom:20px">
+    <h2>4. Send Transactional Email</h2>
+    <div class="endpoint-badge">
+      <span class="method-post">POST</span>
+      <span>/v1/emails/send</span>
+    </div>
+    <p class="panel-sub">
+      Enqueues a transactional email for asynchronous dispatch, validates consent, checks suppression, and verifies balance.
+    </p>
+
+    <h3 style="font-size:14px;margin:18px 0 8px;color:#1e293b">Request Body Schema (JSON)</h3>
+    <div class="table-responsive">
+      <table class="docs-table">
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Requirement</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>to</code></td>
+            <td><code>string</code></td>
+            <td><span class="req-tag">Required</span></td>
+            <td>Valid destination email address. Validated against RFC 5322 and checked against the suppression database.</td>
+          </tr>
+          <tr>
+            <td><code>subject</code></td>
+            <td><code>string</code></td>
+            <td><span class="req-tag">Required</span></td>
+            <td>Subject line of the email (1 - 250 characters). Line breaks and CRLF injection characters are rejected.</td>
+          </tr>
+          <tr>
+            <td><code>text</code></td>
+            <td><code>string</code></td>
+            <td><span class="req-tag">Required*</span></td>
+            <td>Plain-text fallback body. Recommended for maximum inbox deliverability. (Required if <code>html</code> is omitted).</td>
+          </tr>
+          <tr>
+            <td><code>html</code></td>
+            <td><code>string</code></td>
+            <td><span class="opt-tag">Optional</span></td>
+            <td>Rich HTML body. Supports inline CSS and responsive transactional email styling.</td>
+          </tr>
+          <tr>
+            <td><code>consent</code></td>
+            <td><code>boolean</code></td>
+            <td><span class="req-tag">Required</span></td>
+            <td>Must be set to <code>true</code>. Confirms lawful customer consent under transactional transmission guidelines.</td>
+          </tr>
+          <tr>
+            <td><code>idempotency_key</code></td>
+            <td><code>string</code></td>
+            <td><span class="opt-tag">Optional</span></td>
+            <td>Unique client-supplied idempotency key (1 - 128 characters). Prevents duplicate email dispatches or duplicate charges on connection retries.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 style="font-size:14px;margin:22px 0 8px;color:#1e293b">Response Codes & Payloads</h3>
+    <div class="docs-code-card">
+      <div class="docs-code-header">
+        <div class="docs-code-tabs">
+          <button type="button" class="docs-tab-btn active" onclick="switchRespTab('resp-202', this)">202 Accepted (Queued)</button>
+          <button type="button" class="docs-tab-btn" onclick="switchRespTab('resp-400', this)">400 Validation Error</button>
+          <button type="button" class="docs-tab-btn" onclick="switchRespTab('resp-401', this)">401 Invalid Key</button>
+          <button type="button" class="docs-tab-btn" onclick="switchRespTab('resp-402', this)">402 Low Balance</button>
+          <button type="button" class="docs-tab-btn" onclick="switchRespTab('resp-403', this)">403 Suppressed</button>
+          <button type="button" class="docs-tab-btn" onclick="switchRespTab('resp-429', this)">429 Rate Limit</button>
+        </div>
+        <button type="button" class="docs-copy-btn" onclick="copyActiveRespTab()">📋 Copy JSON</button>
+      </div>
+
+      <!-- 202 Accepted -->
+      <pre class="docs-code-body resp-content" id="resp-202"><code>{
+  "success": true,
+  "status": "queued",
+  "message_id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "credits_used": 0
+}</code></pre>
+
+      <!-- 400 Bad Request -->
+      <pre class="docs-code-body resp-content" id="resp-400" style="display:none"><code>{
+  "success": false,
+  "error": "CONSENT_REQUIRED",
+  "message": "Explicit consent confirmation is mandatory for all dispatches."
+}</code></pre>
+
+      <!-- 401 Unauthorized -->
+      <pre class="docs-code-body resp-content" id="resp-401" style="display:none"><code>{
+  "success": false,
+  "error": "INVALID_API_KEY",
+  "message": "Provided API key is invalid or has been revoked."
+}</code></pre>
+
+      <!-- 402 Insufficient Balance -->
+      <pre class="docs-code-body resp-content" id="resp-402" style="display:none"><code>{
+  "success": false,
+  "error": "INSUFFICIENT_CREDITS",
+  "message": "Wallet has 0 credits. Please recharge your wallet via UPI."
+}</code></pre>
+
+      <!-- 403 Suppressed -->
+      <pre class="docs-code-body resp-content" id="resp-403" style="display:none"><code>{
+  "success": false,
+  "error": "RECIPIENT_SUPPRESSED",
+  "message": "Recipient address is on the permanent suppression list due to a previous hard bounce or complaint."
+}</code></pre>
+
+      <!-- 429 Rate Limit -->
+      <pre class="docs-code-body resp-content" id="resp-429" style="display:none"><code>{
+  "success": false,
+  "error": "RATE_LIMIT_EXCEEDED",
+  "message": "API burst rate limit exceeded. Retry after 60 seconds."
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- SECTION 5: QUERY STATUS ENDPOINT -->
+  <div class="panel" id="status-api" style="margin-bottom:20px">
+    <h2>5. Query Transmission Status</h2>
+    <div class="endpoint-badge">
+      <span class="method-get">GET</span>
+      <span>/v1/emails/:message_id</span>
+    </div>
+    <p class="panel-sub">
+      Retrieves the real-time delivery outcome, provider handshake timestamp, and SMTP message ID for any previously queued email.
+    </p>
+
+    <h3 style="font-size:14px;margin:18px 0 8px;color:#1e293b">Response Sample (200 OK)</h3>
+    <div class="docs-code-card">
+      <div class="docs-code-header">
+        <span style="font-size:12px;color:#94a3b8;font-family:monospace">HTTP/1.1 200 OK</span>
+        <button type="button" class="docs-copy-btn" onclick="copySnippet('code-status-resp', 'Status Response')">📋 Copy JSON</button>
+      </div>
+      <pre class="docs-code-body" id="code-status-resp"><code>{
+  "id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "status": "accepted",
+  "senderId": "abffcb41-51b7-4709-a956-6c68238247a9",
+  "providerMessageId": "&lt;mb.c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90@mailbridge.local&gt;",
+  "createdAt": 1794217055848,
+  "updatedAt": 1794217061701
+}</code></pre>
+    </div>
+
+    <h3 style="font-size:13px;margin:18px 0 8px;color:#1e293b">Lifecycle Status Definitions:</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:10px">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px">
+        <span class="badge" style="background:#fef3c7;color:#92400e">queued</span>
+        <p style="font-size:11px;color:#64748b;margin:6px 0 0">Request validated and queued in the asynchronous dispatch buffer.</p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px">
+        <span class="badge" style="background:#dbeafe;color:#1e40af">processing</span>
+        <p style="font-size:11px;color:#64748b;margin:6px 0 0">Worker has claimed the job and is negotiating SMTP handshake.</p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px">
+        <span class="badge" style="background:#dcfce7;color:#15803d">accepted</span>
+        <p style="font-size:11px;color:#64748b;margin:6px 0 0">Upstream SMTP provider confirmed receipt; credit finalized.</p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px">
+        <span class="badge" style="background:#fee2e2;color:#dc2626">failed</span>
+        <p style="font-size:11px;color:#64748b;margin:6px 0 0">Pre-send validation failed; reserved credit immediately refunded.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: WEBHOOKS -->
+  <div class="panel" id="webhooks" style="margin-bottom:20px">
+    <h2>6. Webhooks & Delivery Events</h2>
+    <p class="panel-sub">
+      Receive automated real-time notifications on your server when messages are delivered, bounced, or flagged as spam.
+    </p>
+
+    <h3 style="font-size:14px;margin:16px 0 8px;color:#1e293b">Webhook Event Payload (POST)</h3>
+    <div class="docs-code-card">
+      <div class="docs-code-header">
+        <span style="font-size:12px;color:#94a3b8;font-family:monospace">Event: delivery.accepted</span>
+        <button type="button" class="docs-copy-btn" onclick="copySnippet('code-webhook-sample', 'Webhook Payload')">📋 Copy JSON</button>
+      </div>
+      <pre class="docs-code-body" id="code-webhook-sample"><code>{
+  "event": "delivery.accepted",
+  "id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "recipient": "recipient@example.com",
+  "provider": "gmail-smtp",
+  "providerMessageId": "&lt;mb.c9069be86f2f...@mailbridge.local&gt;",
+  "timestamp": 1794217061701
+}</code></pre>
+    </div>
+
+    <h3 style="font-size:14px;margin:18px 0 8px;color:#1e293b">Signature Verification (Node.js)</h3>
+    <div class="docs-code-card">
+      <pre class="docs-code-body"><code>const crypto = require('crypto');
+
+function verifyWebhook(payloadRawBuffer, signatureHeader, webhookSecret) {
+  const expected = crypto
+    .createHmac('sha256', webhookSecret)
+    .update(payloadRawBuffer)
+    .digest('hex');
+  return crypto.timingSafeEqual(Buffer.from(signatureHeader), Buffer.from(expected));
+}</code></pre>
+    </div>
+  </div>
+
+  <!-- SECTION 7: ERROR REFERENCE -->
+  <div class="panel" id="error-codes" style="margin-bottom:20px">
+    <h2>7. Error Codes Reference & Troubleshooting</h2>
+    <p class="panel-sub">
+      Every error returned by MAIL INDIA includes a machine-readable <code>error</code> string and a human-readable <code>message</code>.
+    </p>
+
+    <div class="table-responsive">
+      <table class="docs-table">
+        <thead>
+          <tr>
+            <th>Error Code</th>
+            <th>HTTP Status</th>
+            <th>Meaning</th>
+            <th>Resolution / Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>INVALID_API_KEY</code></td>
+            <td>401</td>
+            <td>API key is missing, corrupted, or has been revoked.</td>
+            <td>Generate a new live key from <a href="/api-management.html" style="color:#6342dc;font-weight:700">API Keys Management</a>.</td>
+          </tr>
+          <tr>
+            <td><code>INSUFFICIENT_CREDITS</code></td>
+            <td>402</td>
+            <td>Wallet balance is depleted (0 available credits).</td>
+            <td>Top up wallet credits using UPI / NetBanking at <a href="/billing/buy.html" style="color:#6342dc;font-weight:700">Buy Credits</a>.</td>
+          </tr>
+          <tr>
+            <td><code>RECIPIENT_SUPPRESSED</code></td>
+            <td>403</td>
+            <td>The target recipient previously bounced permanently or filed an abuse complaint.</td>
+            <td>Do not send to this address. If verified valid, remove from the <a href="/contacts/suppression.html" style="color:#6342dc;font-weight:700">Suppression List</a>.</td>
+          </tr>
+          <tr>
+            <td><code>IDEMPOTENCY_CONFLICT</code></td>
+            <td>409</td>
+            <td>An existing job with this key was already created with different payload attributes.</td>
+            <td>Use a new unique UUID for distinct emails, or pass identical parameters for retries.</td>
+          </tr>
+          <tr>
+            <td><code>RATE_LIMIT_EXCEEDED</code></td>
+            <td>429</td>
+            <td>Your workspace exceeded the allocated API rate limit (default 120 req/min).</td>
+            <td>Queue dispatches with exponential backoff or contact support to request an enterprise burst increase.</td>
+          </tr>
+          <tr>
+            <td><code>SENDER_UNAVAILABLE</code></td>
+            <td>500</td>
+            <td>Assigned SMTP sender credentials failed health check or are paused.</td>
+            <td>Verify sender credentials in settings. Ensure App Password is valid without spaces.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 8: BEST PRACTICES -->
+  <div class="panel" id="best-practices" style="margin-bottom:20px">
+    <h2>8. Production Best Practices & Deliverability</h2>
+    <p class="panel-sub">
+      Guidelines to achieve 99.8%+ inbox placement and zero bounce rates.
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:14px;margin-top:16px">
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
+        <strong style="color:#1e293b;font-size:13px">🛡️ Use Idempotency Keys</strong>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.6">
+          Always supply an <code>Idempotency-Key</code> header (such as your database order ID or user signup UUID).
+          This ensures network retries never double-charge or duplicate recipient emails.
+        </p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
+        <strong style="color:#1e293b;font-size:13px">📄 Supply Both Text & HTML</strong>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.6">
+          Always include a clean <code>text</code> version alongside your <code>html</code>.
+          Spam filters penalize HTML-only emails and reward clean multi-part alternatives.
+        </p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
+        <strong style="color:#1e293b;font-size:13px">⚡ Handle Async Acceptance</strong>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.6">
+          Store the returned <code>message_id</code> in your database. Poll <code>/v1/emails/:id</code> or listen to webhooks to track delivery confirmation.
+        </p>
+      </div>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:10px">
+        <strong style="color:#1e293b;font-size:13px">🚫 Respect Suppression Rules</strong>
+        <p style="font-size:12px;color:#64748b;margin:8px 0 0;line-height:1.6">
+          Never bypass <code>RECIPIENT_SUPPRESSED</code> responses. Repeatedly sending to hard-bounced addresses damages domain reputation.
+        </p>
+      </div>
+    </div>
+  </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- IN-APP NOTIFICATIONS CENTER DRAWER -->
+  <div id="notif-veil" class="notif-veil" onclick="closeNotifDrawer()" style="display:none"></div>
+  <aside id="notif-drawer" class="notif-drawer" aria-label="Notifications" aria-hidden="true">
+    <div class="notif-drawer-header">
+      <div class="notif-header-title">
+        <span class="notif-header-icon">🔔</span>
+        <h3>Notifications</h3>
+        <span id="notif-unread-count" class="notif-header-badge">0 unread</span>
+      </div>
+      <div class="notif-header-actions">
+        <button type="button" class="notif-action-btn" onclick="markAllNotifsRead()" title="Mark all read">✓ Read All</button>
+        <button type="button" class="notif-action-btn" onclick="clearAllNotifs()" title="Clear all">🗑 Clear</button>
+        <button type="button" class="notif-close-btn" onclick="closeNotifDrawer()" aria-label="Close notifications">✕</button>
+      </div>
+    </div>
+    <div class="notif-filter-bar">
+      <button type="button" class="notif-filter-pill active" data-filter="all" onclick="filterNotifs('all', this)">All</button>
+      <button type="button" class="notif-filter-pill" data-filter="unread" onclick="filterNotifs('unread', this)">Unread</button>
+      <button type="button" class="notif-filter-pill" data-filter="billing" onclick="filterNotifs('billing', this)">Billing</button>
+      <button type="button" class="notif-filter-pill" data-filter="sending" onclick="filterNotifs('sending', this)">Sending</button>
+      <button type="button" class="notif-filter-pill" data-filter="security" onclick="filterNotifs('security', this)">Security</button>
+      <button type="button" class="notif-filter-pill" data-filter="system" onclick="filterNotifs('system', this)">System</button>
+    </div>
+    <div id="notif-list" class="notif-list">
+      <div class="notif-loading">Loading notifications…</div>
+    </div>
+    <div class="notif-drawer-footer">
+      <a href="/profile.html" class="notif-footer-link">⚙ Notification Settings</a>
+      <button type="button" class="notif-footer-link notif-btn-link" onclick="exportNotifsCSV()">Export CSV ↗</button>
+    </div>
+  </aside>
+
+  <div id="toast" role="status"></div>
+  <script>
+  initSession();
+  function copySnippet(elementId, label) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    const text = el.innerText || el.textContent;
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      toast((label || 'Code') + ' copied to clipboard!');
+    }).catch(() => {
+      toast('Unable to copy to clipboard.');
+    });
+  }
+  function switchDocTab(stackId, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.docs-tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('code-' + stackId);
+    if (target) target.style.display = 'block';
+    if (btn) btn.classList.add('active');
+  }
+  function copyActiveDocTab() {
+    const activeEl = document.querySelector('.tab-content:not([style*="display: none"])');
+    if (activeEl) {
+      navigator.clipboard.writeText(activeEl.innerText.trim()).then(() => {
+        toast('Code snippet copied to clipboard!');
+      });
+    }
+  }
+  function switchRespTab(respId, btn) {
+    document.querySelectorAll('.resp-content').forEach(el => el.style.display = 'none');
+    btn.parentElement.querySelectorAll('.docs-tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(respId);
+    if (target) target.style.display = 'block';
+    if (btn) btn.classList.add('active');
+  }
+  function copyActiveRespTab() {
+    const activeEl = document.querySelector('.resp-content:not([style*="display: none"])');
+    if (activeEl) {
+      navigator.clipboard.writeText(activeEl.innerText.trim()).then(() => {
+        toast('Response JSON copied to clipboard!');
+      });
+    }
+  }
+  function switchAiTab(tabId, btn) {
+    document.querySelectorAll('.ai-prompt-content').forEach(el => el.style.display = 'none');
+    btn.parentElement.querySelectorAll('.docs-tab-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('prompt-' + tabId);
+    if (target) target.style.display = 'block';
+    if (btn) btn.classList.add('active');
+  }
+  function copyActiveAiPrompt() {
+    const activeEl = document.querySelector('.ai-prompt-content:not([style*="display: none"])');
+    if (activeEl) {
+      navigator.clipboard.writeText(activeEl.innerText.trim()).then(() => {
+        toast('AI Integration Prompt copied to clipboard! Paste it into ChatGPT, Claude, or Cursor.');
+      });
+    }
+  }
+  function copyAiPrompt(tabId) {
+    const el = document.getElementById('prompt-' + tabId);
+    if (!el) return;
+    navigator.clipboard.writeText(el.innerText.trim()).then(() => {
+      toast('AI Prompt for ' + tabId.toUpperCase() + ' copied to clipboard!');
+    }).catch(() => {
+      toast('Unable to copy prompt.');
+    });
+  }
+  function copyAllDocs() {
+    const markdown = `# MAIL INDIA Developer Documentation
+API Version: 1.0.0 (Production)
+Base URL: https://mailindia.in/v1
+
+## 1. Authentication
+All API endpoints require your API key passed as a Bearer token:
+\`\`\`http
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+Idempotency-Key: <unique-uuid>
+\`\`\`
+
+## 2. Send Transactional Email
+Endpoint: POST /v1/emails/send
+
+Request Payload:
+\`\`\`json
+{
+  "to": "recipient@example.com",
+  "subject": "Order Confirmation #94821",
+  "text": "Thank you for your order! Your tracking number is IN-94821.",
+  "html": "<h2>Order Confirmation</h2><p>Tracking ID: <strong>IN-94821</strong></p>",
+  "consent": true,
+  "idempotency_key": "unique_id_123"
+}
+\`\`\`
+
+Response (202 Accepted):
+\`\`\`json
+{
+  "success": true,
+  "status": "queued",
+  "message_id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "credits_used": 0
+}
+\`\`\`
+
+## 3. Query Email Status
+Endpoint: GET /v1/emails/:id
+
+Response (200 OK):
+\`\`\`json
+{
+  "id": "c9069be86f2f34c897d127790c431bf31de345cae3aa36c032d1ac6c9750fc90",
+  "status": "accepted",
+  "senderId": "abffcb41-51b7-4709-a956-6c68238247a9",
+  "providerMessageId": "<mb.c9069be86f2f...@mailbridge.local>",
+  "createdAt": 1794217055848,
+  "updatedAt": 1794217061701
+}
+\`\`\`
+
+## 4. Error Codes
+- INVALID_API_KEY (401): API key invalid or revoked.
+- INSUFFICIENT_CREDITS (402): Wallet balance is 0. Top up at /billing/buy.html.
+- RECIPIENT_SUPPRESSED (403): Recipient is on the permanent suppression list.
+- IDEMPOTENCY_CONFLICT (409): Duplicate key used with different payload.
+- RATE_LIMIT_EXCEEDED (429): Rate limit exceeded (120 req/min).
+- SENDER_UNAVAILABLE (500): SMTP sender paused or credentials invalid.
+`;
+    navigator.clipboard.writeText(markdown).then(() => {
+      toast('Complete documentation copied to clipboard in Markdown format!');
+    }).catch(() => {
+      toast('Unable to copy documentation.');
+    });
+  }
+</script>
+</body>
+</html>

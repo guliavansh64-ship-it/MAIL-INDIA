@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>Acceptable Use Policy — MAIL INDIA</title>
+  <meta name="description" content="Official Acceptable Use Policy for MAIL INDIA Cloud Email Infrastructure & APIs.">
+  <link rel="icon" href="/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --primary: #7545F5;
+      --secondary: #A52AEF;
+      --navy: #171638;
+      --bg: #F7F6FC;
+      --card-bg: #FFFFFF;
+      --text: #24213D;
+      --text-muted: #64748b;
+      --border: #EAE7F6;
+      --gradient: linear-gradient(135deg, #7545F5 0%, #A52AEF 100%);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; font-size: 14px; background: var(--bg); color: var(--text); font-family: var(--font-sans); }
+    body { min-height: 100vh; line-height: 1.7; background-color: var(--bg); }
+
+    /* Topbar */
+    .topbar-wrap {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 2px 10px rgba(23, 22, 56, 0.04);
+    }
+    .topbar {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .brand {
+      display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: var(--navy);
+    }
+    .brand img {
+      width: 32px; height: 32px; object-fit: contain; border-radius: 8px;
+    }
+    .brand-title {
+      font-size: 16px; font-weight: 900; letter-spacing: -0.3px; color: var(--navy);
+    }
+    .brand-title span { color: var(--primary); }
+    .nav-links {
+      display: flex; gap: 20px; align-items: center; list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px; font-weight: 600; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+    .nav-actions { display: flex; gap: 10px; align-items: center; }
+    .btn {
+      padding: 7px 16px; font-size: 12px; font-weight: 700; border-radius: 8px; text-decoration: none; transition: all 0.2s;
+    }
+    .btn-ghost {
+      color: var(--navy); background: #f0ecfc;
+    }
+    .btn-ghost:hover { background: #e5defc; }
+    .btn-primary {
+      color: #ffffff; background: var(--gradient); box-shadow: 0 4px 12px rgba(117, 69, 245, 0.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(117, 69, 245, 0.35); }
+
+    /* Layout */
+    .legal-shell {
+      max-width: 900px; margin: 40px auto 80px; padding: 0 24px;
+    }
+    .legal-card {
+      background: #ffffff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 48px 40px; box-shadow: 0 4px 20px rgba(23, 22, 56, 0.05);
+    }
+    .legal-badge {
+      display: inline-block; font-size: 11px; font-weight: 700; color: var(--primary);
+      background: #f0ecfc; border-radius: 999px; padding: 4px 12px; margin-bottom: 12px;
+      text-transform: uppercase; letter-spacing: 0.6px;
+    }
+    .legal-title {
+      font-size: 32px; font-weight: 900; color: var(--navy); margin-bottom: 8px; letter-spacing: -0.5px;
+    }
+    .legal-meta {
+      font-size: 12px; color: var(--text-muted); margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+    }
+    .legal-body h2 {
+      font-size: 20px; font-weight: 800; color: var(--navy); margin: 32px 0 12px; padding-top: 8px;
+    }
+    .legal-body h3 {
+      font-size: 15px; font-weight: 700; color: var(--navy); margin: 20px 0 8px;
+    }
+    .legal-body p {
+      font-size: 14px; color: #334155; margin-bottom: 16px; line-height: 1.75;
+    }
+    .legal-body ul, .legal-body ol {
+      margin: 0 0 20px 24px; color: #334155; font-size: 14px; line-height: 1.75;
+    }
+    .legal-body li { margin-bottom: 8px; }
+    .legal-callout {
+      background: #fbfaff; border-left: 4px solid var(--primary); padding: 16px 20px;
+      border-radius: 0 10px 10px 0; margin: 24px 0; font-size: 13px; color: #1e1b4b;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border); background: #ffffff; padding: 32px 0; font-size: 12px; color: var(--text-muted);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+    }
+    .footer-links { display: flex; gap: 18px; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--primary); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .legal-card { padding: 28px 20px; }
+      .legal-title { font-size: 24px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar-wrap">
+    <div class="topbar">
+      <a href="/" class="brand">
+        <img src="/logo.png" alt="MAIL INDIA">
+        <div class="brand-title">MAIL <span>INDIA</span></div>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/api-docs.html">API Docs</a></li>
+        <li><a href="/#pricing">Pricing</a></li>
+        <li><a href="/support.html">Support Desk</a></li>
+        <li><a href="/legal.html">Legal Portal</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="/account.html" class="btn btn-ghost">Sign In</a>
+        <a href="/account.html?mode=signup" class="btn btn-primary">Start Free →</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="legal-shell">
+    <div class="legal-card">
+      <span class="legal-badge">Official Legal Document</span>
+      <h1 class="legal-title">Acceptable Use Policy</h1>
+      <div class="legal-meta">
+        <span>Last Updated: November 2026</span> · 
+        <span>Entity: MAIL INDIA Cloud Infrastructure</span> · 
+        <span>Jurisdiction: Republic of India</span>
+      </div>
+      <div class="legal-body">
+        
+  <h2>1. Purpose and Philosophy</h2>
+  <p>
+    MAIL INDIA is dedicated to maintaining the highest domain reputation, IP pool cleanliness, and primary deliverability for Indian software businesses and developers. This Acceptable Use Policy ("AUP") defines mandatory sending standards across our REST APIs and SMTP relays.
+  </p>
+
+  <h2>2. Permitted Email Communications</h2>
+  <p>MAIL INDIA is designed specifically for:</p>
+  <ul>
+    <li><strong>Transactional Dispatches:</strong> One-Time Passwords (OTPs), authentication links, multi-factor verification codes.</li>
+    <li><strong>Account Lifecycle Alerts:</strong> Password resets, security login notices, profile change verifications.</li>
+    <li><strong>Operational Notifications:</strong> Invoices, payment receipts, order shipment updates, billing statements.</li>
+    <li><strong>Opted-In Relationship Emails:</strong> Product updates, customer support replies, and verified double opt-in newsletters.</li>
+  </ul>
+
+  <h2>3. Strictly Prohibited Sending Practices</h2>
+  <div class="legal-callout">
+    <strong>Zero Tolerance for Unsolicited Mail:</strong> You may never use MAIL INDIA to send unsolicited emails (spam). Purchased, rented, scraped, harvested, or third-party mailing lists are strictly prohibited.
+  </div>
+  <p>The following activities result in immediate account termination and permanent blacklisting:</p>
+  <ul>
+    <li>Sending to email addresses obtained through scraping, crawling, or directory harvesting.</li>
+    <li>Phishing, spear-phishing, social engineering, credential harvesting, or deceptive impersonation of banking or government institutions.</li>
+    <li>Distributing malware, viruses, ransomware, malicious attachment links, or illicit material.</li>
+    <li>Falsifying or obfuscating email headers, origin routing IPs, or Reply-To addresses.</li>
+    <li>Operating pyramid schemes, deceptive crypto promotions, get-rich-quick scams, or counterfeit goods operations.</li>
+  </ul>
+
+  <h2>4. Deliverability Thresholds & Automated Bounce Shields</h2>
+  <p>To preserve our domestic IP reputation, your sending volume must maintain:</p>
+  <ul>
+    <li><strong>Hard Bounce Rate:</strong> Must remain strictly <strong>below 5.0%</strong>. Accounts exceeding this threshold trigger automated rate limiting.</li>
+    <li><strong>Spam Complaint Rate:</strong> Must remain strictly <strong>below 0.1%</strong> (less than 1 complaint per 1,000 sent emails).</li>
+    <li><strong>Suppression Enforcement:</strong> Our platform automatically adds any hard bounce or spam complaint to your account's permanent suppression list to prevent repeated failed dispatches and preserve your credits.</li>
+  </ul>
+
+  <h2>5. Mandatory Unsubscribe & Identity Transparency</h2>
+  <p>
+    Non-transactional communications must clearly identify the sender, include a valid physical address, and feature a functional, 1-click unsubscribe mechanism that honors recipient opt-outs within 48 hours.
+  </p>
+
+  <h2>6. Violations & Abuse Reporting</h2>
+  <p>
+    If you detect any spam, abuse, or unauthorized transmission originating from MAIL INDIA infrastructure, please report it immediately to our 24/7 security team:
+  </p>
+  <p>
+    <strong>Email:</strong> <a href="mailto:abuse@mailindia.in" style="color:var(--primary);font-weight:700">abuse@mailindia.in</a><br>
+    Our security team investigates every report within 2 hours and takes immediate remedial action.
+  </p>
+
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>© 2026 MAIL INDIA Platform. All rights reserved. DPDP Act 2023 Compliant.</div>
+      <div class="footer-links">
+        <a href="/legal.html">Legal Portal</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms & Conditions</a>
+        <a href="/acceptable-use.html">Acceptable Use Policy</a>
+        <a href="/api-docs.html">Developer API</a>
+        <a href="/support.html">Support Desk</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

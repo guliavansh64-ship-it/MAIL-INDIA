@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MAIL INDIA — Transactions & Payments</title>
+  <link rel="stylesheet" href="/styles.css?v=2.2.5">
+  <script src="/common.js?v=2.2.5"></script>
+  <script src="/admin/admin-core.js?v=2.2.5"></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <span class="brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:10px" alt="Mail India"></span>
+        <span>MAIL INDIA <small>ADMIN</small></span>
+        <button type="button" class="drawer-close" onclick="closeDrawer(event)" data-action="close-drawer" aria-label="Close navigation">✕</button>
+      </div>
+      <div class="side-user-card" id="side-user-card">
+        <div class="side-user-avatar" id="side-user-avatar">AD</div>
+        <div class="side-user-info">
+          <div class="side-user-email" id="side-user-email">Platform Admin</div>
+          <div class="side-user-credits" id="side-user-credits">Full Operational Control</div>
+        </div>
+      </div>
+      <div class="side-scroll">
+        <div id="side-guest-section" style="display:none">
+          <div class="side-guest-box" style="padding:16px 14px;text-align:center;background:rgba(255,255,255,0.06);border-radius:12px;margin:10px 14px 16px;border:1px solid rgba(255,255,255,0.12)">
+            <div style="font-size:28px;margin-bottom:6px">🔐</div>
+            <div style="font-size:13px;font-weight:700;color:#ffffff;margin-bottom:4px">Account Required</div>
+            <p style="font-size:11px;color:#a5a3c2;line-height:1.5;margin:0 0 12px">Sign in or register to access the developer workspace, API keys, and email dispatches.</p>
+            <a href="/account.html" class="primary" style="display:block;width:100%;text-align:center;padding:9px 0;font-size:12px;font-weight:700;text-decoration:none;border-radius:8px;background:#6342dc;color:#ffffff;box-sizing:border-box">Sign In / Register →</a>
+          </div>
+          <div class="side-label">PUBLIC RESOURCES</div>
+          <a href="/api-docs.html" class="nav-item"><span class="nav-icon">▤</span>API Documentation</a>
+          <a href="/billing/pricing.html" class="nav-item"><span class="nav-icon">🏷</span>Pricing & Plans</a>
+          <a href="/help/status.html" class="nav-item"><span class="nav-icon">●</span>System Status</a>
+        </div>
+        <div id="side-auth-section">
+          <div class="side-label">SUPER ADMIN CONSOLE</div>
+          
+      <div class="nav-group " id="grp-adm-overview">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-overview', event)" aria-label="Toggle Admin Overview">
+          <span class="group-title"><span>▦</span>Admin Overview</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/index.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">▦</span>Main Dashboard
+        </a>
+        <a href="/admin/analytics.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◷</span>Platform Analytics
+        </a>
+        <a href="/admin/activity.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>Live Activity Logs
+        </a>
+        <a href="/admin/health.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🟢</span>System Health
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-users">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-users', event)" aria-label="Toggle User Management">
+          <span class="group-title"><span>♙</span>User Management</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/users.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">👥</span>All Users
+        </a>
+        <a href="/admin/user-details.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🔍</span>User Details Drawer
+        </a>
+        <a href="/admin/credits.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◈</span>User Credits & Rate
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-emails">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-emails', event)" aria-label="Toggle Email Operations">
+          <span class="group-title"><span>✉</span>Email Operations</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/email-logs.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">≡</span>Global Email Logs
+        </a>
+        <a href="/admin/abuse.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚑</span>Abuse & Suppressions
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-providers">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-providers', event)" aria-label="Toggle Email Providers">
+          <span class="group-title"><span>☁</span>Email Providers</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/senders.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">✉</span>Gmail Senders & OAuth
+        </a>
+        <a href="/admin/smtp-providers.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚙</span>SMTP Providers
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-api">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-api', event)" aria-label="Toggle API Management">
+          <span class="group-title"><span>⌘</span>API Management</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/keys.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⌘</span>All API Keys
+        </a>
+        <a href="/admin/api-limits.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⏳</span>Rate Limits & Throttling
+        </a>
+        </div>
+      </div>
+      <div class="nav-group expanded" id="grp-adm-finance">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-finance', event)" aria-label="Toggle Finance & Billing">
+          <span class="group-title"><span>◈</span>Finance & Billing</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/revenue.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">₹</span>Platform Revenue
+        </a>
+        <a href="/admin/payments.html" class="nav-sub-item active">
+          <span class="nav-sub-icon">▣</span>Transactions & Payments
+        </a>
+        <a href="/admin/refunds.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">↺</span>Refund Management
+        </a>
+        <a href="/admin/disputes.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚠</span>Disputes & Chargebacks
+        </a>
+        <a href="/admin/reconciliation.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚖</span>Financial Reconciliation
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-queue">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-queue', event)" aria-label="Toggle Queue & Workers">
+          <span class="group-title"><span>☵</span>Queue & Workers</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/queue.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">☵</span>Queue Overview
+        </a>
+        <a href="/admin/queue-dlq.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">☠</span>Dead Letter Queue
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-security">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-security', event)" aria-label="Toggle Security & Compliance">
+          <span class="group-title"><span>🔒</span>Security & Compliance</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/security.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🔒</span>Security Dashboard
+        </a>
+        <a href="/admin/sessions.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">💻</span>Session Management
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-support">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-support', event)" aria-label="Toggle Support & Comms">
+          <span class="group-title"><span>◉</span>Support & Comms</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/support.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">◉</span>Support Tickets Desk
+        </a>
+        <a href="/admin/announcements.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">📢</span>Announcements
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-db">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-db', event)" aria-label="Toggle Database & Backups">
+          <span class="group-title"><span>💾</span>Database & Backups</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/db-overview.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">💾</span>Database Overview
+        </a>
+        <a href="/admin/backups.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">🗄</span>Backups & Restore
+        </a>
+        </div>
+      </div>
+      <div class="nav-group " id="grp-adm-settings">
+        <button type="button" class="nav-group-header" onclick="toggleNavGroup('grp-adm-settings', event)" aria-label="Toggle System Settings">
+          <span class="group-title"><span>⚙</span>System Settings</span>
+          <span class="caret">▶</span>
+        </button>
+        <div class="nav-submenu">
+          
+        <a href="/admin/settings.html" class="nav-sub-item ">
+          <span class="nav-sub-icon">⚙</span>Platform Settings
+        </a>
+        </div>
+      </div>
+          
+          <div class="side-label">SWITCH PORTAL</div>
+          <a href="/index.html" class="nav-item">
+            <span class="nav-icon">⇄</span>User Workspace ↗
+          </a>
+        </div>
+      </div>
+      <div class="side-bottom">
+        <strong>MAIL INDIA Platform</strong>
+        High-Availability Cloud Relay.<br>
+        <a href="/api-docs.html" style="color:#d3c7ff;font-weight:700">API Documentation ↗</a>
+      </div>
+    </aside>
+    <div class="veil" id="veil" onclick="closeDrawer(event)" data-action="close-drawer"></div>
+
+    <main class="main">
+      <header class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button type="button" class="icon-button menu-toggle" id="navToggle" onclick="toggleDrawer(event)" data-action="toggle-drawer" aria-label="Toggle navigation" aria-expanded="false">☰</button>
+          <a href="/admin/index.html" class="top-brand" title="MAIL INDIA Platform">
+            <span class="top-brand-mark"><img src="/logo.png" style="width:100%;height:100%;object-fit:cover;border-radius:9px" alt="Mail India"></span>
+            <span class="top-brand-text">MAIL INDIA</span>
+          </a>
+          <div>
+            <div class="top-title">Transactions & Payments</div>
+            <div class="top-sub">Super Admin Console · MAIL INDIA</div>
+          </div>
+        </div>
+        <div class="top-actions">
+          <a href="/api-docs.html" class="icon-button" style="display:grid;place-items:center" aria-label="Documentation">?</a>
+          <button type="button" class="icon-button notif-bell-btn" id="notif-toggle-btn" onclick="toggleNotifDrawer(event)" aria-label="Notifications" title="Notifications">
+            <span class="bell-icon">🔔</span>
+            <span id="notif-badge" class="notif-badge" style="display:none">0</span>
+          </button>
+          <a href="/account.html" class="outline" id="auth-button" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" onclick="handleAuthClick(event)">Sign in</a>
+          <div class="profile-wrap" id="profile-wrap">
+            <button type="button" class="profile" id="topbar-profile" onclick="toggleProfileDropdown(event)" aria-label="User profile menu" aria-haspopup="true" aria-expanded="false">
+              <div class="avatar" id="topbar-avatar" style="background:#fce7f3;color:#db2777">AD</div>
+              <span class="topbar-profile-info"><span class="topbar-profile-name">Platform Admin</span><small class="topbar-profile-role">Full Access</small></span>
+              <span class="profile-caret" id="topbar-caret" style="display:none">▾</span>
+            </button>
+            <div class="profile-dropdown-menu" id="profile-dropdown-menu" role="menu" style="display:none">
+              <div class="profile-dropdown-header">
+                <div class="dropdown-avatar" id="dropdown-user-avatar">AD</div>
+                <div class="dropdown-user-info">
+                  <div class="dropdown-name" id="dropdown-user-name">Platform Admin</div>
+                  <div class="dropdown-email" id="dropdown-user-email">admin@mailindia.in</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <a href="/profile.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">👤</span> My Profile
+              </a>
+              <a href="/account.html?stay=1" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">⚙️</span> Account Settings
+              </a>
+              <a href="/billing/pricing.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">🏷️</span> Pricing &amp; Upgrade
+              </a>
+              <a href="/billing/buy.html" class="profile-dropdown-item" role="menuitem">
+                <span class="dropdown-icon">💳</span> Buy Credits
+              </a>
+              <div class="dropdown-divider"></div>
+              <button type="button" class="profile-dropdown-item profile-logout-btn" onclick="signOut(event)" role="menuitem">
+                <span class="dropdown-icon">🚪</span> Sign Out
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        
+  <div class="welcome">
+    <div>
+      <h1>Payment Transactions Audit</h1>
+      <p>Audit of all UPI (ZetPay) and Razorpay transactions with provider status reconciliation.</p>
+    </div>
+    <div class="actions">
+      <button type="button" class="primary" onclick="initAdminPayments()">🔄 Refresh Audit</button>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:12px;margin-bottom:18px">
+    <div class="stat" style="--accent:#15803d;--pale:#dcfce7">
+      <div class="stat-head">
+        <span class="stat-label">Total Revenue</span>
+        <div class="stat-icon">₹</div>
+      </div>
+      <div class="stat-value" id="stat-total-revenue" style="color:#15803d">₹0.00</div>
+      <div class="stat-note">Captured transactions</div>
+    </div>
+    <div class="stat" style="--accent:#6342dc;--pale:#ede9fe">
+      <div class="stat-head">
+        <span class="stat-label">Successful Orders</span>
+        <div class="stat-icon">🛍️</div>
+      </div>
+      <div class="stat-value" id="stat-total-orders" style="color:#6342dc">0</div>
+      <div class="stat-note">Settled payments</div>
+    </div>
+    <div class="stat" style="--accent:#0284c7;--pale:#e0f2fe">
+      <div class="stat-head">
+        <span class="stat-label">Credits Credited</span>
+        <div class="stat-icon">⚡</div>
+      </div>
+      <div class="stat-value" id="stat-total-credits" style="color:#0284c7">0</div>
+      <div class="stat-note">Added to user balances</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+      <div class="filter-pills" id="admin-tx-filter" style="margin:0">
+        <button type="button" class="filter-pill active" data-tx="all" onclick="filterAdminPayments('all')">All Transactions</button>
+        <button type="button" class="filter-pill" data-tx="captured" onclick="filterAdminPayments('captured')">✓ Captured</button>
+        <button type="button" class="filter-pill" data-tx="created" onclick="filterAdminPayments('created')">⏳ Pending</button>
+        <button type="button" class="filter-pill" data-tx="refunded" onclick="filterAdminPayments('refunded')">↩ Refunded</button>
+      </div>
+      <input type="text" id="admin-payment-search" placeholder="Search order ID, UID, payment ID…" class="mg-input" style="width:260px;max-width:100%" oninput="filterAdminPayments()">
+    </div>
+
+    <div id="financial-alert-list" style="margin-bottom:14px"></div>
+
+    <div id="admin-payments-list">
+      <div class="empty"><div class="empty-icon">💳</div><strong>Loading transaction ledger…</strong></div>
+    </div>
+  </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- IN-APP NOTIFICATIONS CENTER DRAWER -->
+  <div id="notif-veil" class="notif-veil" onclick="closeNotifDrawer()" style="display:none"></div>
+  <aside id="notif-drawer" class="notif-drawer" aria-label="Notifications" aria-hidden="true">
+    <div class="notif-drawer-header">
+      <div class="notif-header-title">
+        <span class="notif-header-icon">🔔</span>
+        <h3>Notifications</h3>
+        <span id="notif-unread-count" class="notif-header-badge">0 unread</span>
+      </div>
+      <div class="notif-header-actions">
+        <button type="button" class="notif-action-btn" onclick="markAllNotifsRead()" title="Mark all read">✓ Read All</button>
+        <button type="button" class="notif-action-btn" onclick="clearAllNotifs()" title="Clear all">🗑 Clear</button>
+        <button type="button" class="notif-close-btn" onclick="closeNotifDrawer()" aria-label="Close notifications">✕</button>
+      </div>
+    </div>
+    <div class="notif-filter-bar">
+      <button type="button" class="notif-filter-pill active" data-filter="all" onclick="filterNotifs('all', this)">All</button>
+      <button type="button" class="notif-filter-pill" data-filter="unread" onclick="filterNotifs('unread', this)">Unread</button>
+      <button type="button" class="notif-filter-pill" data-filter="billing" onclick="filterNotifs('billing', this)">Billing</button>
+      <button type="button" class="notif-filter-pill" data-filter="sending" onclick="filterNotifs('sending', this)">Sending</button>
+      <button type="button" class="notif-filter-pill" data-filter="security" onclick="filterNotifs('security', this)">Security</button>
+      <button type="button" class="notif-filter-pill" data-filter="system" onclick="filterNotifs('system', this)">System</button>
+    </div>
+    <div id="notif-list" class="notif-list">
+      <div class="notif-loading">Loading notifications…</div>
+    </div>
+    <div class="notif-drawer-footer">
+      <a href="/profile.html" class="notif-footer-link">⚙ Notification Settings</a>
+      <button type="button" class="notif-footer-link notif-btn-link" onclick="exportNotifsCSV()">Export CSV ↗</button>
+    </div>
+  </aside>
+
+  <div id="toast" role="status"></div>
+  <script>initAdminPayments();</script>
+</body>
+</html>
