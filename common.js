@@ -18,9 +18,16 @@ window.MAILINDIA_API_BASE = window.MAILINDIA_API_BASE || 'https://mail-india-bet
       } catch {}
     }
     const hasGoogleAuth = search.includes('auth=google_success') || Boolean(incomingToken);
-    const hasCookie = typeof document !== 'undefined' && document.cookie && (document.cookie.includes('mb_session') || document.cookie.includes('__Host-mb_session'));
-    const hasLocal = typeof localStorage !== 'undefined' && (localStorage.getItem('mailbridge_session') === '1' || localStorage.getItem('mb_session_cache'));
-    if (hasGoogleAuth || hasCookie || hasLocal) {
+    let hasValidLocal = false;
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const cached = JSON.parse(localStorage.getItem('mb_session_cache') || '{}');
+        if (cached && (cached.token || (cached.user && cached.user.email))) {
+          hasValidLocal = true;
+        }
+      } catch {}
+    }
+    if (hasGoogleAuth || hasValidLocal) {
       if (typeof document !== 'undefined' && document.documentElement) {
         document.documentElement.classList.add('authenticated');
       }
@@ -655,6 +662,40 @@ if (typeof document !== 'undefined') {
       closeDrawer();
     }
   });
+
+  // Universal guest guard: prevent unauthenticated clicks on workspace sections
+  document.addEventListener('click', function(e) {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+    
+    const isAuth = (typeof document !== 'undefined') &&
+      (document.documentElement.classList.contains('authenticated') || (document.body && document.body.classList.contains('authenticated')));
+    if (isAuth) return;
+
+    // Check if target is a public page
+    const clean = href.split('?')[0].split('#')[0].toLowerCase();
+    const publicList = [
+      '/', '/index.html', '',
+      '/account.html', '/api-docs.html', '/docs.html', '/docs',
+      '/support.html', '/help/status.html', '/help/index.html',
+      '/billing/pricing.html', '/privacy.html', '/terms.html',
+      '/acceptable-use.html', '/legal/privacy.html', '/legal/terms.html',
+      '/legal/acceptable-use.html', '/legal.html'
+    ];
+    const isTargetPublic = publicList.some(p => clean === p || clean.endsWith(p));
+    if (!isTargetPublic) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (typeof toast === 'function') {
+        toast('Please sign in or create an account to access the workspace.');
+      }
+      setTimeout(() => {
+        window.location.href = '/account.html?msg=' + encodeURIComponent('Please sign in or create an account to access the workspace.');
+      }, 250);
+    }
+  }, true);
 }
 
 function getApiUrl(url) {
@@ -1154,9 +1195,20 @@ async function _doInitSession() {
       balance: me.wallet?.balance
     });
 
-    // If authenticated user visits account.html, redirect to dashboard only if not arriving with logged_out, stay, msg, or error
-    if (currentPath === '/account.html' || currentPath.endsWith('/account.html')) {
-      const isExplicitAction = urlParams.has('logged_out') || urlParams.has('stay') || urlParams.has('msg') || urlParams.has('error');
+    // Check if authenticated user has incomplete profile (name, username, mobile)
+    const isProfileIncomplete = Boolean(me.user && (!me.user.username || !me.user.mobile));
+    const onAccount = currentPath === '/account.html' || currentPath.endsWith('/account.html');
+    const onProfile = currentPath === '/profile.html' || currentPath.endsWith('/profile.html');
+
+    // Force new users / users with incomplete details to fill their details on account.html
+    if (isProfileIncomplete && !onAccount && !onProfile && !isPublic) {
+      window.location.replace('/account.html?complete_details=1');
+      return me;
+    }
+
+    // If authenticated user visits account.html, redirect to dashboard only if details are complete and not arriving with explicit action
+    if (onAccount) {
+      const isExplicitAction = urlParams.has('logged_out') || urlParams.has('stay') || urlParams.has('msg') || urlParams.has('error') || urlParams.has('complete_details') || isProfileIncomplete;
       if (!isExplicitAction) {
         let redirectCount = 0;
         try {
@@ -1211,7 +1263,7 @@ async function _doInitSession() {
       await new Promise(r => setTimeout(r, 450));
       return await _doInitSession();
     }
-    const isUnauthenticated = err.message && (err.message.includes('401') || err.message.includes('UNAUTHENTICATED') || err.message.includes('sign in'));
+    const isUnauthenticated = !mbSession?.token || !mbSession?.user || (err.message && (err.message.includes('401') || err.message.includes('UNAUTHENTICATED') || err.message.includes('sign in') || err.message.includes('Failed to fetch')));
     if (isUnauthenticated) {
       // If cached session exists, try one recovery verification before wiping
       if (mbSession && mbSession.user && !window.__authRecoveryTried) {
@@ -4848,14 +4900,14 @@ Your task is to:
 1. Read my existing code and locate where emails should be dispatched (contact form submission, signup alert, OTP verification).
 2. Integrate MAIL INDIA with minimal disruption.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email (or http://localhost:3000/api/test-email)
+Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing HTML/JavaScript codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my existing code and locate where emails should be dispatched (contact form submission, signup alert, OTP verification).
 2. Integrate MAIL INDIA with minimal disruption.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email (or http://localhost:3000/api/test-email for local dev)
+   - Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -5011,7 +5063,7 @@ Your task is to:
 1. Read my Node.js application (Express, Fastify, NestJS, or Next.js API routes).
 2. Add transactional email dispatching with robust error handling and retry logic.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email (or http://localhost:3000/api/test-email for local)
+   - Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}

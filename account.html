@@ -368,6 +368,61 @@
       </div>
     </div>
 
+    <!-- Complete Profile Details Card for New Users / Google Sign-Up -->
+    <div class="auth-card-modern" id="complete-details-card" style="display:none;padding:26px">
+      <div style="text-align:center;margin-bottom:20px">
+        <div id="complete-details-avatar-wrap" style="width:72px;height:72px;border-radius:50%;margin:0 auto 12px;background:linear-gradient(135deg,#6342dc,#8b5cf6);color:#ffffff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;box-shadow:0 8px 24px rgba(99,66,220,0.25);overflow:hidden">
+          <span id="complete-details-avatar-text">MI</span>
+        </div>
+        <div class="auth-brand-badge" style="margin-bottom:8px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46"><span>✓</span> GOOGLE ACCOUNT CONNECTED</div>
+        <h2 style="font-size:22px;font-weight:800;color:#1e1b4b;margin-bottom:4px">Complete Your Profile Details</h2>
+        <p style="color:#64748b;font-size:13px;line-height:1.5;margin:0 0 8px">Welcome to Mail India! Please fill in your name, username, and mobile number to activate your account.</p>
+        <p style="color:#4f46e5;font-size:13px;font-weight:700;margin:0" id="complete-details-email">developer@gmail.com</p>
+      </div>
+
+      <form id="complete-details-form" style="display:grid;gap:14px">
+        <div class="auth-field-group">
+          <label class="auth-field-label">Full Name *</label>
+          <div class="auth-input-container">
+            <span class="auth-input-icon">👤</span>
+            <input required name="name" id="complete-name-input" type="text" class="mg-input" placeholder="e.g. Vansh Gulia">
+          </div>
+        </div>
+
+        <div class="auth-field-group">
+          <label class="auth-field-label">Username *</label>
+          <div class="auth-input-container">
+            <span class="auth-input-icon">🏷️</span>
+            <input required pattern="^[A-Za-z0-9_]{2,50}$" name="username" id="complete-username-input" type="text" class="mg-input" placeholder="Choose a unique username">
+          </div>
+          <small style="font-size:11px;color:#64748b;margin-top:2px">2–50 characters: letters, numbers, and underscores.</small>
+        </div>
+
+        <div class="auth-field-group">
+          <label class="auth-field-label">Mobile Number *</label>
+          <div class="auth-input-container">
+            <span class="auth-input-icon">📱</span>
+            <input required name="mobile" id="complete-mobile-input" type="tel" class="mg-input" placeholder="+91 98765 43210">
+          </div>
+          <small style="font-size:11px;color:#64748b;margin-top:2px">Required for account security alerts and invoice notifications.</small>
+        </div>
+
+        <!-- Password is NOT required notice -->
+        <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px">
+          <span style="font-size:22px">🔒</span>
+          <div style="font-size:12px;color:#475569;line-height:1.4">
+            <strong style="color:#1e293b;display:block">Password Not Required</strong>
+            You are signing up with Google OAuth. Your login is handled securely by Google, so no password is required.
+          </div>
+        </div>
+
+        <button type="submit" class="auth-submit-btn" id="complete-details-submit-btn" style="padding:12px 16px;font-size:14px;margin-top:6px;background:linear-gradient(135deg,#6342dc,#7c3aed)">
+          Complete Registration &amp; Access Workspace →
+        </button>
+        <div id="complete-details-msg" style="font-size:12px;margin-top:4px;text-align:center"></div>
+      </form>
+    </div>
+
     <div class="auth-card-modern" id="login-signup-card">
       <!-- 50% Google Discount Promo Banner -->
       <div class="google-promo-banner" style="background:linear-gradient(135deg,#ecfdf5,#f0fdf4);border:1.5px solid #10b981;border-radius:12px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:12px;box-shadow:0 2px 8px rgba(16,185,129,0.12)">
@@ -1005,16 +1060,12 @@
       try {
         const me = await initSession();
         if (me && me.user) {
+          const completeCard = document.querySelector('#complete-details-card');
           const activeCard = document.querySelector('#active-session-card');
           const loginCard = document.querySelector('#login-signup-card');
           const switcher = document.querySelector('.auth-mode-switcher');
           const mainTitle = document.querySelector('#auth-main-title');
           const mainSubtitle = document.querySelector('#auth-main-subtitle');
-          if (activeCard) activeCard.style.display = 'block';
-          if (loginCard) loginCard.style.display = 'none';
-          if (switcher) switcher.style.display = 'none';
-          if (mainTitle) mainTitle.textContent = 'Account Console';
-          if (mainSubtitle) mainSubtitle.textContent = 'Manage your developer workspace and credentials.';
 
           // Suppress promo modal completely for logged in users
           const promo = document.querySelector('#google-promo-modal');
@@ -1022,6 +1073,94 @@
             promo.classList.remove('open');
             promo.style.display = 'none';
           }
+
+          const isProfileIncomplete = !me.user.username || !me.user.mobile;
+          const isExplicitComplete = urlParams.get('complete_details') === '1' || urlParams.get('welcome') === '1';
+
+          if (isProfileIncomplete || isExplicitComplete) {
+            // SHOW COMPLETE DETAILS SCREEN FOR NEW USER / GOOGLE USER
+            if (completeCard) completeCard.style.display = 'block';
+            if (activeCard) activeCard.style.display = 'none';
+            if (loginCard) loginCard.style.display = 'none';
+            if (switcher) switcher.style.display = 'none';
+            if (mainTitle) mainTitle.textContent = 'Account Setup';
+            if (mainSubtitle) mainSubtitle.textContent = 'Please fill in your details to activate your developer account.';
+
+            const cName = document.querySelector('#complete-name-input');
+            const cUser = document.querySelector('#complete-username-input');
+            const cMob = document.querySelector('#complete-mobile-input');
+            const cEmail = document.querySelector('#complete-details-email');
+            const cAvatarWrap = document.querySelector('#complete-details-avatar-wrap');
+
+            if (cName) cName.value = me.user.name || '';
+            if (cUser) cUser.value = me.user.username || '';
+            if (cMob) cMob.value = me.user.mobile || '';
+            if (cEmail) cEmail.textContent = me.user.email || '';
+            if (cAvatarWrap) {
+              if (me.user.picture) {
+                cAvatarWrap.innerHTML = '<img src="' + esc(me.user.picture) + '" alt="avatar" style="width:100%;height:100%;object-fit:cover">';
+              } else {
+                cAvatarWrap.textContent = (me.user.name || me.user.email || 'MI').slice(0, 2).toUpperCase();
+              }
+            }
+
+            const completeForm = document.querySelector('#complete-details-form');
+            if (completeForm && !completeForm.dataset.handled) {
+              completeForm.dataset.handled = 'true';
+              completeForm.onsubmit = async (ev) => {
+                ev.preventDefault();
+                const nameVal = cName?.value.trim() || '';
+                const userVal = cUser?.value.trim() || '';
+                const mobVal = cMob?.value.trim() || '';
+                const cMsg = document.querySelector('#complete-details-msg');
+                const btn = document.querySelector('#complete-details-submit-btn');
+
+                if (!nameVal) {
+                  if (cMsg) cMsg.innerHTML = '<span style="color:#dc2626">⚠️ Full name is required.</span>';
+                  return;
+                }
+                if (!userVal) {
+                  if (cMsg) cMsg.innerHTML = '<span style="color:#dc2626">⚠️ Username is required.</span>';
+                  return;
+                }
+                if (!mobVal) {
+                  if (cMsg) cMsg.innerHTML = '<span style="color:#dc2626">⚠️ Mobile number is required.</span>';
+                  return;
+                }
+
+                if (btn) { btn.disabled = true; btn.textContent = '⏳ Saving details…'; }
+                if (cMsg) cMsg.innerHTML = '<span style="color:#6342dc">⏳ Saving profile details…</span>';
+
+                try {
+                  const res = await api('/api/profile', 'POST', { name: nameVal, username: userVal, mobile: mobVal });
+                  if (window.mbSession && window.mbSession.user) {
+                    window.mbSession.user.name = res.name || nameVal;
+                    window.mbSession.user.username = res.username || userVal;
+                    window.mbSession.user.mobile = res.mobile || mobVal;
+                    saveSession(window.mbSession);
+                    applyAuthenticatedUI(window.mbSession.user, window.mbSession.wallet);
+                  }
+                  if (cMsg) cMsg.innerHTML = '<span style="color:#15803d">✓ Profile completed! Entering workspace…</span>';
+                  toast('Profile details saved! Welcome to Mail India.');
+                  setTimeout(() => {
+                    window.location.replace('/dashboard.html?auth=google_success&welcome=1');
+                  }, 400);
+                } catch (err) {
+                  if (cMsg) cMsg.innerHTML = '<span style="color:#dc2626">⚠️ ' + esc(err.message) + '</span>';
+                  toast(err.message);
+                  if (btn) { btn.disabled = false; btn.textContent = 'Complete Registration & Access Workspace →'; }
+                }
+              };
+            }
+            return;
+          }
+
+          if (completeCard) completeCard.style.display = 'none';
+          if (activeCard) activeCard.style.display = 'block';
+          if (loginCard) loginCard.style.display = 'none';
+          if (switcher) switcher.style.display = 'none';
+          if (mainTitle) mainTitle.textContent = 'Account Console';
+          if (mainSubtitle) mainSubtitle.textContent = 'Manage your developer workspace and credentials.';
 
           const pName = document.querySelector('#active-profile-name');
           const pEmail = document.querySelector('#active-profile-email');
