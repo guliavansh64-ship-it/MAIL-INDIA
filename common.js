@@ -1,8 +1,7 @@
 'use strict';
 
-// Backend API Base URL: Leave empty ('') for same-origin (default), or set to your Vercel URL
-// (e.g. 'https://your-backend.vercel.app') when hosting frontend separately on AIC Hosting.
-window.MAILINDIA_API_BASE = window.MAILINDIA_API_BASE || '';
+// Backend API Base URL: Automatically points to production Vercel backend
+window.MAILINDIA_API_BASE = window.MAILINDIA_API_BASE || 'https://mail-india-beta.vercel.app';
 
 // Immediate synchronous session detection to prevent Sign In button flash
 (function() {
@@ -660,8 +659,12 @@ if (typeof document !== 'undefined') {
 
 function getApiUrl(url) {
   if (typeof url === 'string' && url.startsWith('/')) {
-    const base = (window.MAILINDIA_API_BASE || localStorage.getItem('mailindia_api_base') || '').replace(/\/+$/, '');
-    if (base) return base + url;
+    const isLocalhost = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+    if (isLocalhost) return url;
+    const base = (window.MAILINDIA_API_BASE || localStorage.getItem('mailindia_api_base') || 'https://mail-india-beta.vercel.app').replace(/\/+$/, '');
+    if (base && typeof window !== 'undefined' && !window.location.origin.startsWith(base)) {
+      return base + url;
+    }
   }
   return url;
 }
