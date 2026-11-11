@@ -419,9 +419,10 @@ async function initAdminSenders() {
 
       const assignSenderSelect = document.querySelector('#assign-sender-id');
       const assignUidSelect = document.querySelector('#assign-uid');
-      if (assignSenderSelect && senders.length) {
+      if (assignSenderSelect) {
         assignSenderSelect.innerHTML = '<option value="">-- Select Sender Account --</option>' +
-          senders.map(s => `<option value="${esc(s.id)}">${esc(s.email)} (${esc(s.name || s.authType)})</option>`).join('');
+          senders.filter(s => s.status === 'active' && Number.isFinite(s.verifiedAt) && s.verifiedAt > 0)
+            .map(s => `<option value="${esc(s.id)}">${esc(s.email)} (${esc(s.name || s.authType)})</option>`).join('');
       }
       if (assignUidSelect && users.length) {
         assignUidSelect.innerHTML = '<option value="">-- Select Tenant / User --</option>' +
@@ -459,7 +460,8 @@ async function initAdminSenders() {
           typeBadge = `<span class="badge" style="background:#fef3c7;color:#b45309">⚙️ Custom SMTP (${esc(s.host || 'smtp')}:${esc(s.port || 465)})</span>`;
         }
 
-        const isActive = s.status === 'active';
+        const isVerified = Number.isFinite(s.verifiedAt) && s.verifiedAt > 0;
+        const isActive = s.status === 'active' && isVerified;
         return `
           <div class="sender-card" id="sender-card-${esc(s.id)}">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
@@ -468,21 +470,22 @@ async function initAdminSenders() {
                   <strong style="font-size:15px;word-break:break-all">${esc(s.email)}</strong>
                   ${s.name ? `<span class="mg-muted" style="font-size:12px">(${esc(s.name)})</span>` : ''}
                   ${typeBadge}
-                  <span class="badge" style="${isActive ? 'background:#dcfce7;color:#15803d' : 'background:#fee2e2;color:#dc2626'}">● ${isActive ? 'Active' : 'Paused'}</span>
+                  <span class="badge" style="${isActive ? 'background:#dcfce7;color:#15803d' : 'background:#fee2e2;color:#dc2626'}">● ${isActive ? 'Active' : (isVerified ? 'Paused' : 'Verification required')}</span>
                 </div>
                 <div style="margin-top:6px;font-size:11px;color:#6b7280;display:flex;gap:12px;flex-wrap:wrap">
                   <span>ID: <code>${esc(s.id)}</code></span>
                   <span>Host: <b>${esc(s.host || 'smtp.gmail.com')}:${esc(s.port || 465)}</b></span>
                   <span>Daily Quota: <b>${esc(s.dailyLimit || 500)}</b>/day</span>
                   <span>Dispatched: <b>${esc(s.usage?.sentToday || s.dailySent || 0)}</b></span>
+                  <span>SMTP verified: <b>${isVerified ? new Date(s.verifiedAt).toLocaleString() : 'Not yet'}</b></span>
                   <span>Created: <b>${s.createdAt ? new Date(s.createdAt).toLocaleDateString() : 'Active'}</b></span>
                 </div>
               </div>
             </div>
             <div class="user-action-grid" style="margin-top:12px">
               <button class="outline" onclick="adminVerifySender('${esc(s.id)}')">⚡ Verify SMTP</button>
-              <button class="outline" onclick="adminToggleSender('${esc(s.id)}', '${isActive ? 'paused' : 'active'}')">${isActive ? '⏸ Pause' : '▶ Activate'}</button>
-              <button class="outline" onclick="adminAssignSenderPrompt('${esc(s.id)}')">👤 Assign Tenant</button>
+              <button class="outline" ${isVerified ? '' : 'disabled title="Use Verify SMTP before activating this sender"'} onclick="adminToggleSender('${esc(s.id)}', '${isActive ? 'paused' : 'active'}')">${isActive ? '⏸ Pause' : '▶ Activate'}</button>
+              <button class="outline" ${isActive ? '' : 'disabled title="Verify and activate this sender before assigning it"'} onclick="adminAssignSenderPrompt('${esc(s.id)}')">👤 Assign Tenant</button>
               <button class="outline" style="color:#d9534f;border-color:#f5c6cb" onclick="adminDeleteSender('${esc(s.id)}')">🗑 Delete</button>
             </div>
           </div>
@@ -497,8 +500,10 @@ async function initAdminSenders() {
     try {
       toast('Verifying SMTP handshake…');
       const r = await api('/api/admin/senders/' + encodeURIComponent(id) + '/verify', 'POST', {});
-      toast(r.success ? 'SMTP Handshake verified successfully!' : 'Verification failed: ' + (r.error || r.message));
-    } catch (e) { toast('Verification failed: ' + e.message); }
+      if (r.success !== true) throw new Error(r.message || r.error || 'SMTP verification was not confirmed.');
+      toast(r.message || 'SMTP credentials verified. The sender is active.', 'success');
+      await load();
+    } catch (e) { toast('Verification failed: ' + e.message, 'error'); }
   };
 
   window.adminToggleSender = async (id, nextStatus) => {
@@ -550,7 +555,7 @@ async function initAdminSenders() {
         if (authType === 'app_password') {
           const rawPass = addForm.elements.appPassword?.value || addForm.elements.password?.value || '';
           const password = rawPass.replace(/\s+/g, '');
-          if (!password) throw new Error('Please enter your 16-character Google App Password.');
+          if (!/^[a-z]{16}$/i.test(password)) throw new Error('Enter the 16-letter Google app password. Spaces between the four groups are allowed.');
           payload.password = password;
           payload.host = 'smtp.gmail.com';
           payload.port = 465;
@@ -591,10 +596,10 @@ async function initAdminSenders() {
         }
 
         await api('/api/admin/senders', 'POST', payload);
-        toast('Sender configured successfully in Firebase!');
+        toast('Sender saved and paused. Click Verify SMTP to check the credentials and activate sending.', 'info', 6000);
         addForm.reset();
         switchSenderTab(currentAuthType);
-        load();
+        await load();
       } catch (err) { toast(err.message); }
       finally { btn.disabled = false; }
     };
@@ -617,7 +622,30 @@ async function initAdminSenders() {
     };
   }
 
-  const urlPreset = new URLSearchParams(window.location.search).get('preset');
+  window.connectAdminGmailOAuth = function() {
+    toast('Redirecting to Google for 1-Click Gmail authorization…', 'info', 4000);
+    const token = window.mbSession?.token || '';
+    const endpoint = '/oauth/admin/gmail/connect' + (token ? '?token=' + encodeURIComponent(token) : '');
+    const targetUrl = typeof window.getApiUrl === 'function' ? window.getApiUrl(endpoint) : endpoint;
+    window.location.href = targetUrl;
+  };
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const senderConn = urlParams.get('sender_connected');
+  if (senderConn === 'success') {
+    const email = urlParams.get('email') || 'Gmail account';
+    toast(`✅ Gmail account ${email} connected successfully and added to active sender pool!`, 'success', 8000);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  } else if (urlParams.get('error')) {
+    toast(`❌ Gmail connection failed: ${urlParams.get('error')}`, 'error', 8000);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
+  const urlPreset = urlParams.get('preset');
   if (urlPreset && PROVIDER_PRESETS[urlPreset]) {
     selectProviderPreset(urlPreset);
   }
@@ -1732,29 +1760,59 @@ async function initAdminApiLimits() {
 }
 
 // Admin System Health Monitor
+async function readAdminHealthSnapshot() {
+  // Health is public. Read degraded (HTTP 503) JSON too, so a database failure
+  // is visible instead of being replaced by a fabricated successful response.
+  const response = await fetch(getApiUrl('/api/health'), { credentials: 'omit', cache: 'no-store' });
+  const health = await response.json().catch(() => null);
+  if (!health || typeof health !== 'object' || typeof health.status !== 'string') {
+    throw new Error('The server did not return a valid health report.');
+  }
+  if (!response.ok && response.status !== 503) {
+    throw new Error(health.message || `Health request failed (HTTP ${response.status}).`);
+  }
+  return { ...health, status: response.ok ? health.status : 'degraded' };
+}
+
 async function initAdminHealth() {
-  await initSession();
+  try { await initSession(); } catch {}
   const box = document.querySelector('#admin-health-box') || document.querySelector('#health-box');
   if (!box) return;
-  try {
-    const [h, s] = await Promise.all([
-      jsonFetch('/api/health').catch(() => ({ status: 'ok', zetpay: 'connected' })),
-      api('/api/admin/summary').catch(() => ({}))
-    ]);
-    box.innerHTML = `
+  box.innerHTML = '<div class="mg-muted" role="status">Checking backend and Realtime Database…</div>';
+  const [healthResult, summaryResult] = await Promise.allSettled([
+    readAdminHealthSnapshot(),
+    api('/api/admin/summary')
+  ]);
+  const h = healthResult.status === 'fulfilled' ? healthResult.value : {};
+  const s = summaryResult.status === 'fulfilled' ? summaryResult.value : null;
+  const database = h.database || {};
+  const authentication = h.authentication || {};
+  const ready = state => state === 'ready' || state === 'connected';
+  const badge = (state, healthy) => `<span class="badge" style="${healthy ? 'background:#dcfce7;color:#15803d' : 'background:#fef3c7;color:#92400e'}">● ${esc(String(state || 'unavailable').toUpperCase())}</span>`;
+  const databaseReady = ready(database.state);
+  const healthError = healthResult.status === 'rejected' ? healthResult.reason?.message || 'The health endpoint could not be reached.' : '';
+  const databaseReason = database.reason || (healthError ? 'Database status could not be checked.' : (databaseReady ? '' : 'The backend has not confirmed a database connection.'));
+  const count = value => Number.isFinite(value) ? value.toLocaleString() : 'Unavailable';
+  box.innerHTML = `
       <div style="display:grid;gap:12px;font-size:13px">
-        <div class="mg-row"><span>Server Status</span><span class="badge" style="background:#dcfce7;color:#15803d">● ${esc(h.status?.toUpperCase() || 'HEALTHY')}</span></div>
-        <div class="mg-row"><span>Firebase Sync (to-375ee)</span><span class="badge" style="background:#dcfce7;color:#15803d">● LIVE CONNECTED</span></div>
-        <div class="mg-row"><span>Realtime Database</span><strong>https://to-375ee-default-rtdb.firebaseio.com</strong></div>
-        <div class="mg-row"><span>Queue Engine (BullMQ)</span><span class="badge" style="background:#e0f2fe;color:#0369a1">Active (${s.queueHealth?.dlqCount || 0} DLQ jobs)</span></div>
-        <div class="mg-row"><span>UPI Payment Gateway (ZetPay)</span><span class="badge" style="background:#dcfce7;color:#15803d">● CONNECTED</span></div>
-        <div class="mg-row"><span>Registered Users in Firebase</span><strong>${s.users || 0} tenants</strong></div>
-        <div class="mg-row"><span>Total Senders Configured</span><strong>${s.senders || 0} active relays</strong></div>
+        <div class="mg-row"><span>Server Status</span>${badge(h.status, h.status === 'ok')}</div>
+        <div class="mg-row"><span>Firebase Realtime Database</span>${badge(database.state, databaseReady)}</div>
+        <div class="mg-row"><span>Database Configuration</span><strong>${database.configured === true ? 'Configured' : (database.configured === false ? 'Incomplete' : 'Unknown')}</strong></div>
+        ${database.checkedAt ? `<div class="mg-row"><span>Last Database Check</span><strong>${esc(new Date(database.checkedAt).toLocaleString())}</strong></div>` : ''}
+        ${databaseReason ? `<div class="mg-muted" role="status"><strong>Database:</strong> ${esc(databaseReason)}</div>` : ''}
+        <div class="mg-row"><span>Firebase Authentication</span>${badge(authentication.state, ready(authentication.state))}</div>
+        ${authentication.reason ? `<div class="mg-muted"><strong>Authentication:</strong> ${esc(authentication.reason)}</div>` : ''}
+        <div class="mg-row"><span>Email Sending</span>${badge(h.sending, h.sending === 'active')}</div>
+        <div class="mg-row"><span>Dead-letter Queue Jobs</span><strong>${count(s?.queueHealth?.dlqCount)}</strong></div>
+        <div class="mg-row"><span>Payment Gateway Status</span><strong>${esc(h.zetpay || h.payments || 'Unavailable')}</strong></div>
+        <div class="mg-row"><span>Registered Users</span><strong>${count(s?.users)}</strong></div>
+        <div class="mg-row"><span>Configured Senders</span><strong>${count(s?.senders)}</strong></div>
+        ${!databaseReady ? '<div class="panel" style="background:#fffbeb;border-color:#fcd34d"><strong>Connect Realtime Database</strong><p>Configure FIREBASE_PROJECT_ID and FIREBASE_DATABASE_URL on the backend, and provide a Firebase Admin service account through GOOGLE_APPLICATION_CREDENTIALS. The account must have permission to access this database. Restart the backend after updating its configuration, then check again.</p></div>' : ''}
+        ${healthError ? `<div role="alert" style="color:#b91c1c">Health check failed: ${esc(healthError)}</div>` : ''}
+        ${summaryResult.status === 'rejected' ? `<div class="mg-muted">Admin metrics are unavailable: ${esc(summaryResult.reason?.message || 'Sign in as an administrator to view metrics.')}</div>` : ''}
+        <button type="button" class="outline" onclick="initAdminHealth()">Check again</button>
       </div>
     `;
-  } catch (e) {
-    box.innerHTML = `<div class="empty">Administrator sign in required to inspect live infrastructure metrics. <a href="/account.html" class="link">Sign in →</a></div>`;
-  }
 }
 
 // Admin Revenue Overview

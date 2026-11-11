@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>MAIL INDIA — Account Access & Security</title>
-  <link rel="stylesheet" href="/styles.css?v=2.2.7">
-  <script src="/common.js?v=2.2.7"></script>
+  <link rel="stylesheet" href="/styles.css?v=2.4.1">
+  <script src="/common.js?v=2.4.1"></script>
   
 </head>
 <body>
@@ -403,7 +403,7 @@
         <span>or continue with email</span>
       </div>
 
-      <form id="auth-form" data-handled="true">
+      <form id="auth-form" data-handled="true" novalidate>
         <!-- Sign Up Only: Full Name & Username -->
         <div id="signup-extra-names" style="display:none">
           <div class="auth-field-row">
@@ -482,8 +482,19 @@
         <div id="account-message" style="margin-top:12px;font-size:12px;line-height:1.5" role="status"></div>
       </form>
 
-      <!-- Verification Link Sent Banner (Shown after Sign Up) -->
-      <div id="signup-verification-banner" style="display:none"></div>
+      <section id="signup-verification-banner" class="auth-verification-banner" style="display:none" aria-labelledby="verification-title">
+        <div class="auth-verif-icon" aria-hidden="true">✉️</div>
+        <h3 class="auth-verif-title" id="verification-title" tabindex="-1">Verify your email</h3>
+        <p class="auth-verif-text" id="verification-intro"></p>
+        <p class="auth-verif-address" id="verification-email"></p>
+        <p class="auth-verif-text">Open the verification link in your inbox, then return here. Check your spam folder if it has not arrived.</p>
+        <div id="verification-message" class="auth-verif-message" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div class="auth-verif-actions">
+          <button type="button" class="auth-verif-action-btn" id="verification-check-btn">I've verified my email</button>
+          <button type="button" class="auth-verif-action-btn auth-verif-secondary" id="verification-resend-btn">Send verification email</button>
+          <button type="button" class="auth-verif-back" id="verification-back-btn">Back to sign in</button>
+        </div>
+      </section>
 
       <div class="auth-footer-note" id="auth-footer-note">
         Don't have an account yet? <a href="javascript:void(0)" onclick="setAuthMode('signup')">Create a free account →</a>
@@ -698,6 +709,188 @@
     const signupConfirmPwdGroup = document.querySelector('#signup-confirm-pwd-group');
     const emailFieldLabel = document.querySelector('#email-field-label');
     const verifBanner = document.querySelector('#signup-verification-banner');
+    let authBusy = false;
+    let verificationBusy = false;
+    let verificationTimer = null;
+    const verificationMessage = document.querySelector('#verification-message');
+    const verificationResendBtn = document.querySelector('#verification-resend-btn');
+    const verificationCheckBtn = document.querySelector('#verification-check-btn');
+    const verificationBackBtn = document.querySelector('#verification-back-btn');
+    const escapeAuthText = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+    // ---- Self-contained auth error rendering -------------------------------
+    // The rest of the app gets showAuthError()/clearAuthError() from common.js.
+    // If that file is stale, blocked, or fails to parse, calling it inside a
+    // catch block throws a second ReferenceError and the user sees nothing at
+    // all - which is exactly what "the error popup never shows" looked like.
+    // These wrappers always work, and fall back to a plain box when needed.
+    const authErrorBox = () => document.querySelector('#account-message');
+    const showAuthErrorSafe = (message, target) => {
+      const text = String(message || 'Something went wrong. Please try again.');
+      // Never let the promo modal cover a validation error.
+      try {
+        const promo = document.querySelector('#google-promo-modal');
+        if (promo) { promo.classList.remove('open'); promo.style.display = 'none'; }
+      } catch {}
+      if (typeof window.showAuthError === 'function') {
+        try { window.showAuthError(text, target || authErrorBox()); return text; } catch {}
+      }
+      const box = target || authErrorBox();
+      if (box) {
+        box.innerHTML =
+          '<div class="auth-error-pop" role="alert">' +
+            '<span class="auth-error-icon">⚠️</span>' +
+            '<span class="auth-error-text">' + escapeAuthText(text) + '</span>' +
+          '</div>';
+        try { box.scrollIntoView({ block: 'nearest', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } catch {}
+      }
+      if (typeof window.toast === 'function') { try { window.toast(text); } catch {} }
+      return text;
+    };
+    const clearAuthErrorSafe = target => {
+      if (typeof window.clearAuthError === 'function') {
+        try { window.clearAuthError(target || authErrorBox()); return; } catch {}
+      }
+      const box = target || authErrorBox();
+      if (box) box.innerHTML = '';
+    };
+    const formatAuthErrorSafe = err => {
+      if (typeof window.formatAuthError === 'function') {
+        try { return window.formatAuthError(err); } catch {}
+      }
+      const m = (err && err.message) || String(err || '');
+      if (m.includes('EMAIL_EXISTS')) return 'This email is already registered. Please sign in instead or reset your password.';
+      if (m.includes('EMAIL_NOT_FOUND') || m.includes('USER_NOT_FOUND')) return 'No account found with this email address. Please create an account first.';
+      if (m.includes('INVALID_LOGIN_CREDENTIALS') || m.includes('INVALID_PASSWORD')) return 'Invalid email or password. Please check your credentials and try again.';
+      if (m.includes('INVALID_EMAIL')) return 'Invalid email address. Please enter a valid Gmail or email address.';
+      if (m.includes('WEAK_PASSWORD')) return 'Password is too weak. Must be at least 6 characters long.';
+      if (m.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) return 'Too many attempts. Please wait a few minutes before trying again.';
+      if (/Failed to fetch|NetworkError|Load failed/i.test(m)) return 'Could not connect. Check your internet connection and try again.';
+      if (m.includes('EMAIL_NOT_VERIFIED')) return 'Verify your email address before signing in.';
+      if (m.includes('signIn is not defined')) return 'Sign-in could not load. Refresh this page and try again.';
+      return m || 'Something went wrong. Please try again.';
+    };
+
+    function setAuthBusy(busy, label) {
+      authBusy = busy;
+      submitBtn.disabled = busy;
+      form.setAttribute('aria-busy', String(busy));
+      if (tabSignin) tabSignin.disabled = busy;
+      if (tabSignup) tabSignup.disabled = busy;
+      if (label) submitBtn.textContent = label;
+      else submitBtn.textContent = authMode === 'signup' ? 'Create account & send verification link' : 'Sign in to console';
+    }
+
+    function updateVerificationButtons() {
+      const pending = getPendingEmailVerification();
+      const seconds = Math.max(0, Math.ceil(((pending?.resendAt || 0) - Date.now()) / 1000));
+      verificationResendBtn.disabled = verificationBusy || seconds > 0;
+      verificationCheckBtn.disabled = verificationBusy;
+      verificationBackBtn.disabled = verificationBusy;
+      verificationResendBtn.textContent = seconds > 0 ? `Resend available in ${seconds}s` : (pending?.verificationSent ? 'Resend verification email' : 'Send verification email');
+      verifBanner.setAttribute('aria-busy', String(verificationBusy));
+      if (!seconds && verificationTimer) { clearInterval(verificationTimer); verificationTimer = null; }
+    }
+
+    function showVerificationPanel(result, focusTitle = true) {
+      form.style.display = 'none';
+      if (footerNote) footerNote.style.display = 'none';
+      verifBanner.style.display = 'block';
+      document.querySelector('#verification-email').textContent = result.email;
+      document.querySelector('#verification-intro').textContent = result.created ? 'Your account has been created. Verify this address before signing in:' : 'This address needs verification before you can sign in:';
+      const promo = document.querySelector('#google-promo-modal');
+      if (promo) { promo.classList.remove('open'); promo.style.display = 'none'; }
+      clearAuthErrorSafe(msg);
+      clearAuthErrorSafe(verificationMessage);
+      if (result.verificationError) {
+        showAuthErrorSafe('Your account is ready, but we could not send the verification email. ' + result.verificationError + ' Use the resend button to try again.', verificationMessage);
+      } else {
+        verificationMessage.textContent = result.verificationSent ? 'Verification email sent. Open the link to activate your account.' : 'Use “Send verification email” below to request a link.';
+      }
+      updateVerificationButtons();
+      if (verificationTimer) clearInterval(verificationTimer);
+      verificationTimer = setInterval(updateVerificationButtons, 1000);
+      if (focusTitle) document.querySelector('#verification-title').focus({ preventScroll: true });
+    }
+
+    verificationResendBtn.onclick = async () => {
+      if (verificationBusy) return;
+      verificationBusy = true;
+      updateVerificationButtons();
+      verificationResendBtn.textContent = 'Sending verification email…';
+      verificationMessage.textContent = 'Requesting a new verification link…';
+      try {
+        const result = await sendPendingVerificationEmail();
+        if (result) showVerificationPanel(result, false);
+      } catch (err) {
+        showAuthErrorSafe('The verification email was not sent. ' + formatAuthErrorSafe(err), verificationMessage);
+      } finally {
+        verificationBusy = false;
+        updateVerificationButtons();
+        if (!verificationTimer) verificationTimer = setInterval(updateVerificationButtons, 1000);
+      }
+    };
+
+    verificationCheckBtn.onclick = async () => {
+      if (verificationBusy) return;
+      verificationBusy = true;
+      updateVerificationButtons();
+      verificationCheckBtn.textContent = 'Checking verification…';
+      verificationMessage.textContent = 'Checking your email verification…';
+      try {
+        const result = await checkPendingEmailVerification();
+        if (result.requiresVerification) {
+          showAuthErrorSafe('Your email is not verified yet. Open the link in your email, then try this button again.', verificationMessage);
+        } else {
+          verificationMessage.textContent = 'Email verified. Opening your dashboard…';
+          window.location.href = '/dashboard.html';
+        }
+      } catch (err) {
+        const expired = /RECENT_LOGIN_REQUIRED|TOKEN_EXPIRED|INVALID_REFRESH_TOKEN|INVALID_ID_TOKEN|USER_NOT_FOUND/.test([err?.code, err?.message].join(' '));
+        if (expired) {
+          verificationBusy = false;
+          setAuthMode('signin');
+          showAuthErrorSafe('Please sign in again to continue. If you opened the verification link, your email stays verified.', msg);
+          form.elements.password.focus();
+        } else {
+          showAuthErrorSafe(formatAuthErrorSafe(err), verificationMessage);
+        }
+      } finally {
+        verificationBusy = false;
+        verificationCheckBtn.textContent = "I've verified my email";
+        updateVerificationButtons();
+      }
+    };
+    verificationBackBtn.onclick = () => { setAuthMode('signin'); form.elements.password.focus(); };
+    // Asks the backend whether an email is registered. Returns true/false, or
+    // null when the check itself failed so callers can fall back to the
+    // generic Firebase message instead of asserting something untrue.
+    const accountExistsSafe = async email => {
+      try {
+        // Resolve the API origin locally so this still works when common.js is
+        // stale or blocked; getApiUrl() is used only when present.
+        let url = '/api/auth/account-exists';
+        if (typeof window.getApiUrl === 'function') {
+          try { url = window.getApiUrl(url); } catch {}
+        }
+        if (!/^https?:/i.test(url)) {
+          const base = (window.MAILINDIA_API_BASE || '').replace(/\/+$/, '');
+          const isLocal = /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
+          if (base && !isLocal) url = base + '/api/auth/account-exists';
+        }
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: String(email || '').trim().toLowerCase() })
+        });
+        if (!res.ok) return null;
+        const data = await res.json().catch(() => null);
+        if (!data || typeof data.exists !== 'boolean') return null;
+        return data.exists;
+      } catch {
+        return null;
+      }
+    };
 
     window.toggleFieldPassword = (fieldId, eyeId) => {
       const input = document.getElementById(fieldId);
@@ -916,9 +1109,17 @@
     };
 
     window.setAuthMode = mode => {
+      if (authBusy || verificationBusy) return;
+      if (typeof clearPendingEmailVerification === 'function') clearPendingEmailVerification();
+      if (verificationTimer) { clearInterval(verificationTimer); verificationTimer = null; }
       authMode = mode;
       if (verifBanner) verifBanner.style.display = 'none';
       if (form) form.style.display = 'block';
+      if (footerNote) footerNote.style.display = '';
+      form.querySelectorAll('[aria-invalid]').forEach(input => input.removeAttribute('aria-invalid'));
+      form.elements.password.value = '';
+      form.elements.confirmPassword.value = '';
+      form.elements.password.autocomplete = mode === 'signup' ? 'new-password' : 'current-password';
 
       const nameIn = document.querySelector('#auth-name-input');
       const usernameIn = document.querySelector('#auth-username-input');
@@ -930,7 +1131,7 @@
         if (tabSignup) tabSignup.classList.add('active');
         if (tabSignin) tabSignin.classList.remove('active');
         if (mainTitle) mainTitle.textContent = 'Create Developer Account';
-        if (mainSubtitle) mainSubtitle.textContent = 'Register your details to receive an instant Gmail verification link & 10 free credits.';
+        if (mainSubtitle) mainSubtitle.textContent = 'Create an account, verify your email, and get started with 10 free credits.';
         if (submitBtn) submitBtn.innerHTML = '<span>🚀 Create Free Account & Send Verification Link</span>';
         if (footerNote) footerNote.innerHTML = 'Already registered? <a href="javascript:void(0)" onclick="setAuthMode(\'signin\')">Sign in here →</a>';
         if (pwdHint) pwdHint.style.display = 'block';
@@ -977,7 +1178,7 @@
       });
     };
     const bindMobileGuards = () => {
-      ['#auth-mobile-input', '#active-setting-mobile', '#complete-details-mobile']
+      ['#auth-mobile-input', '#active-setting-mobile']
         .forEach(sel => enforceMobileDigits(document.querySelector(sel)));
     };
     if (document.readyState === 'loading') {
@@ -1018,7 +1219,7 @@
       }
       const authErr = urlParams.get('error');
       if (authErr && msg) {
-        showAuthError(decodeURIComponent(authErr), msg);
+        showAuthErrorSafe(decodeURIComponent(authErr), msg);
       }
       const authNotice = urlParams.get('msg');
       if (authNotice && msg) {
@@ -1029,6 +1230,28 @@
     async function checkAccountSession() {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get('logged_out') === '1') return;
+
+      // Optimistic render: when a cached session exists, reveal the Account
+      // Console immediately instead of waiting for the async session round-trip.
+      // Without this the sign-in / sign-up form flashes for every signed-in user
+      // opening "Account Settings", which looked like a logout.
+      try {
+        const cached = window.mbSession;
+        if (cached?.verificationConfirmed === true && cached.user && cached.user.emailVerified !== false && cached.user.email) {
+          const ac = document.querySelector('#active-session-card');
+          const lc = document.querySelector('#login-signup-card');
+          const sw = document.querySelector('.auth-mode-switcher');
+          const pm = document.querySelector('#google-promo-modal');
+          if (ac) ac.style.display = 'block';
+          if (lc) lc.style.display = 'none';
+          if (sw) sw.style.display = 'none';
+          if (pm) { pm.classList.remove('open'); pm.style.display = 'none'; }
+          const opName = document.querySelector('#active-profile-name');
+          const opEmail = document.querySelector('#active-profile-email');
+          if (opName) opName.textContent = cached.user.name || String(cached.user.email).split('@')[0];
+          if (opEmail) opEmail.textContent = cached.user.email;
+        }
+      } catch {}
 
       try {
         const me = await initSession();
@@ -1084,16 +1307,19 @@
             activeProfForm.dataset.handled = 'true';
             activeProfForm.onsubmit = async (ev) => {
               ev.preventDefault();
+              // Declared before any early return: referencing pMsg further down
+              // used to throw a TDZ ReferenceError on invalid mobile numbers.
+              const pMsg = document.querySelector('#active-profile-msg');
               const newName = setInName?.value.trim() || '';
               const newUsername = setInUsername?.value.trim() || '';
               const mobileDigits = String(setInMobile?.value || '').replace(/\D/g, '');
               const mobileTen = mobileDigits.length > 10 ? mobileDigits.slice(-10) : mobileDigits;
+              clearAuthErrorSafe(pMsg);
               if (mobileTen && mobileTen.length !== 10) {
-                if (pMsg) pMsg.innerHTML = '<span style="color:#dc2626">⚠️ Enter a valid 10-digit mobile number.</span>';
+                showAuthErrorSafe('Enter a valid 10-digit mobile number.', pMsg);
                 return;
               }
               const newMobile = mobileTen ? ('+91' + mobileTen) : '';
-              const pMsg = document.querySelector('#active-profile-msg');
               const btn = activeProfForm.querySelector('button[type=submit]');
               if (btn) btn.disabled = true;
               if (pMsg) pMsg.innerHTML = '<span style="color:#6342dc">⏳ Updating profile details…</span>';
@@ -1110,8 +1336,7 @@
                   applyAuthenticatedUI(window.mbSession.user, window.mbSession.wallet);
                 }
               } catch (err) {
-                if (pMsg) pMsg.innerHTML = '<span style="color:#dc2626">⚠️ ' + esc(err.message) + '</span>';
-                toast(err.message);
+                showAuthErrorSafe(formatAuthErrorSafe(err), pMsg);
               } finally {
                 if (btn) btn.disabled = false;
               }
@@ -1167,86 +1392,85 @@
       checkAccountSession();
     }
 
+    function failAuthValidation(field, message) {
+      showAuthErrorSafe(message, msg);
+      field?.setAttribute('aria-invalid', 'true');
+      field?.setAttribute('aria-describedby', 'account-message');
+      field?.focus({ preventScroll: true });
+      return null;
+    }
+
+    function validateAuthForm() {
+      const email = form.elements.email.value.trim();
+      form.elements.email.value = email;
+      const password = form.elements.password.value;
+      if (!email) return failAuthValidation(form.elements.email, 'Please enter your email address.');
+      if (form.elements.email.validity.typeMismatch) return failAuthValidation(form.elements.email, 'Enter a valid email address, such as name@example.com.');
+      if (!password) return failAuthValidation(form.elements.password, 'Please enter your password.');
+      if (password.length < 6) return failAuthValidation(form.elements.password, 'Password must be at least 6 characters long.');
+      const profileData = {};
+      if (authMode === 'signup') {
+        profileData.name = form.elements.name.value.trim();
+        profileData.username = form.elements.username.value.trim();
+        const mobileDigits = form.elements.mobile.value.replace(/\D/g, '');
+        const mobileTen = mobileDigits.length > 10 ? mobileDigits.slice(-10) : mobileDigits;
+        profileData.mobile = '+91' + mobileTen;
+        if (!profileData.name) return failAuthValidation(form.elements.name, 'Please enter your full name.');
+        if (profileData.username.length < 3) return failAuthValidation(form.elements.username, 'Username must be at least 3 characters long.');
+        if (mobileTen.length !== 10) return failAuthValidation(form.elements.mobile, 'Please enter a valid 10-digit Indian mobile number.');
+        if (!form.elements.confirmPassword.value) return failAuthValidation(form.elements.confirmPassword, 'Please confirm your password.');
+        if (password !== form.elements.confirmPassword.value) return failAuthValidation(form.elements.confirmPassword, 'Passwords do not match. Enter the same password in both fields.');
+      }
+      return { email, password, profileData };
+    }
+
+    // novalidate routes both button clicks and Enter through the same visible
+    // error popup instead of allowing native validation to cancel submit silently.
+    form.addEventListener('invalid', e => {
+      e.preventDefault();
+      failAuthValidation(e.target, e.target.validationMessage || 'Please check this field.');
+    }, true);
+    form.addEventListener('input', e => e.target.removeAttribute('aria-invalid'));
     form.onsubmit = async e => {
       e.preventDefault();
       e.stopPropagation();
-      clearAuthError(msg);
-      const email = form.elements.email.value.trim();
-      const password = form.elements.password.value;
-      const isCreate = (authMode === 'signup');
-
-      if (isCreate) {
-        const name = form.elements.name?.value.trim() || '';
-        const username = form.elements.username?.value.trim() || '';
-        // Accepts "+91 98765 43210", "09876543210" or "9876543210" and stores a
-        // canonical +91XXXXXXXXXX value; only the last 10 digits are kept so the
-        // India flag prefix in the UI can never be double-counted.
-        const mobileRaw = form.elements.mobile?.value || '';
-        const mobileDigits = mobileRaw.replace(/\D/g, '');
-        const mobileTen = mobileDigits.length > 10 ? mobileDigits.slice(-10) : mobileDigits;
-        const mobile = mobileTen ? ('+91' + mobileTen) : '';
-        const confirmPassword = form.elements.confirmPassword?.value || '';
-
-        if (!name) {
-          showAuthError('Please enter your Full Name.', msg);
-          return;
-        }
-        if (!username || username.length < 3) {
-          showAuthError('Username must be at least 3 characters.', msg);
-          return;
-        }
-        if (mobileTen.length !== 10) {
-          showAuthError('Please enter a valid 10-digit Indian mobile number (with +91).', msg);
-          return;
-        }
-        if (password !== confirmPassword) {
-          showAuthError('Passwords do not match. Please verify your password.', msg);
-          return;
-        }
-
-        msg.innerHTML = '<span style="color:#6342dc">⏳ Creating account & dispatching verification link to Gmail…</span>';
-        submitBtn.disabled = true;
-
-        try {
-          await signIn(email, password, true, { name, username, mobile });
-          toast('✓ Account created! Verification link sent to ' + email);
-          
-          // Display verification card
-          form.style.display = 'none';
-          verifBanner.style.display = 'block';
-          verifBanner.innerHTML = `
-            <div class="auth-verification-banner">
-              <div class="auth-verif-icon">📬</div>
-              <h3 class="auth-verif-title">Verification Link Sent to Gmail!</h3>
-              <p class="auth-verif-text">
-                Welcome <strong>${esc(name)}</strong>! An activation link has been dispatched to <strong>${esc(email)}</strong>.<br>
-                Please check your inbox (and spam/promotions folder) and click the link to verify your email address.
-              </p>
-              <button type="button" class="auth-verif-action-btn" onclick="setAuthMode('signin')">
-                Sign In to Your Account →
-              </button>
-            </div>
-          `;
-        } catch (err) {
-          const errorText = window.formatAuthError ? window.formatAuthError(err) : err.message;
-          showAuthError(errorText, msg);
-        } finally {
-          submitBtn.disabled = false;
-        }
-      } else {
-        msg.innerHTML = '<span style="color:#6342dc">⏳ Signing in with Firebase…</span>';
-        submitBtn.disabled = true;
-
-        try {
-          await signIn(email, password, false);
-          toast('Signed in successfully!');
+      if (authBusy) return;
+      clearAuthErrorSafe(msg);
+      const values = validateAuthForm();
+      if (!values) return;
+      const { email, password, profileData } = values;
+      const isCreate = authMode === 'signup';
+      setAuthBusy(true, isCreate ? 'Creating your account…' : 'Signing in…');
+      msg.textContent = isCreate ? 'Creating your account and requesting a verification link…' : 'Checking your sign-in details…';
+      try {
+        const result = await signIn(email, password, isCreate, profileData);
+        form.elements.password.value = '';
+        form.elements.confirmPassword.value = '';
+        if (result.requiresVerification) {
+          showVerificationPanel(result);
+        } else {
+          msg.textContent = 'Signed in successfully. Opening your dashboard…';
           window.location.href = '/dashboard.html';
-        } catch (err) {
-          const errorText = window.formatAuthError ? window.formatAuthError(err) : err.message;
-          showAuthError(errorText, msg);
-        } finally {
-          submitBtn.disabled = false;
         }
+      } catch (err) {
+        let errorText = formatAuthErrorSafe(err);
+        if (!isCreate && /INVALID_LOGIN_CREDENTIALS|INVALID_PASSWORD/.test(String(err?.message))) {
+          const exists = await accountExistsSafe(email);
+          if (exists === false) errorText = 'No account found with this email address. Please create an account first.';
+        }
+        showAuthErrorSafe(errorText, msg);
+        const duplicate = /already registered/i.test(errorText);
+        const missing = /No account found/i.test(errorText);
+        if (duplicate || missing) {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'auth-switch-mode-btn';
+          btn.textContent = duplicate ? 'Sign in to this account instead →' : 'Create a free account with this email →';
+          btn.onclick = () => { setAuthMode(duplicate ? 'signin' : 'signup'); form.elements.email.value = email; form.elements.password.focus(); };
+          msg.appendChild(btn);
+        }
+      } finally {
+        setAuthBusy(false);
       }
     };
 </script>

@@ -1085,7 +1085,32 @@ button.profile[aria-expanded="true"] .profile-caret {
   100% { opacity: 1; transform: translateY(0) scale(1) translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .auth-error-pop { animation: none; }
+  .auth-error-pop, #toast.toast-error, #toast.toast-error.show { animation: none; }
+  #toast { transition: none; }
+}
+
+/* Recovery action shown under an auth error (e.g. "No account found" ->
+   "Create a free account"). Keeps a failed sign-in from being a dead end. */
+.auth-switch-mode-btn {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+  padding: 9px 14px;
+  border: 1px solid #c7b9f7;
+  border-radius: 9px;
+  background: #f5f2ff;
+  color: #5b2fd6;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+.auth-switch-mode-btn:hover {
+  background: #ede7ff;
+  transform: translateY(-1px);
+}
+.auth-switch-mode-btn:active {
+  transform: translateY(0);
 }
 
 /* Phone Input with Country Code */
@@ -4167,6 +4192,27 @@ button:active, a.primary:active, a.outline:active, .btn:active {
 .auth-verif-action-btn:hover {
   background: #15803d;
   transform: translateY(-1px);
+}
+
+.auth-verif-address {
+  color: #14532d;
+  font-size: 15px;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+  margin: 0 0 14px;
+}
+.auth-verif-message { min-height: 24px; font-size: 13px; line-height: 1.6; margin-bottom: 16px; }
+.auth-verif-actions { display: flex; flex-direction: column; gap: 10px; }
+.auth-verif-secondary { background: #fff; color: #166534; border: 1px solid #86efac; box-shadow: none; }
+.auth-verif-secondary:hover { background: #dcfce7; }
+.auth-verif-back { background: transparent; border: 0; color: #475569; padding: 8px; font: inherit; font-size: 13px; text-decoration: underline; cursor: pointer; }
+.auth-verif-action-btn:disabled, .auth-verif-back:disabled { opacity: 0.6; cursor: wait; transform: none; }
+.auth-verif-action-btn:focus-visible, .auth-verif-back:focus-visible, .auth-switch-mode-btn:focus-visible { outline: 3px solid #6342dc; outline-offset: 3px; }
+#auth-form [aria-invalid="true"] { border-color: #dc2626; box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12); }
+@media (prefers-reduced-motion: reduce) {
+  .auth-verification-banner { animation: none; }
+  .auth-verif-action-btn { transition: none; }
+  .auth-verif-action-btn:hover { transform: none; }
 }
 
 /* ========================================================

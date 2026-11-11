@@ -8,26 +8,16 @@ window.MAILINDIA_API_BASE = window.MAILINDIA_API_BASE || 'https://mail-india-bet
   try {
     const search = typeof window !== 'undefined' ? window.location.search : '';
     const urlParams = new URLSearchParams(search);
-    const incomingToken = urlParams.get('token');
-    if (incomingToken && typeof localStorage !== 'undefined') {
-      try {
-        const cached = JSON.parse(localStorage.getItem('mb_session_cache') || '{}');
-        cached.token = incomingToken;
-        localStorage.setItem('mb_session_cache', JSON.stringify(cached));
-        localStorage.setItem('mailbridge_session', '1');
-      } catch {}
-    }
-    const hasGoogleAuth = search.includes('auth=google_success') || Boolean(incomingToken);
     let hasValidLocal = false;
     if (typeof localStorage !== 'undefined') {
       try {
         const cached = JSON.parse(localStorage.getItem('mb_session_cache') || '{}');
-        if (cached && (cached.token || (cached.user && cached.user.email))) {
+        if (cached && cached.verificationConfirmed === true && cached.user && cached.user.emailVerified !== false) {
           hasValidLocal = true;
         }
       } catch {}
     }
-    if (hasGoogleAuth || hasValidLocal) {
+    if (hasValidLocal && urlParams.get('logged_out') !== '1') {
       if (typeof document !== 'undefined' && document.documentElement) {
         document.documentElement.classList.add('authenticated');
       }
@@ -96,16 +86,19 @@ window.setSliderAmount = function(amount) {
 };
 
 let mbSession = null;
+let authStateVersion = 0;
 try {
   const _savedSession = typeof localStorage !== 'undefined' ? localStorage.getItem('mb_session_cache') : null;
   if (_savedSession) mbSession = JSON.parse(_savedSession);
 } catch {}
+window.mbSession = mbSession;
 
 const $ = s => document.querySelector(s);
 const $$ = s => document.querySelectorAll(s);
 
 function saveSession(data) {
   mbSession = data;
+  window.mbSession = data;
   try {
     if (typeof localStorage !== 'undefined') {
       if (data) {
@@ -117,6 +110,26 @@ function saveSession(data) {
       }
     }
   } catch {}
+}
+
+function isEmailVerificationError(err) {
+  return err?.code === 'EMAIL_NOT_VERIFIED' || /EMAIL_NOT_VERIFIED/.test(String(err?.message || ''));
+}
+
+// A verification rejection must remove every cached/optimistic authenticated view.
+function clearAuthenticationState() {
+  authStateVersion += 1;
+  saveSession(null);
+  if (typeof document === 'undefined') return;
+  document.documentElement?.classList.remove('authenticated');
+  document.body?.classList.remove('authenticated');
+  const hidden = ['#side-auth-section', '#active-session-card', '#notif-toggle-btn', '#topbar-caret'];
+  hidden.forEach(selector => { const el = document.querySelector(selector); if (el) el.style.display = 'none'; });
+  const shown = ['#side-guest-section', '#login-signup-card', '.auth-mode-switcher'];
+  shown.forEach(selector => { const el = document.querySelector(selector); if (el) el.style.display = ''; });
+  const authButton = document.querySelector('#auth-button');
+  if (authButton) authButton.style.display = 'inline-flex';
+  document.querySelector('#admin-portal-switch')?.remove();
 }
 
 function esc(s) {
@@ -709,6 +722,7 @@ function getApiUrl(url) {
   }
   return url;
 }
+window.getApiUrl = getApiUrl;
 
 // Server-side routes (OAuth begins on the backend, not on the static frontend).
 function isBackendRoute(href) {
@@ -749,6 +763,7 @@ function isOwnBackendUrl(fullUrl) {
 }
 
 async function jsonFetch(url, options = {}) {
+  const requestAuthVersion = authStateVersion;
   const fullUrl = getApiUrl(url);
   const isCrossDomain = typeof fullUrl === 'string' && fullUrl.startsWith('http') && !fullUrl.startsWith(window.location.origin);
   let credentials;
@@ -764,15 +779,21 @@ async function jsonFetch(url, options = {}) {
   const res = await fetch(fullUrl, fetchOptions);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) {
-    if (res.status === 429) {
-      throw new Error(data.message || 'Rate limit reached. Please wait a moment before trying again.');
+    const error = new Error(data.message || data.error?.message || (typeof data.error === 'string' ? data.error : '') || (res.status === 429 ? 'Rate limit reached. Please wait a moment before trying again.' : `HTTP ${res.status}`));
+    error.code = data.error?.code || (typeof data.error === 'string' ? data.error : '') || data.code || data.error?.message;
+    error.status = res.status;
+    if (isEmailVerificationError(error) && requestAuthVersion === authStateVersion) {
+      window.__emailVerificationDenied = true;
+      clearAuthenticationState();
+      error.authenticationCleared = true;
     }
-    throw new Error(data.message || data.error?.message || data.error || `HTTP ${res.status}`);
+    throw error;
   }
   return data;
 }
 
 async function api(url, method = 'GET', body = null) {
+  const requestAuthVersion = authStateVersion;
   if (!mbSession || !mbSession.csrf) {
     // Try restoring from session cookie
     try {
@@ -781,6 +802,7 @@ async function api(url, method = 'GET', body = null) {
       try {
         s = await jsonFetch('/api/session/status', { credentials: 'same-origin', headers: authHeaders });
       } catch (e) {
+        if (isEmailVerificationError(e)) throw e;
         if (mbSession?.token) {
           delete mbSession.token;
           saveSession(mbSession);
@@ -789,8 +811,10 @@ async function api(url, method = 'GET', body = null) {
           throw e;
         }
       }
-      saveSession({ ...(mbSession || {}), csrf: s.csrf });
-    } catch {
+      if (requestAuthVersion !== authStateVersion) throw new Error('Your sign-in changed. Please try again.');
+      saveSession({ ...(mbSession || {}), csrf: s.csrf, verificationConfirmed: true, ...(s.user ? { user: s.user } : {}) });
+    } catch (err) {
+      if (isEmailVerificationError(err)) throw err;
       throw new Error('Please sign in first to access this resource.');
     }
   }
@@ -827,7 +851,7 @@ async function api(url, method = 'GET', body = null) {
 }
 
 function formatAuthError(err) {
-  const m = (err && err.message) || String(err || '');
+  const m = [err?.code, err?.message || String(err || '')].filter(Boolean).join(' ');
   if (m.includes('INVALID_LOGIN_CREDENTIALS') || m.includes('INVALID_PASSWORD')) {
     return 'Invalid email or password. Please check your credentials and try again.';
   }
@@ -846,7 +870,14 @@ function formatAuthError(err) {
   if (m.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) {
     return 'Too many attempts. Please wait a few minutes before trying again.';
   }
-  return m;
+  if (m.includes('EMAIL_NOT_VERIFIED')) return 'Verify your email address before signing in. Open the link in your inbox or request a new one below.';
+  if (/RECENT_LOGIN_REQUIRED|TOKEN_EXPIRED|INVALID_REFRESH_TOKEN|INVALID_ID_TOKEN|USER_NOT_FOUND/.test(m)) return 'Please sign in again to continue. If you opened the verification link, your email stays verified.';
+  if (m.includes('USER_DISABLED')) return 'This account has been disabled. Please contact support for help.';
+  if (/OPERATION_NOT_ALLOWED|CONFIGURATION_NOT_FOUND|API_KEY_INVALID/.test(m)) return 'Email sign-in is temporarily unavailable. Please try again later or contact support.';
+  if (/Failed to fetch|NetworkError|network request failed|Load failed/i.test(m)) return 'Could not connect. Check your internet connection and try again.';
+  if (err?.status === 429 || /TOO_MANY_REQUESTS|RATE_LIMIT/.test(m)) return 'Too many requests. Please wait a minute before trying again.';
+  if (err?.status >= 500) return 'The service could not complete this request. Please try again shortly.';
+  return err?.message || m || 'Something went wrong. Please try again.';
 }
 
 window.formatAuthError = formatAuthError;
@@ -859,12 +890,12 @@ function showAuthError(message, target) {
   const box = target || document.querySelector('#account-message');
   if (box) {
     box.innerHTML =
-      '<div class="auth-error-pop" role="alert">' +
-        '<span class="auth-error-icon">⚠️</span>' +
+      '<div class="auth-error-pop" role="alert" aria-atomic="true">' +
+        '<span class="auth-error-icon" aria-hidden="true">⚠️</span>' +
         '<span class="auth-error-text">' + esc(text) + '</span>' +
       '</div>';
     if (typeof box.scrollIntoView === 'function') {
-      try { box.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {}
+      try { box.scrollIntoView({ block: 'nearest', behavior: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); } catch {}
     }
   }
   toast(text, 'error', 5000);
@@ -879,64 +910,132 @@ function clearAuthError(target) {
 }
 window.clearAuthError = clearAuthError;
 
-async function signIn(email, password, register, profileData = {}) {
-  const apiKey = (window.firebaseConfig && window.firebaseConfig.apiKey) || 'AIzaSyCvfIXHa_6Vy5Qh2Of-ayhUjw1INwujmsE';
-  const operation = register ? 'signUp' : 'signInWithPassword';
-  const r = await jsonFetch(`https://identitytoolkit.googleapis.com/v1/accounts:${operation}?key=${encodeURIComponent(apiKey)}`, {
+// Unverified Firebase credentials exist only in this page's memory. They never
+// become an app session or survive a page reload.
+let pendingEmailVerification = null;
+
+function firebaseAuthUrl(operation) {
+  return `https://identitytoolkit.googleapis.com/v1/accounts:${operation}?key=${encodeURIComponent(window.firebaseConfig.apiKey)}`;
+}
+
+function getPendingEmailVerification() {
+  if (!pendingEmailVerification) return null;
+  const { email, created, verificationSent, verificationError, resendAt } = pendingEmailVerification;
+  return { requiresVerification: true, email, created, verificationSent, verificationError, resendAt };
+}
+
+function clearPendingEmailVerification() {
+  pendingEmailVerification = null;
+}
+
+async function refreshPendingVerificationToken() {
+  const pending = pendingEmailVerification;
+  if (!pending?.refreshToken) throw new Error('Please sign in again to check your email verification.');
+  const result = await jsonFetch(`https://securetoken.googleapis.com/v1/token?key=${encodeURIComponent(window.firebaseConfig.apiKey)}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, returnSecureToken: true })
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: pending.refreshToken }).toString()
   });
+  if (pending !== pendingEmailVerification) throw new Error('Please sign in again to continue.');
+  pending.idToken = result.id_token;
+  pending.refreshToken = result.refresh_token || pending.refreshToken;
+  pending.refreshedAt = Date.now();
+  return pending;
+}
 
-  if (register) {
-    // 1. Dispatch Firebase standard verification link to Gmail
-    await jsonFetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${encodeURIComponent(apiKey)}`, {
+async function sendPendingVerificationEmail() {
+  const pending = pendingEmailVerification;
+  if (!pending) throw new Error('Please sign in again to request a verification email.');
+  if (pending.resendAt > Date.now()) throw new Error('Please wait before requesting another verification email.');
+  if (Date.now() - pending.refreshedAt > 45 * 60 * 1000) await refreshPendingVerificationToken();
+  try {
+    const result = await jsonFetch('/api/auth/send-verification-email', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ requestType: 'VERIFY_EMAIL', idToken: r.idToken })
-    }).catch(() => {});
-
-    // 2. Dispatch custom Mail India activation email via API relay
-    await jsonFetch('/api/auth/send-verification-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, idToken: r.idToken })
-    }).catch(() => {});
+      headers: { Authorization: `Bearer ${pending.idToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: pending.email })
+    });
+    if (result.success !== true) throw new Error('The verification email could not be sent. Please try again.');
+    if (pending !== pendingEmailVerification) return null;
+    pending.verificationSent = true;
+    pending.verificationError = '';
+    pending.resendAt = Date.now() + 60000;
+    return getPendingEmailVerification();
+  } catch (err) {
+    pending.verificationError = formatAuthError(err);
+    // Failed requests also have a short cooldown to avoid repeated provider calls.
+    pending.resendAt = Date.now() + (err.status === 429 ? 60000 : 10000);
+    throw err;
   }
+}
 
-  // Pass profileData (name, username, mobile) to bootstrap
-  const bootstrapPayload = {
-    email: r.email || email,
-    name: profileData.name || '',
-    username: profileData.username || '',
-    mobile: profileData.mobile || profileData.phone || ''
-  };
-
+async function completeVerifiedSignIn(identity, profileData = {}) {
   await jsonFetch('/api/session/bootstrap', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${r.idToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(bootstrapPayload)
+    headers: { Authorization: `Bearer ${identity.idToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: identity.email, name: profileData.name || '', username: profileData.username || '', mobile: profileData.mobile || profileData.phone || '' })
   });
-
   const session = await jsonFetch('/api/session/login', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${r.idToken}` },
+    headers: { Authorization: `Bearer ${identity.idToken}` },
     credentials: 'same-origin'
   });
-
+  window.__emailVerificationDenied = false;
   saveSession({
     csrf: session.csrf,
-    token: r.idToken,
-    user: {
-      email: r.email,
-      uid: r.localId,
-      name: profileData.name || '',
-      username: profileData.username || '',
-      mobile: profileData.mobile || ''
-    }
+    token: identity.idToken,
+    verificationConfirmed: true,
+    user: { email: identity.email, uid: identity.localId, ...profileData, ...(session.user || {}), emailVerified: true }
   });
+  pendingEmailVerification = null;
+  return { email: identity.email, uid: identity.localId, requiresVerification: false };
+}
 
-  return { idToken: r.idToken, email: r.email, uid: r.localId, register };
+async function checkPendingEmailVerification() {
+  const pending = await refreshPendingVerificationToken();
+  const result = await jsonFetch(firebaseAuthUrl('lookup'), {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken: pending.idToken })
+  });
+  if (pending !== pendingEmailVerification) throw new Error('Please sign in again to continue.');
+  if (result.users?.[0]?.emailVerified !== true) return getPendingEmailVerification();
+  try {
+    return await completeVerifiedSignIn(pending, pending.profileData);
+  } catch (err) {
+    if (isEmailVerificationError(err)) return getPendingEmailVerification();
+    throw err;
+  }
+}
+
+async function signIn(email, password, register, profileData = {}) {
+  const r = await jsonFetch(firebaseAuthUrl(register ? 'signUp' : 'signInWithPassword'), {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password, returnSecureToken: true })
+  });
+  clearAuthenticationState();
+  const identity = { ...r, email: r.email || email };
+  let verified = false;
+  if (!register) {
+    const account = await jsonFetch(firebaseAuthUrl('lookup'), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ idToken: r.idToken })
+    });
+    verified = account.users?.[0]?.emailVerified === true;
+  }
+  if (verified) {
+    try { return await completeVerifiedSignIn(identity, profileData); }
+    catch (err) { if (!isEmailVerificationError(err)) throw err; }
+  }
+  pendingEmailVerification = {
+    ...identity, profileData, created: Boolean(register), verificationSent: false,
+    verificationError: '', resendAt: 0, refreshedAt: Date.now()
+  };
+  if (register) {
+    // Account creation already succeeded. A dispatch failure remains a retryable
+    // verification step, never an invitation to create the account a second time.
+    // Profile setup is deferred until verified login so database availability
+    // cannot delay the verification email. profileData remains in memory above.
+    try { await sendPendingVerificationEmail(); }
+    catch (err) { pendingEmailVerification.verificationError = formatAuthError(err); }
+  }
+  return getPendingEmailVerification();
 }
 
 async function requestPasswordResetOtp(email) {
@@ -963,6 +1062,7 @@ window.requestPasswordResetOtp = requestPasswordResetOtp;
 window.verifyPasswordResetOtp = verifyPasswordResetOtp;
 
 async function signOut() {
+  clearPendingEmailVerification();
   try {
     let csrf = mbSession?.csrf;
     if (!csrf) {
@@ -1014,7 +1114,7 @@ async function signOut() {
 }
 
 function applyAuthenticatedUI(user, wallet) {
-  if (!user) return;
+  if (!user || user.emailVerified === false || mbSession?.verificationConfirmed !== true || window.__emailVerificationDenied) return;
   if (typeof document !== 'undefined') {
     if (document.documentElement) document.documentElement.classList.add('authenticated');
     if (document.body) document.body.classList.add('authenticated');
@@ -1105,6 +1205,8 @@ async function initSession() {
 }
 
 async function _doInitSession() {
+  if (pendingEmailVerification) return null;
+  const initAuthVersion = authStateVersion;
   const publicPages = [
     '/',
     '/index.html',
@@ -1132,25 +1234,15 @@ async function _doInitSession() {
   // Check incoming token (from Google OAuth or magic link redirect)
   const incomingToken = urlParams.get('token');
   if (incomingToken && !isExplicitLogout) {
-    if (!mbSession) mbSession = {};
-    mbSession.token = incomingToken;
-    saveSession(mbSession);
-    if (typeof document !== 'undefined') {
-      if (document.documentElement) document.documentElement.classList.add('authenticated');
-      if (document.body) document.body.classList.add('authenticated');
-    }
+    mbSession = { token: incomingToken };
   }
 
   // Optimistically apply authenticated UI from cached session immediately
-  if (mbSession && mbSession.user && !isExplicitLogout) {
+  if (mbSession?.verificationConfirmed === true && mbSession.user && !isExplicitLogout) {
     applyAuthenticatedUI(mbSession.user, mbSession.wallet);
   }
 
   const setGuestUI = () => {
-    // If we have an incoming token or Google OAuth redirect in flight, do not downgrade to guest UI
-    if (incomingToken || urlParams.get('auth') === 'google_success') {
-      return;
-    }
     if (typeof document !== 'undefined') {
       if (document.documentElement) document.documentElement.classList.remove('authenticated');
       if (document.body) document.body.classList.remove('authenticated');
@@ -1241,6 +1333,7 @@ async function _doInitSession() {
     try {
       s = await jsonFetch('/api/session/status', { credentials: 'same-origin', headers: authHeaders });
     } catch (e) {
+      if (isEmailVerificationError(e)) throw e;
       if (activeToken) {
         authHeaders = {};
         s = await jsonFetch('/api/session/status', { credentials: 'same-origin', headers: {} });
@@ -1249,15 +1342,18 @@ async function _doInitSession() {
       }
     }
 
+    if (initAuthVersion !== authStateVersion || pendingEmailVerification) return null;
     if (s && s.csrf) {
-      saveSession({ ...(mbSession || {}), csrf: s.csrf, token: activeToken || mbSession?.token, ...(s.user ? { user: s.user } : {}) });
+      window.__emailVerificationDenied = false;
+      saveSession({ ...(mbSession || {}), csrf: s.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, ...(s.user ? { user: s.user } : {}) });
     }
     if (s && s.user) {
       applyAuthenticatedUI(s.user);
     }
 
     const me = await api('/api/me');
-    saveSession({ ...(mbSession || {}), csrf: s?.csrf || mbSession?.csrf, token: activeToken || mbSession?.token, user: me.user, wallet: me.wallet });
+    if (initAuthVersion !== authStateVersion || pendingEmailVerification) return null;
+    saveSession({ ...(mbSession || {}), csrf: s?.csrf || mbSession?.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, user: me.user, wallet: me.wallet });
 
     // Clean URL query params if returning from Google OAuth or with token
     if ((urlParams.get('auth') === 'google_success' || incomingToken) && window.history && window.history.replaceState) {
@@ -1281,24 +1377,22 @@ async function _doInitSession() {
       return me;
     }
 
-    // If authenticated user visits account.html, redirect to dashboard only if details are complete and not arriving with explicit action
+    // NOTE: account.html is the Account Settings console. A signed-in user who
+    // navigates here (sidebar "Account Settings", profile menu, or a deep link)
+    // must STAY on the page. It previously bounced to /dashboard.html unless the
+    // URL happened to carry `?stay=1`, which made the menu item look broken and
+    // also hid the profile/password forms. Redirects away from this page are now
+    // opt-in only, via `?next=<url>`.
     if (onAccount) {
-      const isExplicitAction = urlParams.has('logged_out') || urlParams.has('stay') || urlParams.has('msg') || urlParams.has('error') || urlParams.has('complete_details') || isProfileIncomplete;
-      if (!isExplicitAction) {
-        let redirectCount = 0;
-        try {
-          redirectCount = parseInt(sessionStorage.getItem('mb_auth_redirects') || '0', 10);
-        } catch {}
-        if (redirectCount < 2) {
-          try { sessionStorage.setItem('mb_auth_redirects', String(redirectCount + 1)); } catch {}
-          window.location.replace('/dashboard.html');
-          return me;
-        } else {
-          console.warn('Redirect loop prevented. Remaining on account.html.');
-          try { sessionStorage.removeItem('mb_auth_redirects'); } catch {}
-          return me;
-        }
+      const nextUrl = urlParams.get('next');
+      const safeNext = nextUrl && /^\/[A-Za-z0-9/_.\-]*$/.test(nextUrl) && !nextUrl.startsWith('//')
+        ? nextUrl
+        : null;
+      if (safeNext && !isProfileIncomplete) {
+        window.location.replace(safeNext);
+        return me;
       }
+      try { sessionStorage.removeItem('mb_auth_redirects'); } catch {}
       return me;
     }
 
@@ -1333,6 +1427,13 @@ async function _doInitSession() {
     return me;
   } catch (err) {
     console.warn('Session verification failed:', err.message);
+    if (initAuthVersion !== authStateVersion && !err.authenticationCleared) return null;
+    if (isEmailVerificationError(err)) {
+      clearAuthenticationState();
+      setGuestUI();
+      if (currentPath.endsWith('/account.html')) showAuthError(formatAuthError(err));
+      return null;
+    }
     if (urlParams.get('auth') === 'google_success' && (!window.__googleAuthRetried || window.__googleAuthRetried < 3)) {
       window.__googleAuthRetried = (window.__googleAuthRetried || 0) + 1;
       await new Promise(r => setTimeout(r, 450));
@@ -1355,7 +1456,7 @@ async function _doInitSession() {
       setGuestUI();
     } else {
       console.warn('Transient network/server error during session check; not redirecting to login:', err.message);
-      if (mbSession && mbSession.user) {
+      if (mbSession?.verificationConfirmed === true && mbSession.user) {
         applyAuthenticatedUI(mbSession.user, mbSession.wallet);
       }
     }
@@ -1370,7 +1471,7 @@ async function initDashboard() {
   const hasPendingAuth = urlParams.get('auth') === 'google_success' || Boolean(incomingToken);
 
   // Instant optimistic render if cached session exists
-  if (mbSession && mbSession.user) {
+  if (mbSession?.verificationConfirmed === true && mbSession.user) {
     applyAuthenticatedUI(mbSession.user, mbSession.wallet);
     const notice = document.querySelector('#dashboard-notice');
     if (notice) {
@@ -1387,7 +1488,7 @@ async function initDashboard() {
   });
   if (!me) {
     // If cached session is present or auth is still pending, keep optimistic authenticated view
-    if ((mbSession && mbSession.user) || hasPendingAuth) {
+    if (!window.__emailVerificationDenied && ((mbSession?.verificationConfirmed === true && mbSession.user) || hasPendingAuth)) {
       if (mbSession && mbSession.user) {
         applyAuthenticatedUI(mbSession.user, mbSession.wallet);
       }
