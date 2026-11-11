@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:seo="http://indiamail.toolsnetwork.online/schemas/seo/1.0"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+
+  <!-- ============================================================ -->
+  <!-- MAIL INDIA / INDIA MAIL - MASTER XML SITEMAP & SEO CATALOG   -->
+  <!-- Canonical Domain: http://indiamail.toolsnetwork.online       -->
+  <!-- Last Modified: 2026-11-10                                    -->
+  <!-- ============================================================ -->
+
+  <!-- 1. CORE CANONICAL PUBLIC PAGES -->
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/index.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/billing/pricing.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/account.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/support.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/ai-support.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/help/index.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/help/status.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>always</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- 2. LEGAL, TRUST & COMPLIANCE PAGES -->
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/legal.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/legal/privacy.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/legal/terms.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/legal/acceptable-use.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/privacy.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/terms.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/acceptable-use.html</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <!-- 3. DEEP API DOCUMENTATION & INTEGRATION ROUTES -->
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#authentication</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#send-email</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-curl</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-node-axios</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-node-fetch</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-python</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-php</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-go</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#code-java</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#ai-prompts</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#rate-limits</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#error-codes</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/api-docs.html#best-practices</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>http://indiamail.toolsnetwork.online/billing/pricing.html#pay-as-you-go</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- ================================================================= -->
+  <!-- 200 INDEXED TARGET SEO KEYWORDS CATALOG                           -->
+  <!-- ================================================================= -->
+  <!--
+    1. mailindia
+    2. mailindia api
+    3. mail india
+    4. mail india api
+    5. indiamail
+    6. indiamail api
+    7. indiamail toolsnetwork online
+    8. transactional email api
+    9. transactional email api india
+    10. indian transactional email service
+    11. smtp relay india
+    12. smtp relay server india
+    13. cloud smtp relay
+    14. cheap transactional email api
+    15. lowest price email api
+    16. transactional email service provider
+    17. sendgrid alternative india
+    18. mailgun alternative india
+    19. aws ses alternative india
+    20. postmark alternative india
+    21. resend alternative india
+    22. brevo alternative india
+    23. sparkpost alternative india
+    24. zeptomail alternative india
+    25. otp email api
+    26. transactional otp delivery
+    27. high speed otp email service
+    28. instant otp email api
+    29. email api for developers
+    30. developer first email api
+    31. rest email api
+    32. email sending api
+    33. transactional email delivery
+    34. email api mumbai data residency
+    35. rbi compliant email service
+    36. indian data residency email api
+    37. dpdp compliant email relay
+    38. mumbai cloud smtp
+    39. cloud email infrastructure india
+    40. nodejs email api
+    41. python email api
+    42. php mail api
+    43. go email api
+    44. java email api
+    45. ruby email api
+    46. csharp email api
+    47. curl email api
+    48. wordpress transactional email api
+    49. wp_mail smtp india
+    50. laravel email api transport
+    51. django email backend api
+    52. expressjs email sending
+    53. fastapi email api
+    54. flask email relay
+    55. spring boot email api
+    56. nextjs email api
+    57. react transactional email
+    58. vuejs email dispatch
+    59. angular email sender
+    60. high deliverability email service
+    61. inbox placement email api
+    62. dkim signed email api
+    63. spf record email api
+    64. dmarc compliant email delivery
+    65. bimi certified email sending
+    66. 2048 bit dkim email relay
+    67. dedicated ip email api
+    68. shared ip pool email service
+    69. email bounce tracking api
+    70. hard bounce suppression api
+    71. soft bounce automatic retry
+    72. spam complaint suppression list
+    73. real time email suppression api
+    74. email delivery webhooks
+    75. async email webhook notifications
+    76. webhook delivery event callback
+    77. email open tracking api
+    78. email click tracking api
+    79. transactional email analytics
+    80. credit based email api
+    81. pay as you go email api
+    82. 10 paise per email api
+    83. 0.10 rupee email api
+    84. upi payment email api
+    85. gpay email api topup
+    86. phonepe email api credits
+    87. paytm email recharge
+    88. razorpay email credits
+    89. zetpay upi email billing
+    90. free email api credits
+    91. 10 free credits email api
+    92. 50 percent off email api google
+    93. bulk transactional email api
+    94. high volume email api
+    95. 100000 emails per month api
+    96. 1 million emails per month api
+    97. low latency email pipeline
+    98. 15ms email acceptance api
+    99. asynchronous email worker
+    100. redis bullmq email queue
+    101. idempotent email sending api
+    102. idempotency key email api
+    103. duplicate send prevention email
+    104. secure session email api
+    105. apiKey bearer token email api
+    106. email api key generator
+    107. rate limited email api
+    108. automated email reconciliation
+    109. transactional email logs
+    110. email status query api
+    111. get email status by message id
+    112. 64 character message id email
+    113. order confirmation email api
+    114. invoice receipt email delivery
+    115. password reset email service
+    116. account activation email api
+    117. user welcome email api
+    118. security alert email notification
+    119. payment receipt email api
+    120. bank alert email delivery
+    121. edtech student notification email
+    122. ecommerce order dispatch email
+    123. healthcare appointment reminder email
+    124. saas transactional notification email
+    125. b2b transactional email relay
+    126. b2c high volume email sender
+    127. marketing email api india
+    128. html email template api
+    129. responsive email template api
+    130. drag and drop email template
+    131. dynamic email merge tags
+    132. handlebars email templates
+    133. mjml email template support
+    134. transactional email attachments api
+    135. pdf invoice email attachment
+    136. multi recipient email api
+    137. cc bcc email api
+    138. custom reply to email api
+    139. custom sender name email api
+    140. sender domain verification api
+    141. dns verification txt record
+    142. cname verification email sender
+    143. gmail api sending integration
+    144. connect gmail oauth email api
+    145. send via gmail api
+    146. google workspace email api relay
+    147. custom smtp provider integration
+    148. amazon ses smtp relay setup
+    149. sendgrid smtp connector
+    150. mailgun smtp relay connector
+    151. brevo smtp connector
+    152. postmark smtp connector
+    153. zeptomail smtp connector
+    154. zoho mail smtp api
+    155. outlook office365 smtp relay
+    156. fastmail smtp connector
+    157. transactional email sdk
+    158. npm mailindia sdk
+    159. pip mailindia sdk
+    160. composer mailindia sdk
+    161. maven mailindia sdk
+    162. nuget mailindia sdk
+    163. gem mailindia sdk
+    164. ai integration prompts email api
+    165. chatgpt email api prompt
+    166. claude email api prompt
+    167. cursor email api prompt
+    168. copilot transactional email prompt
+    169. v0 email api integration
+    170. developer playground email api
+    171. test email sending sandbox
+    172. live email api documentation
+    173. swagger openapi email api
+    174. postman collection email api
+    175. email relay port 587
+    176. email relay port 465
+    177. email relay port 25
+    178. tls 1.3 encrypted email relay
+    179. starttls email transport
+    180. secure transactional email gateway
+    181. anti abuse email detection
+    182. reputation monitor email ip
+    183. spam score analyzer email
+    184. automated dkim rotation
+    185. suppress bounce email api
+    186. grievance officer email india
+    187. certified indian email relay
+    188. fast transactional mail service
+    189. reliable email api in india
+    190. scalable cloud email infrastructure
+    191. best transactional email service india
+    192. top 10 email api providers india
+    193. cheap email api for startups
+    194. enterprise transactional email platform
+    195. high concurrency email sender
+    196. transactional email microservice
+    197. serverless email api vercel
+    198. firebase realtime db email relay
+    199. self hosted email gateway api
+    200. mail india transactional cloud
+  -->
+</urlset>

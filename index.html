@@ -1947,7 +1947,7 @@
 
           <div class="dev-body">
             <div class="dev-code-col" id="codeContainer"><span class="code-comment"># Dispatch an authenticated transactional email</span>
-<span class="code-method">POST</span> <span class="code-endpoint">https://api.mailindia.in/v1/emails/send</span>
+<span class="code-method">POST</span> <span class="code-endpoint">https://mail-india-beta.vercel.app/v1/emails/send</span>
 <span class="code-header-name">Authorization</span>: Bearer YOUR_API_KEY
 <span class="code-header-name">Content-Type</span>: application/json
 
@@ -2537,11 +2537,11 @@
       <div class="footer-bottom">
         <div>© 2026 Mail India. All rights reserved.</div>
         <div style="display:flex; gap:16px;">
-          <a href="/privacy.html" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#7545F5'" onmouseout="this.style.color='inherit'">DPDP Act 2023 Compliant</a>
+          <a href="/privacy.html" style="color:inherit;text-decoration:none">DPDP Act 2023 Compliant</a>
           <span>•</span>
-          <a href="/acceptable-use.html" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#7545F5'" onmouseout="this.style.color='inherit'">2048-bit DKIM</a>
+          <a href="/acceptable-use.html" style="color:inherit;text-decoration:none">2048-bit DKIM</a>
           <span>•</span>
-          <a href="/legal.html" style="color:inherit;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='#7545F5'" onmouseout="this.style.color='inherit'">TLS 1.3</a>
+          <a href="/legal.html" style="color:inherit;text-decoration:none">TLS 1.3</a>
         </div>
       </div>
     </div>
@@ -2761,7 +2761,7 @@
     // 9. Developer Snippets Dictionary & Switcher
     const codeSnippets = {
       curl: `<span class="code-comment"># Dispatch an authenticated transactional email</span>
-<span class="code-method">POST</span> <span class="code-endpoint">https://api.mailindia.in/v1/emails/send</span>
+<span class="code-method">POST</span> <span class="code-endpoint">https://mail-india-beta.vercel.app/v1/emails/send</span>
 <span class="code-header-name">Authorization</span>: Bearer YOUR_API_KEY
 <span class="code-header-name">Content-Type</span>: application/json
 
@@ -2783,7 +2783,7 @@ await mailer.emails.send({
 import requests
 
 response = requests.post(
-    "https://api.mailindia.in/v1/emails/send",
+    "https://mail-india-beta.vercel.app/v1/emails/send",
     headers={"Authorization": "Bearer YOUR_API_KEY"},
     json={
         "to": "user@example.com",
@@ -2792,7 +2792,7 @@ response = requests.post(
     }
 )`,
       php: `<span class="code-comment">// PHP cURL Implementation</span>
-$ch = curl_init('https://api.mailindia.in/v1/emails/send');
+$ch = curl_init('https://mail-india-beta.vercel.app/v1/emails/send');
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer YOUR_API_KEY',
     'Content-Type: application/json'
@@ -2812,7 +2812,7 @@ import (
 
 func main() {
     body := []byte("{\"to\":\"user@example.com\",\"subject\":\"Welcome to Mail India\",\"html\":\"&lt;h1&gt;Welcome!&lt;/h1&gt;\"}")
-    req, _ := http.NewRequest("POST", "https://api.mailindia.in/v1/emails/send", bytes.NewBuffer(body))
+    req, _ := http.NewRequest("POST", "https://mail-india-beta.vercel.app/v1/emails/send", bytes.NewBuffer(body))
     req.Header.Set("Authorization", "Bearer YOUR_API_KEY")
     req.Header.Set("Content-Type", "application/json")
     http.DefaultClient.Do(req)
@@ -2820,7 +2820,7 @@ func main() {
     };
 
     const rawCodeSnippets = {
-      curl: `curl -X POST https://api.mailindia.in/v1/emails/send \\
+      curl: `curl -X POST https://mail-india-beta.vercel.app/v1/emails/send \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -2839,7 +2839,7 @@ await mailer.emails.send({
       python: `import requests
 
 response = requests.post(
-    "https://api.mailindia.in/v1/emails/send",
+    "https://mail-india-beta.vercel.app/v1/emails/send",
     headers={"Authorization": "Bearer YOUR_API_KEY"},
     json={
         "to": "user@example.com",
@@ -2847,7 +2847,7 @@ response = requests.post(
         "html": "<h1>Welcome!</h1><p>Your account is ready.</p>"
     }
 )`,
-      php: `$ch = curl_init('https://api.mailindia.in/v1/emails/send');
+      php: `$ch = curl_init('https://mail-india-beta.vercel.app/v1/emails/send');
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     'Authorization: Bearer YOUR_API_KEY',
     'Content-Type: application/json'
@@ -2866,7 +2866,7 @@ import (
 
 func main() {
     body := []byte("{\"to\":\"user@example.com\",\"subject\":\"Welcome to Mail India\",\"html\":\"<h1>Welcome!</h1>\"}")
-    req, _ := http.NewRequest("POST", "https://api.mailindia.in/v1/emails/send", bytes.NewBuffer(body))
+    req, _ := http.NewRequest("POST", "https://mail-india-beta.vercel.app/v1/emails/send", bytes.NewBuffer(body))
     req.Header.Set("Authorization", "Bearer YOUR_API_KEY")
     req.Header.Set("Content-Type", "application/json")
     http.DefaultClient.Do(req)

@@ -1023,6 +1023,61 @@ button.profile[aria-expanded="true"] .profile-caret {
 #toast.toast-error {
   border-color: rgba(239, 68, 68, 0.4);
   background: linear-gradient(135deg, #7f1d1d 0%, #2b1116 100%);
+  animation: toastShake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+@keyframes toastShake {
+  0%, 100% { transform: translateY(0) scale(1); }
+  10%, 30%, 50%, 70% { transform: translateY(0) scale(1) translateX(-4px); }
+  20%, 40%, 60% { transform: translateY(0) scale(1) translateX(4px); }
+  80% { transform: translateY(0) scale(1) translateX(2px); }
+  90% { transform: translateY(0) scale(1) translateX(-2px); }
+}
+@media (max-width: 600px) {
+  #toast.toast-error.show {
+    animation: toastShakeMobile 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+  @keyframes toastShakeMobile {
+    0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+    10%, 30%, 50%, 70% { transform: translateX(calc(-50% - 4px)) translateY(0) scale(1); }
+    20%, 40%, 60% { transform: translateX(calc(-50% + 4px)) translateY(0) scale(1); }
+    80% { transform: translateX(calc(-50% + 2px)) translateY(0) scale(1); }
+    90% { transform: translateX(calc(-50% - 2px)) translateY(0) scale(1); }
+  }
+}
+
+/* Phone Input with Country Code */
+.phone-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+}
+.phone-country-prefix {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+  white-space: nowrap;
+  flex-shrink: 0;
+  height: 100%;
+  box-sizing: border-box;
+  min-height: 40px;
+}
+.phone-country-prefix .flag-icon {
+  font-size: 16px;
+  line-height: 1;
+}
+.phone-input-wrap .mg-input {
+  border-radius: 0 8px 8px 0 !important;
+  flex: 1;
+  min-width: 0;
 }
 #toast.toast-error .toast-icon {
   background: #ef4444;

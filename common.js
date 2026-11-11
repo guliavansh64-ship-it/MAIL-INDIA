@@ -1,6 +1,6 @@
 'use strict';
 
-// Backend API Base URL: Automatically points to production Vercel backend
+// Backend API Base URL: Points to production backend (not frontend)
 window.MAILINDIA_API_BASE = window.MAILINDIA_API_BASE || 'https://mail-india-beta.vercel.app';
 
 // Immediate synchronous session detection to prevent Sign In button flash
@@ -784,17 +784,20 @@ async function api(url, method = 'GET', body = null) {
 
 function formatAuthError(err) {
   const m = (err && err.message) || String(err || '');
-  if (m.includes('INVALID_LOGIN_CREDENTIALS') || m.includes('EMAIL_NOT_FOUND') || m.includes('INVALID_PASSWORD')) {
-    return 'Invalid email or password. If you do not have an account yet, click "Create account" below.';
+  if (m.includes('INVALID_LOGIN_CREDENTIALS') || m.includes('INVALID_PASSWORD')) {
+    return 'Invalid email or password. Please check your credentials and try again.';
+  }
+  if (m.includes('EMAIL_NOT_FOUND') || m.includes('USER_NOT_FOUND')) {
+    return 'No account found with this email address. Please create an account first.';
   }
   if (m.includes('EMAIL_EXISTS')) {
-    return 'This email address is already registered. Please sign in with your password or reset your password.';
+    return 'This email is already registered. Please sign in instead or reset your password.';
   }
   if (m.includes('WEAK_PASSWORD')) {
-    return 'Password must be at least 6 characters long.';
+    return 'Password is too weak. Must be at least 6 characters long.';
   }
   if (m.includes('INVALID_EMAIL')) {
-    return 'Please enter a valid email address.';
+    return 'Invalid email address. Please enter a valid Gmail or email address.';
   }
   if (m.includes('TOO_MANY_ATTEMPTS_TRY_LATER')) {
     return 'Too many attempts. Please wait a few minutes before trying again.';
@@ -4900,14 +4903,14 @@ Your task is to:
 1. Read my existing code and locate where emails should be dispatched (contact form submission, signup alert, OTP verification).
 2. Integrate MAIL INDIA with minimal disruption.
 3. Use the following integration details:
-Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing HTML/JavaScript codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my existing code and locate where emails should be dispatched (contact form submission, signup alert, OTP verification).
 2. Integrate MAIL INDIA with minimal disruption.
 3. Use the following integration details:
-   - Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -4940,14 +4943,14 @@ Your task is to:
 1. Read my existing PHP files and locate where emails are triggered (order confirmation, password reset, user welcome).
 2. Integrate MAIL INDIA using native cURL with zero external dependencies.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing PHP codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my existing PHP files and locate where emails are triggered (order confirmation, password reset, user welcome).
 2. Integrate MAIL INDIA using native cURL with zero external dependencies.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -4979,14 +4982,14 @@ Your task is to:
 1. Read my Android project structure (Activities, ViewModels, or Services).
 2. Add email dispatch functionality using OkHttp or HttpURLConnection on a background thread.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing Java (Android) codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my Android project structure (Activities, ViewModels, or Services).
 2. Add email dispatch functionality using OkHttp or HttpURLConnection on a background thread.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -5018,14 +5021,14 @@ Your task is to:
 1. Read my Kotlin codebase and identify where email notifications or verifications are sent.
 2. Build a repository / service class using OkHttp and Kotlin Coroutines.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing Kotlin (Android) codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my Kotlin codebase and identify where email notifications or verifications are sent.
 2. Build a repository / service class using OkHttp and Kotlin Coroutines.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -5056,14 +5059,14 @@ Your task is to:
 1. Read my Node.js application (Express, Fastify, NestJS, or Next.js API routes).
 2. Add transactional email dispatching with robust error handling and retry logic.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing Node.js codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my Node.js application (Express, Fastify, NestJS, or Next.js API routes).
 2. Add transactional email dispatching with robust error handling and retry logic.
 3. Use the following integration details:
-   - Endpoint: POST http://indiamail.toolsnetwork.online/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -5095,14 +5098,14 @@ Your task is to:
 1. Read my Python codebase (FastAPI, Flask, or Django).
 2. Implement transactional email dispatching using httpx or requests.
 3. Use the following integration details:
-Endpoint: POST https://mailindia.in/api/test-email
+Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing Python codebase that I am about to give you (or have already given you).
 Your task is to:
 1. Read my Python codebase (FastAPI, Flask, or Django).
 2. Implement transactional email dispatching using httpx or requests.
 3. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
@@ -5132,18 +5135,18 @@ Your task is to:
     preview: `You are integrating MAIL INDIA transactional email API into an existing shell/bash script or automation pipeline that I am about to give you.
 Your task is to:
 1. Write a shell script function using curl to dispatch transactional emails with bearer token auth.
-2. Endpoint: POST https://mailindia.in/api/test-email
+2. Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 3. Headers: Content-Type: application/json, Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating MAIL INDIA transactional email API into an existing shell/bash script or automation pipeline that I am about to give you.
 Your task is to:
 1. Write a shell script function using curl to dispatch transactional emails with bearer token auth.
 2. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers:
        Content-Type: application/json
        Authorization: Bearer ${apiKey}
    - Command:
-     curl -s -S -X POST "https://mailindia.in/api/test-email" \\
+     curl -s -S -X POST "https://mail-india-beta.vercel.app/api/test-email" \\
        -H "Content-Type: application/json" \\
        -H "Authorization: Bearer ${apiKey}" \\
        -d '{
@@ -5169,13 +5172,13 @@ Your task is to:
     preview: `You are integrating the MAIL INDIA transactional email API into an existing WordPress / WooCommerce site.
 Your task is to:
 1. Create a drop-in mu-plugin or functions.php snippet that overrides wp_mail() with Mail India API.
-2. Endpoint: POST https://mailindia.in/api/test-email
+2. Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
 3. Authorization: Bearer YOUR_MAILINDIA_API_KEY`,
     fullPrompt: (apiKey) => `You are integrating the MAIL INDIA transactional email API into an existing WordPress / WooCommerce site.
 Your task is to:
 1. Create a drop-in mu-plugin or functions.php snippet that overrides wp_mail() with Mail India API.
 2. Use the following integration details:
-   - Endpoint: POST https://mailindia.in/api/test-email
+   - Endpoint: POST https://mail-india-beta.vercel.app/api/test-email
    - Headers: Authorization: Bearer ${apiKey}
    - Convert standard \`wp_mail($to, $subject, $message, $headers, $attachments)\` parameters to Mail India JSON payload.
 3. Use \`wp_remote_post()\` for native WordPress HTTP transport.
