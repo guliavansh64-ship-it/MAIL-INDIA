@@ -710,6 +710,30 @@ function getApiUrl(url) {
   return url;
 }
 
+// Server-side routes (OAuth begins on the backend, not on the static frontend).
+function isBackendRoute(href) {
+  return typeof href === 'string' && /^\/(oauth|api)(\/|$)/.test(href);
+}
+
+// When the frontend is hosted separately from the backend (e.g. static hosting
+// + Vercel API), full-page navigations to backend routes such as
+// `/oauth/google/start` must resolve against the backend origin. Rewrites href
+// attributes in-place, preserving query strings. No-op when same-origin.
+function applyBackendLinks(root) {
+  try {
+    if (typeof document === 'undefined') return;
+    const scope = root || document;
+    scope.querySelectorAll('a[href]').forEach(a => {
+      const href = a.getAttribute('href');
+      if (!isBackendRoute(href)) return;
+      const target = getApiUrl(href);
+      if (target && target !== href) {
+        a.setAttribute('href', target);
+      }
+    });
+  } catch {}
+}
+
 async function jsonFetch(url, options = {}) {
   const fullUrl = getApiUrl(url);
   const isCrossDomain = typeof fullUrl === 'string' && fullUrl.startsWith('http') && !fullUrl.startsWith(window.location.origin);
@@ -4040,6 +4064,8 @@ async function initProfile() {
             <span>⚡ Connect Google Account (50% Off)</span>
           </a>
         `;
+        // Inject above; route the OAuth link at the API origin when split-hosted.
+        applyBackendLinks(gStatusEl);
       }
     } catch {
       gStatusEl.innerHTML = '<span style="color:#94a3b8;font-size:12px">Unable to check Google connection.</span>';
@@ -4871,6 +4897,8 @@ if (typeof document !== 'undefined') {
 
   // Auto-initialize session status & credit slider upon DOM ready
   const tryInitPageCommon = () => {
+    // Point backend-only routes (OAuth etc.) at the API origin when split-hosted
+    applyBackendLinks();
     // Immediately apply authenticated UI if cached user session exists
     if (mbSession && mbSession.user) {
       applyAuthenticatedUI(mbSession.user, mbSession.wallet);
