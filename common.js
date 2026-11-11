@@ -734,12 +734,32 @@ function applyBackendLinks(root) {
   } catch {}
 }
 
+// Third-party origins (e.g. Google Identity Toolkit / Firebase Auth REST) never
+// send `Access-Control-Allow-Credentials`, so sending cookies with `include`
+// makes the browser reject the whole response. Only our own backend needs
+// credentialed cross-origin requests.
+function isOwnBackendUrl(fullUrl) {
+  try {
+    const base = (window.MAILINDIA_API_BASE || localStorage.getItem('mailindia_api_base') || '').replace(/\/+$/, '');
+    if (base && fullUrl.startsWith(base)) return true;
+    return fullUrl.startsWith(window.location.origin);
+  } catch {
+    return fullUrl.startsWith(window.location.origin);
+  }
+}
+
 async function jsonFetch(url, options = {}) {
   const fullUrl = getApiUrl(url);
   const isCrossDomain = typeof fullUrl === 'string' && fullUrl.startsWith('http') && !fullUrl.startsWith(window.location.origin);
+  let credentials;
+  if (!isCrossDomain) {
+    credentials = options.credentials || 'same-origin';
+  } else {
+    credentials = isOwnBackendUrl(fullUrl) ? 'include' : 'omit';
+  }
   const fetchOptions = {
     ...options,
-    credentials: isCrossDomain ? 'include' : (options.credentials || 'same-origin')
+    credentials
   };
   const res = await fetch(fullUrl, fetchOptions);
   const data = await res.json().catch(() => ({}));
@@ -830,6 +850,34 @@ function formatAuthError(err) {
 }
 
 window.formatAuthError = formatAuthError;
+
+// Displays an authentication error inside the auth form.
+// The box pops in with a shake so failures are impossible to miss on mobile,
+// where a silent no-op previously looked like "the button does nothing".
+function showAuthError(message, target) {
+  const text = String(message || 'Something went wrong. Please try again.');
+  const box = target || document.querySelector('#account-message');
+  if (box) {
+    box.innerHTML =
+      '<div class="auth-error-pop" role="alert">' +
+        '<span class="auth-error-icon">⚠️</span>' +
+        '<span class="auth-error-text">' + esc(text) + '</span>' +
+      '</div>';
+    if (typeof box.scrollIntoView === 'function') {
+      try { box.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {}
+    }
+  }
+  toast(text, 'error', 5000);
+  return text;
+}
+window.showAuthError = showAuthError;
+
+// Clears any visible auth error box.
+function clearAuthError(target) {
+  const box = target || document.querySelector('#account-message');
+  if (box) box.innerHTML = '';
+}
+window.clearAuthError = clearAuthError;
 
 async function signIn(email, password, register, profileData = {}) {
   const apiKey = (window.firebaseConfig && window.firebaseConfig.apiKey) || 'AIzaSyCvfIXHa_6Vy5Qh2Of-ayhUjw1INwujmsE';
