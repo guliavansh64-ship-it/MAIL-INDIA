@@ -1062,8 +1062,7 @@ button.profile[aria-expanded="true"] .profile-caret {
   line-height: 1.5;
   text-align: left;
   box-shadow: 0 6px 18px rgba(239, 68, 68, 0.16);
-  animation: authErrorPop 0.42s cubic-bezier(0.16, 1, 0.3, 1) both,
-             authErrorShake 0.5s cubic-bezier(.36,.07,.19,.97) 0.16s both;
+  animation: authErrorIn 0.52s cubic-bezier(.36,.07,.19,.97) both;
 }
 .auth-error-pop .auth-error-icon {
   font-size: 14px;
@@ -1074,17 +1073,16 @@ button.profile[aria-expanded="true"] .profile-caret {
   flex: 1;
   word-break: break-word;
 }
-@keyframes authErrorPop {
-  0% { opacity: 0; transform: translateY(-8px) scale(0.95); }
-  60% { opacity: 1; transform: translateY(0) scale(1.02); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-@keyframes authErrorShake {
-  0%, 100% { transform: translateX(0); }
-  15%, 45% { transform: translateX(-4px); }
-  30%, 60% { transform: translateX(4px); }
-  75% { transform: translateX(-2px); }
-  90% { transform: translateX(2px); }
+/* Pop-in and shake share a single keyframe track: two animations both
+   animating `transform` would let the later one discard the pop entirely. */
+@keyframes authErrorIn {
+  0%   { opacity: 0; transform: translateY(-10px) scale(0.94); }
+  28%  { opacity: 1; transform: translateY(0) scale(1.03) translateX(-5px); }
+  42%  { transform: translateY(0) scale(1) translateX(5px); }
+  56%  { transform: translateY(0) scale(1) translateX(-3px); }
+  70%  { transform: translateY(0) scale(1) translateX(3px); }
+  84%  { transform: translateY(0) scale(1) translateX(-1px); }
+  100% { opacity: 1; transform: translateY(0) scale(1) translateX(0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .auth-error-pop { animation: none; }
