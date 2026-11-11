@@ -873,6 +873,8 @@ function formatAuthError(err) {
   if (m.includes('EMAIL_NOT_VERIFIED')) return 'Verify your email address before signing in. Open the link in your inbox or request a new one below.';
   if (/RECENT_LOGIN_REQUIRED|TOKEN_EXPIRED|INVALID_REFRESH_TOKEN|INVALID_ID_TOKEN|USER_NOT_FOUND/.test(m)) return 'Please sign in again to continue. If you opened the verification link, your email stays verified.';
   if (m.includes('USER_DISABLED')) return 'This account has been disabled. Please contact support for help.';
+  if (/DATABASE_UNAVAILABLE|AUTH_UNAVAILABLE|FIREBASE_ADMIN_REQUIRED|VERIFICATION_LINK_FAILED/.test(m)) return err?.message || 'The backend Firebase connection needs administrator setup.';
+  if (/^SMTP_|SYSTEM_SENDER_|SENDER_KEY_|SENDER_DECRYPTION_|GMAIL_APP_PASSWORD_/.test(String(err?.code || ''))) return err?.message || 'The configured Gmail sender needs attention.';
   if (/OPERATION_NOT_ALLOWED|CONFIGURATION_NOT_FOUND|API_KEY_INVALID/.test(m)) return 'Email sign-in is temporarily unavailable. Please try again later or contact support.';
   if (/Failed to fetch|NetworkError|network request failed|Load failed/i.test(m)) return 'Could not connect. Check your internet connection and try again.';
   if (err?.status === 429 || /TOO_MANY_REQUESTS|RATE_LIMIT/.test(m)) return 'Too many requests. Please wait a minute before trying again.';
