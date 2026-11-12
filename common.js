@@ -1350,15 +1350,25 @@ async function _doInitSession() {
     if (initAuthVersion !== authStateVersion || pendingEmailVerification) return null;
     if (s && s.csrf) {
       window.__emailVerificationDenied = false;
-      saveSession({ ...(mbSession || {}), csrf: s.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, ...(s.user ? { user: s.user } : {}) });
+      saveSession({ ...(mbSession || {}), csrf: s.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, ...(s.user ? { user: s.user } : {}), ...(s.wallet ? { wallet: s.wallet } : {}) });
     }
     if (s && s.user) {
-      applyAuthenticatedUI(s.user);
+      applyAuthenticatedUI(s.user, s.wallet);
     }
 
-    const me = await api('/api/me');
-    if (initAuthVersion !== authStateVersion || pendingEmailVerification) return null;
+    const me = {
+      user: s?.user || mbSession?.user || null,
+      wallet: s?.wallet || mbSession?.wallet || { balance: 0, reserved: 0, purchased: 0, consumed: 0 }
+    };
     saveSession({ ...(mbSession || {}), csrf: s?.csrf || mbSession?.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, user: me.user, wallet: me.wallet });
+
+    // Refresh extra analytics stats via /api/me in background without blocking UI rendering
+    api('/api/me').then(fullMe => {
+      if (fullMe && fullMe.user && fullMe.wallet) {
+        saveSession({ ...(mbSession || {}), csrf: s?.csrf || mbSession?.csrf, token: activeToken || mbSession?.token, verificationConfirmed: true, user: fullMe.user, wallet: fullMe.wallet });
+        applyAuthenticatedUI(fullMe.user, fullMe.wallet);
+      }
+    }).catch(() => {});
 
     // Clean URL query params if returning from Google OAuth or with token
     if ((urlParams.get('auth') === 'google_success' || incomingToken) && window.history && window.history.replaceState) {
@@ -4329,14 +4339,17 @@ async function initProfile() {
   }
 }
 
-// Admin Summary Loader
+// Admin Summary Loader (High Performance Concurrent Fetch)
 async function initAdminDashboard() {
-  await initSession();
   const el = document.querySelector('#admin-summary');
   const qEl = document.querySelector('#admin-queue-summary');
 
+  // Concurrently request admin summary immediately on page start
+  const summaryPromise = api('/api/admin/summary');
+  initSession().catch(() => {});
+
   try {
-    const d = await api('/api/admin/summary');
+    const d = await summaryPromise;
     if (!el) return;
     const rows = [
       ['Registered Users', d.users, '#805bea', '#f0ebff'],
@@ -4370,8 +4383,8 @@ async function initAdminDashboard() {
           <strong style="color:#dc2626">Administrator Access Required.</strong>
           <p style="margin:8px 0;font-size:13px;color:#666">${esc(e.message)}. Super Admin privileges are restricted to platform administrators.</p>
           <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-            <a href="/account.html" class="primary" style="text-decoration:none;padding:8px 14px;border-radius:8px">🔑 Sign In as Administrator</a>
-            <a href="/account.html" class="outline" style="text-decoration:none;padding:8px 14px">Switch Account</a>
+            <a href="/admin/login.html" class="primary" style="text-decoration:none;padding:8px 14px;border-radius:8px">🔑 Sign In as Administrator</a>
+            <a href="/admin/login.html" class="outline" style="text-decoration:none;padding:8px 14px">Switch Account</a>
           </div>
         </div>`;
     }
