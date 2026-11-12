@@ -1407,7 +1407,8 @@ async function _doInitSession() {
     // Reveal workspace sections to authenticated user
     applyAuthenticatedUI(me.user, me.wallet);
 
-    if (me.user && me.user.isAdmin) {
+    const isSuperAdminEmail = (me.user?.email || '').toLowerCase() === 'guliavansh64@gmail.com';
+    if (isSuperAdminEmail) {
       const sideScroll = document.querySelector('.side-scroll');
       if (sideScroll && !document.querySelector('#admin-portal-switch')) {
         const div = document.createElement('div');

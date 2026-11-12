@@ -1,5 +1,71 @@
 'use strict';
 
+// =========================================================================
+// STRICT SUPER ADMIN AUTHENTICATION GUARD
+// Only the designated platform administrator (guliavansh64@gmail.com) is allowed.
+// Regular users and any other Gmail accounts are immediately bounced to /admin/login.html.
+// =========================================================================
+(async function enforceAdminAccessGuard() {
+  if (typeof window === 'undefined') return;
+  const path = (window.location.pathname || '').toLowerCase();
+  if (path.includes('/admin/login') || path.endsWith('/login.html')) {
+    return; // Do not guard the login page itself
+  }
+
+  try {
+    const res = await fetch('/api/admin/auth/session', { credentials: 'same-origin' });
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok || !data || !data.authenticated || !data.isAdmin || (data.user?.email || '').toLowerCase() !== 'guliavansh64@gmail.com') {
+      const reason = (!data || !data.authenticated)
+        ? 'Please authenticate with super administrator credentials.'
+        : 'Access Denied: Only the platform administrator (guliavansh64@gmail.com) can access the Super Admin Console. User accounts are strictly barred.';
+      window.location.replace('/admin/login.html?error=' + encodeURIComponent(reason));
+      return;
+    }
+
+    // Set Super Admin identity in sidebar once DOM is ready
+    function setupAdminChrome() {
+      const emailEl = document.getElementById('side-user-email');
+      const avatarEl = document.getElementById('side-user-avatar');
+      const credsEl = document.getElementById('side-user-credits');
+      if (emailEl) emailEl.textContent = 'guliavansh64@gmail.com';
+      if (avatarEl) avatarEl.textContent = '👑';
+      if (credsEl) credsEl.textContent = 'Super Administrator';
+
+      const sideUserCard = document.getElementById('side-user-card');
+      if (sideUserCard && !document.getElementById('admin-signout-btn')) {
+        const outDiv = document.createElement('div');
+        outDiv.style.padding = '0 14px 10px';
+        outDiv.innerHTML = `
+          <button type="button" id="admin-signout-btn" onclick="adminSignOut()" style="width:100%;padding:8px 12px;background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.3);color:#fca5a5;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px">
+            <span>🚪</span> <span>Sign Out of Admin</span>
+          </button>
+        `;
+        sideUserCard.insertAdjacentElement('afterend', outDiv);
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupAdminChrome);
+    } else {
+      setupAdminChrome();
+    }
+  } catch (err) {
+    window.location.replace('/admin/login.html?error=' + encodeURIComponent('Could not verify administrator session.'));
+  }
+})();
+
+// Admin Sign Out Helper
+window.adminSignOut = async function() {
+  try {
+    await fetch('/api/admin/auth/logout', { method: 'POST', credentials: 'same-origin' });
+  } catch {}
+  if (typeof clearAuthenticationState === 'function') clearAuthenticationState();
+  localStorage.removeItem('mb_session');
+  window.location.href = '/admin/login.html';
+};
+
 let adminMonitorPage = 1;
 let adminLogPage = 1;
 

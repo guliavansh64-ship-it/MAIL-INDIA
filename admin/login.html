@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>MAIL INDIA — Super Admin Authentication</title>
+  <link rel="stylesheet" href="/styles.css?v=2.4.0">
+  <style>
+    body {
+      background: radial-gradient(circle at top right, #1e1738 0%, #0d0f1a 60%, #080910 100%);
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .admin-login-wrapper {
+      width: 100%;
+      max-width: 440px;
+    }
+    .admin-login-card {
+      background: rgba(17, 24, 39, 0.95);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 40px rgba(99, 66, 220, 0.15);
+      backdrop-filter: blur(16px);
+      box-sizing: border-box;
+    }
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .admin-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 6px;
+      letter-spacing: -0.5px;
+    }
+    .admin-sub {
+      font-size: 13px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin: 0 0 24px;
+    }
+    .admin-field {
+      margin-bottom: 18px;
+    }
+    .admin-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+    .admin-input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px 14px;
+      background: #0f172a;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .admin-input:focus {
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
+    }
+    .admin-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, #6342dc 0%, #4325a7 100%);
+      color: #ffffff;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(99, 66, 220, 0.4);
+      transition: transform 0.15s, opacity 0.15s;
+    }
+    .admin-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .admin-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .admin-alert {
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .admin-alert-error {
+      background: rgba(220, 38, 38, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+    }
+    .admin-alert-success {
+      background: rgba(22, 163, 74, 0.15);
+      border: 1px solid rgba(34, 197, 94, 0.4);
+      color: #86efac;
+    }
+    .admin-footer-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12.5px;
+      color: #64748b;
+    }
+    .admin-footer-link a {
+      color: #a78bfa;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .admin-footer-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="admin-login-wrapper">
+    <div class="admin-login-card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="display:inline-block;width:38px;height:38px;border-radius:10px;overflow:hidden;background:#6342dc;flex-shrink:0">
+          <img src="/logo.png" style="width:100%;height:100%;object-fit:cover" alt="Mail India">
+        </span>
+        <div>
+          <div style="font-size:15px;font-weight:800;letter-spacing:0.5px;color:#ffffff">MAIL INDIA</div>
+          <div style="font-size:11px;color:#94a3b8;text-transform:uppercase;letter-spacing:1px">Central Infrastructure</div>
+        </div>
+      </div>
+
+      <div class="admin-badge">
+        <span>🛡️</span>
+        <span>Platform Super Admin</span>
+      </div>
+
+      <h1 class="admin-title">Admin Authentication</h1>
+      <p class="admin-sub">Restricted platform operations area. Only the designated platform administrator credentials are permitted.</p>
+
+      <div id="admin-alert-box" class="admin-alert admin-alert-error" style="display:none">
+        <span id="admin-alert-icon">⚠️</span>
+        <span id="admin-alert-msg"></span>
+      </div>
+
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)">
+        <div class="admin-field">
+          <label class="admin-label" for="admin-email">Administrator Email</label>
+          <input 
+            type="email" 
+            id="admin-email" 
+            name="email" 
+            class="admin-input" 
+            value="guliavansh64@gmail.com" 
+            required 
+            autocomplete="username"
+            placeholder="guliavansh64@gmail.com"
+            style="background:#131c31;color:#c7d2fe;font-weight:600"
+          >
+          <div style="font-size:11px;color:#64748b;margin-top:4px">🔒 Only guliavansh64@gmail.com is authorized. User accounts are strictly barred.</div>
+        </div>
+
+        <div class="admin-field">
+          <label class="admin-label" for="admin-password">Administrator Password</label>
+          <input 
+            type="password" 
+            id="admin-password" 
+            name="password" 
+            class="admin-input" 
+            required 
+            autocomplete="current-password"
+            placeholder="Enter administrator password"
+          >
+        </div>
+
+        <button type="submit" id="admin-submit-btn" class="admin-btn">
+          <span>Authenticate Super Admin →</span>
+        </button>
+      </form>
+
+      <div class="admin-footer-link">
+        Regular customer account? <a href="/account.html">Customer Workspace</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/common.js?v=2.4.0"></script>
+  <script>
+    // Check if error was passed in URL query
+    (function() {
+      const p = new URLSearchParams(window.location.search);
+      const err = p.get('error');
+      if (err) {
+        showAlert(err, 'error');
+      }
+
+      // Pre-check if current session is already the admin
+      try {
+        const s = localStorage.getItem('mb_session');
+        if (s) {
+          const parsed = JSON.parse(s);
+          if (parsed && parsed.user && (parsed.user.email || '').toLowerCase() === 'guliavansh64@gmail.com') {
+            showAlert('You are already authenticated as Super Admin. <a href="/admin/index.html" style="color:#ffffff;text-decoration:underline;font-weight:700">Enter Admin Console →</a>', 'success');
+          }
+        }
+      } catch {}
+    })();
+
+    function showAlert(text, type) {
+      const box = document.getElementById('admin-alert-box');
+      const msg = document.getElementById('admin-alert-msg');
+      const icon = document.getElementById('admin-alert-icon');
+      if (!box || !msg) return;
+      box.className = 'admin-alert ' + (type === 'success' ? 'admin-alert-success' : 'admin-alert-error');
+      icon.textContent = type === 'success' ? '✓' : '⚠️';
+      msg.innerHTML = text;
+      box.style.display = 'flex';
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const email = document.getElementById('admin-email').value.trim().toLowerCase();
+      const password = document.getElementById('admin-password').value;
+      const btn = document.getElementById('admin-submit-btn');
+
+      // STRICT CLIENT-SIDE CHECK: Block any user Gmail or non-admin account immediately
+      if (email !== 'guliavansh64@gmail.com') {
+        showAlert('Access Denied: Only the platform administrator (<strong>guliavansh64@gmail.com</strong>) is permitted to access the Super Admin Console. User accounts are strictly barred.', 'error');
+        return;
+      }
+
+      if (!password) {
+        showAlert('Please enter the administrator password.', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Verifying credentials…</span>';
+
+      try {
+        // First try standard Firebase signInWithPassword to get recent ID token if public config is available
+        let idToken = null;
+        try {
+          const cfgResp = await fetch('/api/public-config').catch(() => null);
+          const cfg = cfgResp && cfgResp.ok ? await cfgResp.json() : null;
+          const apiKey = cfg?.firebaseApiKey || cfg?.firebaseConfig?.apiKey;
+          if (apiKey) {
+            const authResp = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: 'guliavansh64@gmail.com', password, returnSecureToken: true })
+            });
+            const authData = await authResp.json();
+            if (authData.idToken) {
+              idToken = authData.idToken;
+            }
+          }
+        } catch {}
+
+        const res = await fetch('/api/admin/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ email: 'guliavansh64@gmail.com', password, idToken })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.message || data.error || 'Administrator authentication failed.');
+        }
+
+        showAlert('✓ Administrator verified. Redirecting to console…', 'success');
+        
+        // Save session locally
+        if (typeof saveSession === 'function') {
+          saveSession({
+            csrf: data.csrf,
+            token: data.token,
+            verificationConfirmed: true,
+            user: { email: 'guliavansh64@gmail.com', uid: data.user?.uid || 'admin', admin: true, isAdmin: true }
+          });
+        }
+
+        setTimeout(() => {
+          window.location.href = data.redirect || '/admin/index.html';
+        }, 400);
+      } catch (err) {
+        showAlert(err.message, 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Authenticate Super Admin →</span>';
+      }
+    }
+  </script>
+</body>
+</html>
