@@ -609,6 +609,9 @@ function toggleNavGroup(groupId, e) {
   } else {
     target.classList.add('expanded');
   }
+  if (typeof syncPendingRecharges === 'function') {
+    syncPendingRecharges(true).catch(() => {});
+  }
 }
 
 function handleAuthClick(e) {
@@ -1426,6 +1429,9 @@ async function _doInitSession() {
       }, 30000);
     }
 
+    // Auto-sync pending ZetPay recharges so wallet updates even if user closed modal or changed page
+    syncPendingRecharges(true).catch(() => {});
+
     return me;
   } catch (err) {
     console.warn('Session verification failed:', err.message);
@@ -1918,6 +1924,95 @@ function setupCreditSlider(currentRate = 5, defaultVal = null) {
 // WALLET & BILLING SUITE ENHANCEMENTS
 // ============================================================
 
+// Persistent Pending ZetPay Orders & Auto-Credit Synchronization
+function getPendingOrders() {
+  try {
+    const list = JSON.parse(localStorage.getItem('mb_pending_orders') || '[]');
+    const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+    return Array.isArray(list) ? list.filter(o => o && o.orderId && o.createdAt > oneDayAgo) : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePendingOrder(order) {
+  try {
+    const list = getPendingOrders().filter(o => o.orderId !== order.orderId);
+    list.push(order);
+    localStorage.setItem('mb_pending_orders', JSON.stringify(list));
+    localStorage.setItem('mb_active_recharge_order', JSON.stringify(order));
+  } catch {}
+}
+
+function removePendingOrder(orderId) {
+  try {
+    const list = getPendingOrders().filter(o => o.orderId !== orderId);
+    localStorage.setItem('mb_pending_orders', JSON.stringify(list));
+    const active = JSON.parse(localStorage.getItem('mb_active_recharge_order') || 'null');
+    if (active && active.orderId === orderId) {
+      localStorage.removeItem('mb_active_recharge_order');
+    }
+  } catch {}
+}
+
+let _isSyncingRecharges = false;
+async function syncPendingRecharges(silent = false) {
+  if (_isSyncingRecharges || !mbSession || !mbSession.user) return;
+  _isSyncingRecharges = true;
+  try {
+    const pending = getPendingOrders();
+    for (const p of pending) {
+      try {
+        const s = await api('/api/payments/zetpay/status/' + encodeURIComponent(p.orderId));
+        if (s && s.status === 'success') {
+          removePendingOrder(p.orderId);
+          toast(`✓ Payment confirmed! ${p.credits || s.credits} credits added to your wallet.`);
+          await refreshWalletBalance();
+        } else if (s && (s.status === 'failed' || s.status === 'cancelled')) {
+          removePendingOrder(p.orderId);
+        }
+      } catch {}
+    }
+
+    const res = await api('/api/payments/zetpay/sync-pending', 'POST').catch(() => null);
+    if (res && res.success && res.creditedCount > 0) {
+      toast(`✓ Payment confirmed! +${res.totalCreditsAdded} credits added to your wallet.`);
+      await refreshWalletBalance();
+    }
+  } catch (err) {
+    if (!silent) console.warn('[SYNC RECHARGES]', err);
+  } finally {
+    _isSyncingRecharges = false;
+  }
+}
+
+async function refreshWalletBalance() {
+  try {
+    const s = await api('/api/session/status');
+    if (s && s.authenticated && s.wallet) {
+      if (mbSession) mbSession.wallet = s.wallet;
+      const b = s.wallet.balance ?? 0;
+      document.querySelectorAll('[data-wallet-balance], #topbar-credits, .sidebar-credits, #user-credit-balance').forEach(el => {
+        el.textContent = b.toLocaleString();
+      });
+      document.querySelectorAll('.sidebar-user-balance, #sidebar-credits-display').forEach(el => {
+        el.textContent = `${b.toLocaleString()} credits`;
+      });
+    }
+  } catch {}
+}
+
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      syncPendingRecharges(true).catch(() => {});
+    }
+  });
+  window.addEventListener('focus', () => {
+    syncPendingRecharges(true).catch(() => {});
+  });
+}
+
 // Shared ZetPay UPI Launcher with Status Polling
 async function startZetpayRecharge(rupees, btn, msgEl) {
   if (!mbSession || !mbSession.user) {
@@ -1936,6 +2031,12 @@ async function startZetpayRecharge(rupees, btn, msgEl) {
 
   try {
     const order = await api('/api/payments/zetpay/order', 'POST', { amountRupees: cleanRupees });
+    savePendingOrder({
+      orderId: order.orderId,
+      credits: order.credits,
+      amountRupees: cleanRupees,
+      createdAt: Date.now()
+    });
     if (msgEl) msgEl.textContent = `Order ${order.orderId} created. Opening UPI checkout…`;
 
     const popup = window.open(order.paymentUrl, 'ZetPayUPI', 'width=430,height=700,scrollbars=yes');
@@ -1956,10 +2057,12 @@ async function startZetpayRecharge(rupees, btn, msgEl) {
         const s = await api('/api/payments/zetpay/status/' + encodeURIComponent(order.orderId));
         if (s.status === 'success') {
           clearInterval(interval);
+          removePendingOrder(order.orderId);
           if (popup && !popup.closed) popup.close();
           if (msgEl) msgEl.textContent = `Payment confirmed! ${order.credits} credits added to your wallet.`;
           toast(`Payment confirmed! ${order.credits} credits added.`);
           if (btn) btn.disabled = false;
+          await refreshWalletBalance();
           await initSession();
           if (typeof window.onPaymentSuccess === 'function') {
             window.onPaymentSuccess(order);
@@ -1968,6 +2071,7 @@ async function startZetpayRecharge(rupees, btn, msgEl) {
           }
         } else if (s.status === 'failed' || polls > 60) {
           clearInterval(interval);
+          if (s.status === 'failed') removePendingOrder(order.orderId);
           if (msgEl) msgEl.textContent = s.status === 'failed' ? 'Payment failed or cancelled.' : 'Payment session timed out.';
           if (btn) btn.disabled = false;
         }
